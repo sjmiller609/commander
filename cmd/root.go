@@ -5,6 +5,7 @@ import (
 
 	"github.com/astronomerio/commander/api"
 	"github.com/astronomerio/commander/api/v1"
+	"github.com/astronomerio/commander/config"
 	"github.com/astronomerio/commander/kubernetes"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -25,6 +26,20 @@ var RootCmd = &cobra.Command{
 }
 
 func start() {
+	logger := log.WithField("function", "start")
+	logger.Debug("Starting commander")
+
+	// Set up configuration
+	config := config.Get()
+	config.Log()
+
+	if config.DebugMode {
+		logrus.SetLevel(logrus.DebugLevel)
+	} else {
+		logrus.SetLevel(logrus.InfoLevel)
+	}
+
+	// Create new API client and begin accepting requests
 	client := api.NewClient()
 	initAirflowRouteHandler(client)
 	client.Serve("8881")
