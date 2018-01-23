@@ -1,0 +1,19 @@
+---
+version: "2"
+
+services:
+  commander:
+    image: astronomerinc/ap-commander
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    labels:
+      io.astronomer.docker: "true"
+    ports:
+      - "8081:8081"
+    volumes:
+      - ~/.kube/config:/root/.kube/config
+    environment:
+      COMMANDER_KUBE_CONFIG: /root/.kube/config
+

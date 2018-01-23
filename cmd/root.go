@@ -12,40 +12,35 @@ import (
 )
 
 var (
-	log = logrus.WithField("package", "cmd")
+	log       = logrus.WithField("package", "cmd")
+	appConfig = config.Get()
 )
 
 // RootCmd is the commander root command.
 var RootCmd = &cobra.Command{
 	Use: "commander",
 	Run: func(cmd *cobra.Command, args []string) {
-		logrus.SetOutput(os.Stdout)
-		logrus.SetLevel(logrus.DebugLevel)
 		start()
 	},
 }
 
 func start() {
-	logger := log.WithField("function", "start")
-	logger.Debug("Starting commander")
-
-	// Set up configuration
-	config := config.Get()
-	config.Log()
-
-	if config.DebugMode {
+	// Set up logging
+	logrus.SetOutput(os.Stdout)
+	if appConfig.DebugMode {
 		logrus.SetLevel(logrus.DebugLevel)
-	} else {
-		logrus.SetLevel(logrus.InfoLevel)
 	}
+
+	logger := log.WithField("function", "start")
+	logger.Info("Starting commander")
 
 	// Create new API client and begin accepting requests
 	client := api.NewClient()
 	initAirflowRouteHandler(client)
-	client.Serve("8881")
+	client.Serve(appConfig.Port)
 }
 
-func initAirflowRouteHandler(c *api.Client) {
+func initAirflowRouteHandler(client *api.Client) {
 	logger := log.WithField("function", "initAirflowRouteHandler")
 	logger.Debug("Entered initAirflowRouteHandler")
 
@@ -56,5 +51,5 @@ func initAirflowRouteHandler(c *api.Client) {
 
 	// Alternate provisioners can be swapped here
 	airflowRouteHandler := v1.NewAirflowRouteHandler(kubernetesProvisioner)
-	c.AppendRouteHandler(airflowRouteHandler)
+	client.AppendRouteHandler(airflowRouteHandler)
 }

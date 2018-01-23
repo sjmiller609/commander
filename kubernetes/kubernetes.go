@@ -3,12 +3,14 @@ package kubernetes
 import (
 	"fmt"
 
+	"github.com/astronomerio/commander/config"
 	"github.com/astronomerio/commander/provisioner"
 	"github.com/sirupsen/logrus"
 	apiappsv1beta2 "k8s.io/api/apps/v1beta2"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	typedappsv1beta2 "k8s.io/client-go/kubernetes/typed/apps/v1beta2"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/util/retry"
 	// Required to authenticate against GKE clusters
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
@@ -16,7 +18,8 @@ import (
 )
 
 var (
-	log = logrus.WithField("package", "kubernetes")
+	log       = logrus.WithField("package", "kubernetes")
+	appConfig = config.Get()
 )
 
 // KubeProvisioner is capable of deploying and maintaining jobs on Kubernetes.
@@ -28,25 +31,33 @@ type KubeProvisioner struct {
 // NewKubeProvisioner returns a new KubeProvisioner
 func NewKubeProvisioner() (*KubeProvisioner, error) {
 	logger := log.WithField("function", "NewKubeProvisioner")
-	config, err := clientcmd.BuildConfigFromFlags("", "/home/schnie/.kube/config")
-	if err != nil {
-		return nil, err
+	logger.Debug("Creating Kubernetes provisioner")
+
+	var (
+		kubeConfig *rest.Config
+		configErr  error
+	)
+
+	if appConfig.KubeConfig != "" {
+		logger.Debug("Using config at ", appConfig.KubeConfig)
+		kubeConfig, configErr = clientcmd.BuildConfigFromFlags("", appConfig.KubeConfig)
+	} else {
+		logger.Debug("Using in-cluster config")
+		kubeConfig, configErr = rest.InClusterConfig()
 	}
 
-	clientset, err := kubernetes.NewForConfig(config)
-	if err != nil {
-		return nil, err
+	if configErr != nil {
+		return nil, configErr
 	}
 
-	deploymentsClient := clientset.AppsV1beta2().Deployments("astronomer-system")
-	logger.Info("Created deployments client")
-
-	stsClient := clientset.AppsV1beta2().StatefulSets("astronomer-system")
-	logger.Info("Created statefulsets client")
+	clientset, clientErr := kubernetes.NewForConfig(kubeConfig)
+	if clientErr != nil {
+		return nil, clientErr
+	}
 
 	return &KubeProvisioner{
-		deploymentsClient: deploymentsClient,
-		stsClient:         stsClient,
+		deploymentsClient: clientset.AppsV1beta2().Deployments(appConfig.KubeNamespace),
+		stsClient:         clientset.AppsV1beta2().StatefulSets(appConfig.KubeNamespace),
 	}, nil
 }
 
