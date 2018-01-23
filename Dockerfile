@@ -20,7 +20,6 @@ RUN set -x \
 	&& tar -xvf ${GCLOUD_FILE} \
 	&& rm ${GCLOUD_FILE} \
 	&& google-cloud-sdk/install.sh
-	
 
 WORKDIR /go/src/github.com/astronomerio/commander
 COPY . .
