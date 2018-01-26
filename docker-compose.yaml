@@ -3,13 +3,11 @@ version: "2"
 
 services:
   commander:
-    image: astronomerinc/ap-commander
+    image: astronomerinc/ap-pce-commander
     build:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    labels:
-      io.astronomer.docker: "true"
     ports:
       - "8880:8880"
     volumes:
