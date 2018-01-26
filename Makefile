@@ -6,7 +6,7 @@ IMAGE_NAME ?= astronomerinc/ap-pce-${OUTPUT}
 dep:
 	dep ensure
 
-build: dep
+build:
 	go build -o ${OUTPUT} main.go
 
 build-image:
