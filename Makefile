@@ -1,7 +1,12 @@
-IMAGE_NAME ?= astronomerinc/ap-commander
 OUTPUT ?= commander
+IMAGE_NAME ?= astronomerinc/ap-pce-${OUTPUT}
 
-build:
+.DEFAULT_GOAL := build
+
+dep:
+	dep ensure
+
+build: dep
 	go build -o ${OUTPUT} main.go
 
 build-image:
