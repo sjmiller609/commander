@@ -18,7 +18,7 @@ type Configuration struct {
 	DebugMode     bool   `mapstructure:"DEBUG_MODE"`
 	Port          string `mapstructure:"PORT"`
 	KubeConfig    string `mapstructure:"KUBE_CONFIG"`
-	KubeNamespace string `mapsructure:"KUBE_NAMESPACE"`
+	KubeNamespace string `mapstructure:"KUBE_NAMESPACE"`
 }
 
 // Log will log the configuation struct out

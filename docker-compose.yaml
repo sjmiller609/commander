@@ -11,9 +11,10 @@ services:
     labels:
       io.astronomer.docker: "true"
     ports:
-      - "8081:8081"
+      - "8880:8880"
     volumes:
       - ~/.kube/config:/root/.kube/config
+      - ~/.config/gcloud:/root/.config/gcloud
     environment:
+      COMMANDER_PORT: 8880
       COMMANDER_KUBE_CONFIG: /root/.kube/config
-

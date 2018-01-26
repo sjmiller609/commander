@@ -9,6 +9,7 @@ ENV GCLOUD_VERSION="185.0.0"
 ENV GCLOUD_FILE="google-cloud-sdk-${GCLOUD_VERSION}-linux-x86_64.tar.gz"
 ENV GCLOUD_URL="https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${GCLOUD_FILE}"
 
+WORKDIR /opt
 RUN set -x \
 	&& apk update \
 	&& apk add --no-cache --virtual .build-deps \
@@ -25,5 +26,4 @@ WORKDIR /go/src/github.com/astronomerio/commander
 COPY . .
 RUN make build
 
-EXPOSE 8881
 ENTRYPOINT ["./commander"]
