@@ -7,6 +7,6 @@ build:
 build-image:
 	docker build -t ${IMAGE_NAME} .
 
-install:
+install: build
 	mkdir -p $(DESTDIR)
 	cp ${OUTPUT} $(DESTDIR)
