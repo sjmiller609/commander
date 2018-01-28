@@ -19,7 +19,9 @@ RUN apk update \
 	&& wget ${GCLOUD_URL} \
 	&& tar -xvf ${GCLOUD_FILE} \
 	&& rm ${GCLOUD_FILE} \
-	&& google-cloud-sdk/install.sh
+	&& google-cloud-sdk/install.sh \
+	&& mkdir -p /opt \
+	&& mv google-cloud-sdk /opt
 
 WORKDIR /usr/lib/go/src/${REPO}
 COPY . .

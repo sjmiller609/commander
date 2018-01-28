@@ -72,6 +72,7 @@ func (h *AirflowRouteHandler) patchDeployment(c *gin.Context) {
 	if patchErr != nil {
 		logger.Error(patchErr)
 		c.JSON(http.StatusInternalServerError, resp)
+		return
 	}
 
 	c.JSON(http.StatusOK, resp)
