@@ -44,6 +44,9 @@ func (c *Client) Serve(port string) error {
 		handler.Register(router)
 	}
 
+	router.GET("/", func(c *gin.Context) {
+		c.String(http.StatusOK, "OK")
+	})
 	router.GET("/health", func(c *gin.Context) {
 		c.String(http.StatusOK, "OK")
 	})
