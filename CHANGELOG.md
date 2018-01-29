@@ -6,3 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Initial support for listing deployments.
 - Initial support for patching deployments.
+
+## [0.0.7] - 2018-01-28
+### Added
+- Respond to / with 200.
