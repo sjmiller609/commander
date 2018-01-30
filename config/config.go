@@ -44,7 +44,7 @@ func init() {
 // Set some default values
 func setDefaults() {
 	viper.SetDefault("DEBUG_MODE", true)
-	viper.SetDefault("PORT", "8081")
+	viper.SetDefault("PORT", "8880")
 	viper.SetDefault("KUBE_CONFIG", "")
 	viper.SetDefault("KUBE_NAMESPACE", "astronomer-system")
 }

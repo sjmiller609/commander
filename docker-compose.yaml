@@ -14,5 +14,4 @@ services:
       - ~/.kube/config:/root/.kube/config
       - ~/.config/gcloud:/root/.config/gcloud
     environment:
-      COMMANDER_PORT: 8880
       COMMANDER_KUBE_CONFIG: /root/.kube/config
