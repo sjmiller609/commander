@@ -6,7 +6,6 @@ import (
 	"github.com/astronomerio/commander/config"
 	"github.com/astronomerio/commander/provisioner"
 	"github.com/sirupsen/logrus"
-	apiappsv1beta2 "k8s.io/api/apps/v1beta2"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	typedappsv1beta2 "k8s.io/client-go/kubernetes/typed/apps/v1beta2"
@@ -62,110 +61,115 @@ func NewKubeProvisioner() (*KubeProvisioner, error) {
 }
 
 // ListDeployments returns a list of known deployments.
-func (p *KubeProvisioner) ListDeployments(organizationID string) (*provisioner.ListDeploymentResponse, error) {
-	logger := log.WithField("function", "ListDeployments")
-	logger.Debug("Entered ListDeployments")
+// func (p *KubeProvisioner) ListDeployments(organizationID string) (*provisioner.ListDeploymentResponse, error) {
+// 	logger := log.WithField("function", "ListDeployments")
+// 	logger.Debug("Entered ListDeployments")
 
-	labels := fmt.Sprintf("organization=%s, tier=airflow-core", organizationID)
-	deployments, listErr := p.deploymentsClient.List(metav1.ListOptions{
-		LabelSelector: labels,
-	})
+// 	labels := fmt.Sprintf("organization=%s, tier=airflow-core", organizationID)
+// 	deployments, listErr := p.deploymentsClient.List(metav1.ListOptions{
+// 		LabelSelector: labels,
+// 	})
 
-	if listErr != nil {
-		return nil, listErr
-	}
+// 	if listErr != nil {
+// 		return nil, listErr
+// 	}
 
-	// Use a map to create a unique list
-	items := make(map[string]bool)
-	for _, deployment := range deployments.Items {
-		if release, ok := deployment.ObjectMeta.Labels["release"]; ok {
-			items[release] = true
-		}
-	}
+// 	// Use a map to create a unique list
+// 	items := make(map[string]bool)
+// 	for _, deployment := range deployments.Items {
+// 		if release, ok := deployment.ObjectMeta.Labels["release"]; ok {
+// 			items[release] = true
+// 		}
+// 	}
 
-	releaseNames := []string{}
-	for key := range items {
-		releaseNames = append(releaseNames, key)
-	}
+// 	releaseNames := []string{}
+// 	for key := range items {
+// 		releaseNames = append(releaseNames, key)
+// 	}
 
-	resp := &provisioner.ListDeploymentResponse{
-		Items: releaseNames,
-	}
-	return resp, nil
-}
+// 	resp := &provisioner.ListDeploymentResponse{
+// 		Items: releaseNames,
+// 	}
+// 	return resp, nil
+// }
 
 // PatchDeployment patches a deployment in place.
-func (p *KubeProvisioner) PatchDeployment(deploymentID string, req *provisioner.PatchDeploymentRequest) (*provisioner.PatchDeploymentResponse, error) {
+func (p *KubeProvisioner) PatchDeployment(patchReq *provisioner.PatchDeploymentRequest) (*provisioner.PatchDeploymentResponse, error) {
 	logger := log.WithField("function", "PatchDeployment")
 	logger.Debug("Entered PatchDeployment")
+	logger.Debug(fmt.Sprintf("%+v", patchReq))
 
-	webserverName := fmt.Sprintf("%s-webserver", deploymentID)
-	_, webErr := p.patchDeployment(webserverName, req.Image)
-	if webErr != nil {
-		return nil, webErr
+	metadata := patchReq.Metadata
+	labels := fmt.Sprintf("release=%s, tier=%s", metadata.DeploymentID, metadata.ComponentID)
+	depErr := p.patchDeployment(labels, patchReq.Image)
+	if depErr != nil {
+		return nil, depErr
 	}
 
-	schedulerName := fmt.Sprintf("%s-scheduler", deploymentID)
-	_, schedErr := p.patchDeployment(schedulerName, req.Image)
-	if schedErr != nil {
-		return nil, schedErr
+	stsErr := p.patchStatefulSet(labels, patchReq.Image)
+	if stsErr != nil {
+		return nil, stsErr
 	}
 
-	flowerName := fmt.Sprintf("%s-flower", deploymentID)
-	_, flowerErr := p.patchDeployment(flowerName, req.Image)
-	if flowerErr != nil {
-		return nil, flowerErr
-	}
-
-	workerName := fmt.Sprintf("%s-worker", deploymentID)
-	_, workerErr := p.patchStatefulSet(workerName, req.Image)
-	if workerErr != nil {
-		return nil, workerErr
-	}
-
-	resp := &provisioner.PatchDeploymentResponse{}
-	return resp, nil
+	return &provisioner.PatchDeploymentResponse{}, nil
 }
 
 // Patches a Kubernetes Deployment resource.
-func (p *KubeProvisioner) patchDeployment(name, image string) (*apiappsv1beta2.Deployment, error) {
+func (p *KubeProvisioner) patchDeployment(labels, image string) error {
 	logger := log.WithField("function", "patchDeployment")
-	logger.Debug("Entered patchDeployment")
+	logger.Debug("Applying deployment patches...")
+	logger.Debug(fmt.Sprintf("Using labels %s", labels))
 
-	// Get the deployment using the given name.
-	d, getErr := p.deploymentsClient.Get(name, metav1.GetOptions{})
-	if getErr != nil {
-		return d, getErr
+	deployments, listErr := p.deploymentsClient.List(metav1.ListOptions{
+		LabelSelector: labels,
+	})
+	if listErr != nil {
+		return listErr
+	}
+	logger.Debug(fmt.Sprintf("Found %d deployments", len(deployments.Items)))
+
+	for _, d := range deployments.Items {
+		// Update the deployment.
+		retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
+			d.Spec.Template.Spec.Containers[0].Image = image
+			_, updateErr := p.deploymentsClient.Update(&d)
+			return updateErr
+		})
+		if retryErr != nil {
+			return retryErr
+		}
 	}
 
-	// Update the deployment.
-	retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
-		d.Spec.Template.Spec.Containers[0].Image = image
-		_, updateErr := p.deploymentsClient.Update(d)
-		return updateErr
-	})
-
-	return d, retryErr
+	return nil
 }
 
 // Patches a Kubernetes StatefulSet resource.
-func (p *KubeProvisioner) patchStatefulSet(name, image string) (*apiappsv1beta2.StatefulSet, error) {
+func (p *KubeProvisioner) patchStatefulSet(labels, image string) error {
 	logger := log.WithField("function", "patchStatefulSet")
-	logger.Debug("Entered patchStatefulSet")
+	logger.Debug("Applying statefulset patches...")
+	logger.Debug(fmt.Sprintf("Using labels %s", labels))
 
-	// Get the statefulset using the given name.
-	s, getErr := p.stsClient.Get(name, metav1.GetOptions{})
-	if getErr != nil {
-		return s, getErr
+	sts, listErr := p.stsClient.List(metav1.ListOptions{
+		LabelSelector: labels,
+	})
+	if listErr != nil {
+		return listErr
+	}
+	logger.Debug(fmt.Sprintf("Found %d statefulsets", len(sts.Items)))
+
+	for _, s := range sts.Items {
+		// Update the statefulset.
+		retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
+			// Workers have a sidecar.
+			s.Spec.Template.Spec.Containers[0].Image = image
+			s.Spec.Template.Spec.Containers[1].Image = image
+			_, updateErr := p.stsClient.Update(&s)
+			return updateErr
+		})
+		if retryErr != nil {
+			return retryErr
+		}
 	}
 
-	// Update the statefulset.
-	retryErr := retry.RetryOnConflict(retry.DefaultRetry, func() error {
-		s.Spec.Template.Spec.Containers[0].Image = image
-		s.Spec.Template.Spec.Containers[1].Image = image
-		_, updateErr := p.stsClient.Update(s)
-		return updateErr
-	})
-
-	return s, retryErr
+	return nil
 }

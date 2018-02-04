@@ -3,8 +3,8 @@ package provisioner
 // Provisioner types are capable of scheduling and various maintenace tasks
 // of containers running on various container orchestrators.
 type Provisioner interface {
-	ListDeployments(organizationID string) (*ListDeploymentResponse, error)
-	PatchDeployment(deploymentID string, patchReq *PatchDeploymentRequest) (*PatchDeploymentResponse, error)
+	// ListDeployments(organizationID string) (*ListDeploymentResponse, error)
+	PatchDeployment(patchReq *PatchDeploymentRequest) (*PatchDeploymentResponse, error)
 }
 
 // ListDeploymentResponse is a response from listing deployments.
@@ -12,9 +12,16 @@ type ListDeploymentResponse struct {
 	Items []string
 }
 
+// DeploymentMetadata uniquely describes a deploymnet.
+type DeploymentMetadata struct {
+	DeploymentID string `json:"deploymentId,omitempty"`
+	ComponentID  string `json:"componentId,omitempty"`
+}
+
 // PatchDeploymentRequest is a request to patch an existing deployment.
 type PatchDeploymentRequest struct {
-	Image string `json:"image,omitempty"`
+	Metadata DeploymentMetadata
+	Image    string `json:"image,omitempty"`
 	// Workers int    `json:"workers,omitempty"`
 }
 

@@ -12,63 +12,67 @@ var (
 	log = logrus.WithField("package", "v1")
 )
 
-// AirflowRouteHandler is a route handler for Airflow on Kubernetes
-type AirflowRouteHandler struct {
+// DeploymentRouteHandler is a route handler for Airflow on Kubernetes
+type DeploymentRouteHandler struct {
 	provisionHandler provisioner.Provisioner
 }
 
-// NewAirflowRouteHandler creates a new KubeAirflowRouteHandler
-func NewAirflowRouteHandler(provHandler provisioner.Provisioner) *AirflowRouteHandler {
-	return &AirflowRouteHandler{
+// NewDeploymentRouteHandler creates a new KubeAirflowRouteHandler
+func NewDeploymentRouteHandler(provHandler provisioner.Provisioner) *DeploymentRouteHandler {
+	return &DeploymentRouteHandler{
 		provisionHandler: provHandler,
 	}
 }
 
 // Register registers the routes for KubeAirflowRouteHandler
-func (h *AirflowRouteHandler) Register(router *gin.Engine) {
-	airflowRouter := router.Group("/v1").Group("/airflow")
+func (h *DeploymentRouteHandler) Register(router *gin.Engine) {
+	depRouter := router.Group("/v1")
 	{
-		airflowRouter.GET(":organization_id/deployments", h.listDeployments)
-		airflowRouter.POST(":organization_id/deployments", h.createDeployment)
-		airflowRouter.PATCH(":organization_id/deployments/:deployment_id", h.patchDeployment)
-		airflowRouter.DELETE(":organization_id/deployments/:deployment_id", h.deleteDeployment)
+		// depRouter.GET("/deployments", h.listDeployments)
+		// depRouter.POST("/deployments", h.createDeployment)
+		depRouter.PATCH("/deployments/:deploymentId/component/:componentId", h.patchDeployment)
+		// depRouter.DELETE("deployments/:deployment_id", h.deleteDeployment)
 	}
+
 }
 
-func (h *AirflowRouteHandler) listDeployments(c *gin.Context) {
-	logger := log.WithField("function", "listDeployments")
-	logger.Debug("Entered listDeployments")
+// func (h *DeploymentRouteHandler) listDeployments(c *gin.Context) {
+// 	logger := log.WithField("function", "listDeployments")
+// 	logger.Debug("Entered listDeployments")
 
-	organizationID := c.Param("organization_id")
+// 	organizationID := c.Param("organization_id")
+// 	resp, listErr := h.provisionHandler.ListDeployments(organizationID)
+// 	if listErr != nil {
+// 		logger.Error(listErr)
+// 		c.JSON(http.StatusInternalServerError, resp)
+// 	}
 
-	resp, listErr := h.provisionHandler.ListDeployments(organizationID)
-	if listErr != nil {
-		logger.Error(listErr)
-		c.JSON(http.StatusInternalServerError, resp)
-	}
-	c.JSON(http.StatusOK, resp)
-}
+// 	c.JSON(http.StatusOK, resp)
+// }
 
-func (h *AirflowRouteHandler) createDeployment(c *gin.Context) {
-	logger := log.WithField("function", "createDeployment")
-	logger.Debug("Entered createDeployment")
-	c.JSON(http.StatusOK, "")
-}
+// func (h *DeploymentRouteHandler) createDeployment(c *gin.Context) {
+// 	logger := log.WithField("function", "createDeployment")
+// 	logger.Debug("Entered createDeployment")
+// 	c.JSON(http.StatusOK, "")
+// }
 
-func (h *AirflowRouteHandler) patchDeployment(c *gin.Context) {
+func (h *DeploymentRouteHandler) patchDeployment(c *gin.Context) {
 	logger := log.WithField("function", "patchDeployment")
 	logger.Debug("Entered patchDeployment")
 
-	deploymentID := c.Param("deployment_id")
+	metadata := provisioner.DeploymentMetadata{
+		DeploymentID: c.Param("deploymentId"),
+		ComponentID:  c.Param("componentId"),
+	}
 
-	patchReq := &provisioner.PatchDeploymentRequest{}
-	if bindErr := c.BindJSON(patchReq); bindErr != nil {
-		logger.Error(bindErr)
+	patchReq := provisioner.PatchDeploymentRequest{Metadata: metadata}
+	if jsonErr := c.BindJSON(&patchReq); jsonErr != nil {
+		logger.Error(jsonErr)
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	resp, patchErr := h.provisionHandler.PatchDeployment(deploymentID, patchReq)
+	resp, patchErr := h.provisionHandler.PatchDeployment(&patchReq)
 	if patchErr != nil {
 		logger.Error(patchErr)
 		c.JSON(http.StatusInternalServerError, resp)
@@ -78,8 +82,8 @@ func (h *AirflowRouteHandler) patchDeployment(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-func (h *AirflowRouteHandler) deleteDeployment(c *gin.Context) {
-	logger := log.WithField("function", "deleteDeployment")
-	logger.Debug("Entered deleteDeployment")
-	c.JSON(http.StatusOK, "")
-}
+// func (h *DeploymentRouteHandler) deleteDeployment(c *gin.Context) {
+// 	logger := log.WithField("function", "deleteDeployment")
+// 	logger.Debug("Entered deleteDeployment")
+// 	c.JSON(http.StatusOK, "")
+// }

@@ -36,13 +36,13 @@ func start() {
 
 	// Create new API client and begin accepting requests
 	client := api.NewClient()
-	initAirflowRouteHandler(client)
+	initDeploymentRouteHandler(client)
 	client.Serve(appConfig.Port)
 }
 
-func initAirflowRouteHandler(client *api.Client) {
-	logger := log.WithField("function", "initAirflowRouteHandler")
-	logger.Debug("Entered initAirflowRouteHandler")
+func initDeploymentRouteHandler(client *api.Client) {
+	logger := log.WithField("function", "initDeploymentRouteHandler")
+	logger.Debug("Entered initDeploymentRouteHandler")
 
 	kubernetesProvisioner, err := kubernetes.NewKubeProvisioner()
 	if err != nil {
@@ -50,6 +50,6 @@ func initAirflowRouteHandler(client *api.Client) {
 	}
 
 	// Alternate provisioners can be swapped here
-	airflowRouteHandler := v1.NewAirflowRouteHandler(kubernetesProvisioner)
-	client.AppendRouteHandler(airflowRouteHandler)
+	deploymentRouteHandler := v1.NewDeploymentRouteHandler(kubernetesProvisioner)
+	client.AppendRouteHandler(deploymentRouteHandler)
 }

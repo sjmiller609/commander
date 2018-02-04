@@ -1,5 +1,5 @@
 OUTPUT ?= commander
-IMAGE_NAME ?= astronomerinc/ap-pce-${OUTPUT}
+IMAGE_NAME ?= astronomerinc/ap-${OUTPUT}
 
 .DEFAULT_GOAL := build
 
