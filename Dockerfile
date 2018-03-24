@@ -14,6 +14,7 @@ ENV GCLOUD_URL="https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${GCL
 RUN apk update \
 	&& apk add \
 		build-base \
+		ca-certificates \
 		go \
 		python2 \
 	&& wget ${GCLOUD_URL} \
@@ -24,7 +25,8 @@ RUN apk update \
 	&& mv google-cloud-sdk /opt
 
 WORKDIR /usr/lib/go/src/${REPO}
-COPY . .
-RUN make build
 
+COPY . .
+
+RUN make build
 ENTRYPOINT ["./commander"]

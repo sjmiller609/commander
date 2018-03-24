@@ -13,5 +13,10 @@ services:
     volumes:
       - ~/.kube/config:/root/.kube/config
       - ~/.config/gcloud:/root/.config/gcloud
+      - /Users/macbook/.minikube/:/Users/macbook/.minikube/
     environment:
-      COMMANDER_KUBE_CONFIG: /root/.kube/config
+      COMMANDER_KUBECONFIG: /root/.kube/config
+      ENVIRONMENT: development
+      COMMANDER_KUBE_CORE_NAMESPACE: "astro-core"
+      COMMANDER_KUBE_AIRFLOW_NAMESPACE: "astro-airflow"
+      COMMANDER_KUBE_CLICKSTREAM_NAMESPACE: "astro-clickstream"

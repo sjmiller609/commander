@@ -1,6 +1,7 @@
 OUTPUT ?= commander
 IMAGE_NAME ?= astronomerinc/ap-${OUTPUT}
-
+PROTO_SRC ?= $(shell pwd)/_proto
+PROTO_DEST ?= $(shell pwd)/api
 .DEFAULT_GOAL := build
 
 dep:
@@ -11,6 +12,9 @@ build:
 
 build-image:
 	docker build -t ${IMAGE_NAME} .
+
+build-proto:
+	protoc --proto_path=${PROTO_SRC} --go_out=plugins=grpc:${PROTO_DEST} $(shell find ${PROTO_SRC} -type f -name "*.proto")
 
 install: build
 	mkdir -p $(DESTDIR)
