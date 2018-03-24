@@ -4,6 +4,11 @@ package provisioner
 // of containers running on various container orchestrators.
 type Provisioner interface {
 	// ListDeployments(organizationID string) (*ListDeploymentResponse, error)
+	InstallDeployment()
+	UpdateDeployment()
+	UpgradeDeployment()
+	DeleteDeployment()
+	ListDeployments()
 	PatchDeployment(patchReq *PatchDeploymentRequest) (*PatchDeploymentResponse, error)
 }
 
@@ -27,4 +32,5 @@ type PatchDeploymentRequest struct {
 
 // PatchDeploymentResponse is a response from patching an existing deployment.
 type PatchDeploymentResponse struct {
+
 }
