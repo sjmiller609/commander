@@ -952,6 +952,7 @@
   name = "k8s.io/helm"
   packages = [
     "pkg/chartutil",
+    "pkg/downloader",
     "pkg/getter",
     "pkg/helm",
     "pkg/helm/environment",
@@ -965,6 +966,7 @@
     "pkg/proto/hapi/version",
     "pkg/provenance",
     "pkg/repo",
+    "pkg/resolver",
     "pkg/sympath",
     "pkg/tlsutil",
     "pkg/urlutil",
@@ -1179,6 +1181,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "afc1bdea37ded125efe7f70c87742a8ee956d7cd7faca7d355e19e1d49b1e17c"
+  inputs-digest = "9b3a217098e0c88a79cee8fbdfeba114b6889be59d41c7464e356e98551b3b37"
   solver-name = "gps-cdcl"
   solver-version = 1
