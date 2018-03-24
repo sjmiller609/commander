@@ -27,6 +27,9 @@ var RootCmd = &cobra.Command{
 func start() {
 	// Set up logging
 	logrus.SetOutput(os.Stdout)
+
+	config.Init()
+
 	if appConfig.DebugMode {
 		logrus.SetLevel(logrus.DebugLevel)
 	}

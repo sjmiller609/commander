@@ -17,8 +17,11 @@ var (
 type Configuration struct {
 	DebugMode     bool   `mapstructure:"DEBUG_MODE"`
 	Port          string `mapstructure:"PORT"`
-	KubeConfig    string `mapstructure:"KUBE_CONFIG"`
-	KubeNamespace string `mapstructure:"KUBE_NAMESPACE"`
+	KubeConfig    string `mapstructure:"KUBECONFIG"`
+	KubeCoreNS string `mapstructure:"KUBE_CORE_NAMESPACE"`
+	KubeAirflowNS string `mapstructure:"KUBE_AIRFLOW_NAMESPACE"`
+	KubeClickstreamNS string `mapstructure:"KUBE_CLICKSTREAM_NAMESPACE"`
+	HelmRepo	  string `mapstructure:"HELM_REPO"`
 }
 
 // Log will log the configuation struct out
@@ -28,7 +31,7 @@ func (c *Configuration) Log() {
 }
 
 // Initalize configuration
-func init() {
+func Init() {
 	logger := log.WithField("function", "init")
 	logger.Debug("Initializing configuration")
 
@@ -45,8 +48,11 @@ func init() {
 func setDefaults() {
 	viper.SetDefault("DEBUG_MODE", true)
 	viper.SetDefault("PORT", "8880")
-	viper.SetDefault("KUBE_CONFIG", "")
-	viper.SetDefault("KUBE_NAMESPACE", "astronomer")
+	viper.SetDefault("KUBECONFIG", "")
+	viper.SetDefault("KUBE_CORE_NAMESPACE", "astronomer")
+	viper.SetDefault("KUBE_AIRFLOW_NAMESPACE", "astronomer")
+	viper.SetDefault("KUBE_CLICKSTREAM_NAMESPACE", "astronomer")
+	viper.SetDefault("HELM_REPO", "https://helm.astronomer.io")
 }
 
 // Get returns a populated config struct
