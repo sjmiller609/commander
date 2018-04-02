@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Protobuf .proto files needed for Commander clients",
   "files": [
-    "proto/"
+    "_proto/"
   ],
   "repository": {
     "type": "git",
