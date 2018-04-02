@@ -18,16 +18,17 @@ package commander;
 
 option go_package="api";
 
-message ListDeploymentsRequest {
+message FetchDeploymentRequest {
     string name = 1;
 }
 
-message ListDeploymentsResponse {
+message FetchDeploymentResponse {
     string name = 1;
 }
 
 message CreateDeploymentRequest {
-    string name = 1;
+    string release_name = 1;
+    string encoded_config = 2;
 }
 
 message CreateDeploymentResponse {

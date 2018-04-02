@@ -21,7 +21,7 @@ import "deployment.proto";
 option go_package="api";
 
 service Commander {
-    rpc ListDeployments (ListDeploymentsRequest) returns (ListDeploymentsResponse) {}
+    rpc FetchDeployment (FetchDeploymentRequest) returns (FetchDeploymentResponse) {}
     rpc CreateDeployment (CreateDeploymentRequest) returns (CreateDeploymentResponse) {}
     rpc UpdateDeployment (UpdateDeploymentRequest) returns (UpdateDeploymentResponse) {}
     rpc UpgradeDeployment (UpgradeDeploymentRequest) returns (UpgradeDeploymentResponse) {}
