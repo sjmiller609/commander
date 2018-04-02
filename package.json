@@ -2,6 +2,7 @@
   "name": "commander",
   "version": "0.0.1",
   "description": "Protobuf .proto files needed for Commander clients",
+  "main": "index.js",
   "files": [
     "_proto/"
   ],
