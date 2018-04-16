@@ -1,7 +1,7 @@
 OUTPUT ?= commander
 IMAGE_NAME ?= astronomerinc/ap-${OUTPUT}
 PROTO_SRC ?= $(shell pwd)/_proto
-PROTO_DEST ?= $(shell pwd)/api
+PROTO_DEST ?= $(shell pwd)/pkg/proto
 .DEFAULT_GOAL := build
 
 dep:
