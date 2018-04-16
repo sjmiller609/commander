@@ -1,14 +1,14 @@
 package api
 
 import (
-	"fmt"
 	"net"
-	"strings"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
+	"github.com/astronomerio/commander/pkg/proto"
 	"github.com/astronomerio/commander/provisioner"
+	"github.com/astronomerio/commander/utils"
 )
 
 const (
@@ -16,17 +16,19 @@ const (
 )
 
 // Struct all gRPC methods will be implemented on
-type Server struct{
+type GRPCServer struct{
 	grpc *grpc.Server
-	provisioner *provisioner.Provisioner
+	provisioner provisioner.Provisioner
 }
 
 // Creates a new gRPC server instance
-func NewServer() (*Server) {
-	apiServer := Server{
+func NewGRPC(prov provisioner.Provisioner) (*GRPCServer) {
+	apiServer := GRPCServer{
 		grpc: grpc.NewServer(),
+		provisioner: prov,
 	}
-	RegisterCommanderServer(apiServer.grpc, &apiServer)
+
+	proto.RegisterCommanderServer(apiServer.grpc, &apiServer)
 
 	// Register reflection service on gRPC server.
 	reflection.Register(apiServer.grpc)
@@ -35,11 +37,11 @@ func NewServer() (*Server) {
 }
 
 // Binds a port for the gRPC server to listen to
-func (s *Server) Serve(port string) error {
-	// ensure port has a colon prefix
-	if !strings.HasPrefix(port, ":") {
-		port = fmt.Sprintf(":%s", port)
-	}
+func (s *GRPCServer) Serve(port string) error {
+	logger := log.WithField("function", "Serve")
+	logger.Debug("Starting gRPC server")
+
+	port = utils.EnsurePrefix(port, ":")
 
 	// listen to a port
 	listen, err := net.Listen("tcp", port)
