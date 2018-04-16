@@ -13,17 +13,6 @@ import (
 	"k8s.io/helm/pkg/repo"
 )
 
-func KubeNamespaceForChart(chart string) string {
-	switch chart {
-	case "airflow":
-		return appConfig.KubeAirflowNS
-	case "clickstream":
-		return appConfig.KubeClickstreamNS
-	default:
-		return appConfig.KubeCoreNS
-	}
-}
-
 func (c *Client) AddRepository(cacheFile, repoName, repoUrl string) (*repo.ChartRepository, error) {
 	entry := repo.Entry{
 		Name:  repoName,
@@ -31,12 +20,6 @@ func (c *Client) AddRepository(cacheFile, repoName, repoUrl string) (*repo.Chart
 		Cache: cacheFile,
 	}
 	repository, err := repo.NewChartRepository(&entry, getter.All(c.settings))
-	if err != nil {
-		return nil, err
-	}
-
-	// In this case, the cacheFile is always absolute. So passing empty string is safe.
-	err = c.DownloadRepository(repository)
 	if err != nil {
 		return nil, err
 	}
@@ -294,10 +277,20 @@ func (c *Client) ensureAstroRepo() error {
 		if err != nil {
 			return err
 		}
+		c.DownloadRepository(stableRepo)
+		if err != nil {
+			return err
+		}
+
 		astroRepo, err := c.AddRepository(c.localRepoPath(astroRepoName), astroRepoName, c.repoUrl)
 		if err != nil {
 			return err
 		}
+		c.DownloadRepository(astroRepo)
+		if err != nil {
+			return err
+		}
+
 		f.Add(stableRepo.Config)
 		f.Add(astroRepo.Config)
 		c.repo = astroRepo
@@ -313,6 +306,13 @@ func (c *Client) ensureAstroRepo() error {
 		}
 	} else if fi.IsDir() {
 		return fmt.Errorf("%s must be a file, not a directory", repoFile)
+	} else {
+		astroRepo, err := c.AddRepository(c.localRepoPath(astroRepoName), astroRepoName, c.repoUrl)
+		if err != nil {
+			return err
+		}
+		c.repo = astroRepo
+		c.LoadRepoIndex()
 	}
 	return nil
 }

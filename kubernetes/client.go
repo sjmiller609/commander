@@ -15,7 +15,8 @@ var (
 
 // KubeProvisioner is capable of deploying and maintaining jobs on Kubernetes.
 type Client struct {
-	clientSet *kube.Clientset
+	ClientSet *kube.Clientset
+	Config *rest.Config
 	Namespace *Namespace
 }
 
@@ -30,9 +31,15 @@ func New(kubeConfig *rest.Config) (*Client, error) {
 	}
 
 	return &Client{
-		clientSet: clientSet,
+		ClientSet: clientSet,
+		Config: kubeConfig,
 		Namespace: &Namespace{
-			clientSet: clientSet,
+			ClientSet: clientSet,
 		},
 	}, nil
+}
+
+// TODO: Couldn't get type assertion working so did this, loop back later and do it properly
+func (c *Client) ClientSetInterface() kube.Interface {
+	return c.ClientSet
 }

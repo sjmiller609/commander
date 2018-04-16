@@ -8,11 +8,11 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 type Namespace struct {
-	clientSet *kube.Clientset
+	ClientSet *kube.Clientset
 }
 
 func (n *Namespace) Exists(namespace string) (bool, error) {
-	_, err := n.clientSet.Core().Namespaces().Get(namespace, metav1.GetOptions{})
+	_, err := n.ClientSet.Core().Namespaces().Get(namespace, metav1.GetOptions{})
 	if err != nil {
 		// Maybe better to list all namespaces and search it so we don't have to do a dirty check
 		if err.Error() == fmt.Sprintf("namespaces \"%s\" not found", namespace) {
@@ -30,7 +30,7 @@ func (n *Namespace) Create(namespace string) (*v1.Namespace, error) {
 			Name: namespace,
 		},
 	}
-	return n.clientSet.Core().Namespaces().Create(ns)
+	return n.ClientSet.Core().Namespaces().Create(ns)
 }
 
 func (n *Namespace) Ensure(namespace string) (error) {
