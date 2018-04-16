@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package commander;
+
+option go_package="proto";
+
+message UUID {
+    string value = 1;
+}
+
+message Env {
+    string key = 1; // env key
+    string value = 2; // env value
+}
+
+message EnvSecret {
+    string key = 1; // env key
+    string name = 2; // the name of the secret
+}
+
+message Secret {
+    string name = 1;
+    string key = 2;
+    string value = 3;
+}
+
+message Result {
+    bool success = 1;
+    string message = 2;
+}
+
+message Chart {
+    string name = 1;
+    string version = 2;
+}
+
+message Deployment {
+    string release_name = 1;
+}

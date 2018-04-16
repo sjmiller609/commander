@@ -1,54 +1,57 @@
-// Copyright 2015 gRPC authors.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 syntax = "proto3";
 
 package commander;
 
-option go_package="api";
+import "common.proto";
+
+option go_package="proto";
 
 message FetchDeploymentRequest {
     string name = 1;
 }
 
 message FetchDeploymentResponse {
-    string name = 1;
+    Result result = 1;
+    repeated Deployment deployments = 2;
 }
 
 message CreateDeploymentRequest {
     string release_name = 1;
-    string encoded_config = 2;
+    string raw_config = 2;
+    Chart chart = 3;
+    UUID organization_uuid = 6;
+    repeated Secret secrets = 10; // secrets to be set
+    repeated EnvSecret env_secret = 11;
 }
 
 message CreateDeploymentResponse {
-    string name = 1;
+    Result result = 1;
+    Deployment deployment = 2;
 }
 
 message UpdateDeploymentRequest {
-    string name = 1;
+    string release_name = 1;
+    string raw_config = 2;
+    Chart chart = 3;
+    UUID organization_uuid = 6;
+    repeated Secret secrets = 10; // secrets to be set
+    repeated EnvSecret env_secret = 11;
 }
 
 message UpdateDeploymentResponse {
-    string name = 1;
+    Result result = 1;
+    Deployment deployment = 2;
 }
 
 message UpgradeDeploymentRequest {
-    string name = 1;
+    string release_name = 1;
+    string raw_config = 2;
+    Chart chart = 3;
 }
 
 message UpgradeDeploymentResponse {
-    string name = 1;
+    Result result = 1;
+    Deployment deployment = 2;
 }
 
 message DeleteDeploymentRequest {
@@ -56,6 +59,7 @@ message DeleteDeploymentRequest {
 }
 
 message DeleteDeploymentResponse {
-    string release_name = 1;
+    Result result = 1;
+    Deployment deployment = 2;
 }
 
