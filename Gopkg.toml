@@ -101,3 +101,7 @@
 [[override]]
   name = "github.com/russross/blackfriday"
   revision = "55d61fa8aa702f59229e6cff85793c22e580eaf5"
+
+[[override]]
+  name = "google.golang.org/grpc"
+  revision = "5ffe3083946d5603a0578721101dc8165b1d5b5f"
