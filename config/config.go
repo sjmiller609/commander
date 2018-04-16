@@ -16,12 +16,12 @@ var (
 // Configuration is a struct to hold provisioner configs
 type Configuration struct {
 	DebugMode     bool   `mapstructure:"DEBUG_MODE"`
-	Port          string `mapstructure:"PORT"`
+	HttpPort          string `mapstructure:"HTTP_PORT"`
+	GRPCPort          string `mapstructure:"GRPC_PORT"`
 	KubeConfig    string `mapstructure:"KUBECONFIG"`
-	KubeCoreNS string `mapstructure:"KUBE_CORE_NAMESPACE"`
-	KubeAirflowNS string `mapstructure:"KUBE_AIRFLOW_NAMESPACE"`
-	KubeClickstreamNS string `mapstructure:"KUBE_CLICKSTREAM_NAMESPACE"`
+	KubeNamespace string `mapstructure:"KUBE_NAMESPACE"`
 	HelmRepo	  string `mapstructure:"HELM_REPO"`
+	TillerHost		string `mapstructure:"TILLER_HOST"`
 }
 
 // Log will log the configuation struct out
@@ -47,12 +47,12 @@ func Init() {
 // Set some default values
 func setDefaults() {
 	viper.SetDefault("DEBUG_MODE", true)
-	viper.SetDefault("PORT", "8880")
+	viper.SetDefault("HTTP_PORT", "8880")
+	viper.SetDefault("GRPC_PORT", "50051")
 	viper.SetDefault("KUBECONFIG", "")
-	viper.SetDefault("KUBE_CORE_NAMESPACE", "astronomer")
-	viper.SetDefault("KUBE_AIRFLOW_NAMESPACE", "astronomer")
-	viper.SetDefault("KUBE_CLICKSTREAM_NAMESPACE", "astronomer")
+	viper.SetDefault("KUBE_NAMESPACE", "astronomer")
 	viper.SetDefault("HELM_REPO", "https://helm.astronomer.io")
+	viper.SetDefault("TILLER_HOST", "127.0.0.1:34477")
 }
 
 // Get returns a populated config struct

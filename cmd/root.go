@@ -7,6 +7,7 @@ import (
 	"github.com/astronomerio/commander/api"
 	"github.com/astronomerio/commander/config"
 	"github.com/astronomerio/commander/kubernetes"
+	kubeProv "github.com/astronomerio/commander/provisioner/kubernetes"
 	"github.com/astronomerio/commander/helm"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -40,14 +41,6 @@ func start() {
 	logger := log.WithField("function", "start")
 	logger.Info("Starting commander")
 
-	helmClient := helm.New(appConfig.HelmRepo)
-
-	fmt.Println("DERP Helm initialized lets install a release")
-	_, err := helmClient.InstallRelease("astronomer-ee/airflow", "",      appConfig.KubeAirflowNS, map[string]interface{}{})
-	fmt.Println(err)
-	//_, err = helmClient.InstallRelease("astronomer-ee/airflow", "0.1.2", appConfig.KubeAirflowNS, map[string]interface{}{})
-	//fmt.Println(err)
-
 	kubeConfig, err := kubernetes.GetKubeConfig()
 	if err != nil {
 		logger.Panic(err)
@@ -58,23 +51,20 @@ func start() {
 		logger.Panic(err)
 	}
 
-	// Ensure all namespaces exist
-	kubeClient.Namespace.Ensure(appConfig.KubeCoreNS)
-	kubeClient.Namespace.Ensure(appConfig.KubeAirflowNS)
-	kubeClient.Namespace.Ensure(appConfig.KubeClickstreamNS)
+	err = kubeClient.Namespace.Ensure(appConfig.KubeNamespace)
+	if err != nil {
+		logger.Panic(err)
+	}
 
-	// Create new API client and begin accepting requests
-	server := api.NewServer()
-	logger.Info(fmt.Sprintf("Starting gRPC server on port %s", appConfig.Port))
-	server.Serve(appConfig.Port)
-}
+	helmClient := helm.New(kubeClient, appConfig.HelmRepo)
 
-func getProvisioner() {
-	//kubernetesProvisioner, err := kubernetes.NewKubeProvisioner()
-	//if err != nil {
-	//	logger.Panic(err)
-	//}
-	//
-	//// Alternate provisioners can be swapped here
-	//client.AppendRouteHandler(deploymentRouteHandler)
+	prov := kubeProv.New(helmClient, kubeClient)
+
+	httpServer := api.NewHttp()
+	logger.Info(fmt.Sprintf("Starting HTTP server on port %s", appConfig.HttpPort))
+	httpServer.Serve(appConfig.HttpPort)
+
+	grpcServer := api.NewGRPC(&prov)
+	logger.Info(fmt.Sprintf("Starting gRPC server on port %s", appConfig.GRPCPort))
+	grpcServer.Serve(appConfig.GRPCPort)
 }
