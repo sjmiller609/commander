@@ -7,9 +7,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    restart: unless-stopped
     ports:
       - "8880:8880"
+      - "50051:50051"
     volumes:
       - ~/.kube/config:/root/.kube/config
       - ~/.config/gcloud:/root/.config/gcloud
@@ -17,6 +17,6 @@ services:
     environment:
       COMMANDER_KUBECONFIG: /root/.kube/config
       ENVIRONMENT: development
-      COMMANDER_KUBE_CORE_NAMESPACE: "astro-core"
-      COMMANDER_KUBE_AIRFLOW_NAMESPACE: "astro-airflow"
-      COMMANDER_KUBE_CLICKSTREAM_NAMESPACE: "astro-clickstream"
+      GRPC_TRACE: all
+      GRPC_VERBOSITY: DEBUG
+      COMMANDER_KUBE_NAMESPACE: "cj-dev-test"
