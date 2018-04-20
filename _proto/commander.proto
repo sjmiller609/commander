@@ -2,11 +2,13 @@ syntax = "proto3";
 
 package commander;
 
+import "common.proto";
 import "deployment.proto";
 
 option go_package="proto";
 
 service Commander {
+    rpc Ping (PingRequest) returns (PingResponse) {}
     rpc FetchDeployment (FetchDeploymentRequest) returns (FetchDeploymentResponse) {}
     rpc CreateDeployment (CreateDeploymentRequest) returns (CreateDeploymentResponse) {}
     rpc UpdateDeployment (UpdateDeploymentRequest) returns (UpdateDeploymentResponse) {}

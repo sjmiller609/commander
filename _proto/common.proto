@@ -4,6 +4,11 @@ package commander;
 
 option go_package="proto";
 
+message PingRequest {}
+message PingResponse {
+    int64 received = 1;
+}
+
 message UUID {
     string value = 1;
 }

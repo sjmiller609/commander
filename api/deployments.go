@@ -2,11 +2,18 @@ package api
 
 import (
 	"fmt"
+	"time"
 
 	"golang.org/x/net/context"
 
 	"github.com/astronomerio/commander/pkg/proto"
 )
+
+func (s *GRPCServer) Ping(ctx context.Context, in *proto.PingRequest) (*proto.PingResponse, error) {
+	return &proto.PingResponse{
+		Received: time.Now().UnixNano() / int64(time.Millisecond),
+	}, nil
+}
 
 func (s *GRPCServer) FetchDeployment(ctx context.Context, in *proto.FetchDeploymentRequest) (*proto.FetchDeploymentResponse, error) {
 	return &proto.FetchDeploymentResponse{}, nil
