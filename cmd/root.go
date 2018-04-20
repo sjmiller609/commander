@@ -51,10 +51,10 @@ func start() {
 		logger.Panic(err)
 	}
 
-	err = kubeClient.Namespace.Ensure(appConfig.KubeNamespace)
-	if err != nil {
-		logger.Panic(err)
-	}
+	//err = kubeClient.Namespace.Ensure(appConfig.KubeNamespace)
+	//if err != nil {
+	//	logger.Panic(err)
+	//}
 
 	helmClient := helm.New(kubeClient, appConfig.HelmRepo)
 
