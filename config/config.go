@@ -21,6 +21,7 @@ type Configuration struct {
 	KubeConfig    string `mapstructure:"KUBECONFIG"`
 	KubeNamespace string `mapstructure:"KUBE_NAMESPACE"`
 	HelmRepo	  string `mapstructure:"HELM_REPO"`
+	HelmRepoName	  string `mapstructure:"HELM_REPO_NAME"`
 	TillerHost		string `mapstructure:"TILLER_HOST"`
 }
 
@@ -52,6 +53,7 @@ func setDefaults() {
 	viper.SetDefault("KUBECONFIG", "")
 	viper.SetDefault("KUBE_NAMESPACE", "astronomer")
 	viper.SetDefault("HELM_REPO", "https://helm.astronomer.io")
+	viper.SetDefault("HELM_REPO_NAME", "astronomer-ee")
 	viper.SetDefault("TILLER_HOST", "127.0.0.1:34477")
 }
 
