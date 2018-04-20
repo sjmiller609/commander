@@ -16,7 +16,7 @@ func EnsurePrefix(value string, prefix string) string {
 func ParseJSON(value string) (map[string]interface{}, error) {
 	var result map[string]interface{}
 
-	err := json.Unmarshal([]byte(value), result)
+	err := json.Unmarshal([]byte(value), &result)
 	if err != nil {
 		return nil, err
 	}

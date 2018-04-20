@@ -19,3 +19,17 @@ func TestEnsurePrefix(t *testing.T) {
 		t.Error(errors.New("test2 was double prefixed"))
 	}
 }
+
+func TestParseJson(t *testing.T) {
+
+	jsonString := "{\"foo\":\"bar\"}"
+	jsonObj, err := ParseJSON(jsonString)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	if jsonObj["foo"] != "bar" {
+		t.Error(errors.New("unexpected parsed json"))
+	}
+}
