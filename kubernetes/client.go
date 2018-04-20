@@ -18,6 +18,7 @@ type Client struct {
 	ClientSet *kube.Clientset
 	Config *rest.Config
 	Namespace *Namespace
+	Secret *Secret
 }
 
 // NewKubeProvisioner returns a new KubeProvisioner
@@ -34,6 +35,9 @@ func New(kubeConfig *rest.Config) (*Client, error) {
 		ClientSet: clientSet,
 		Config: kubeConfig,
 		Namespace: &Namespace{
+			ClientSet: clientSet,
+		},
+		Secret: &Secret {
 			ClientSet: clientSet,
 		},
 	}, nil
