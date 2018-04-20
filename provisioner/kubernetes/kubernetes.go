@@ -32,20 +32,25 @@ func New(helm *helm.Client, kube *kubernetes.Client) KubeProvisioner {
 func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentRequest) (*proto.CreateDeploymentResponse) {
 	response := &proto.CreateDeploymentResponse{}
 
+	if len(request.Secrets) > 0 {
+		for _, secret := range request.Secrets {
+			k.kube.Secret.Create(secret.Name, secret.Key, secret.Value, appConfig.KubeNamespace, request.ReleaseName)
+		}
+	}
+
 	options, err := utils.ParseJSON(request.RawConfig)
 	if err != nil {
-		response.Result = BuildResult(err)
+		response.Result = BuildResult(false, err.Error())
 		return response
 	}
 
-	install, err := k.helm.InstallRelease(request.Chart.Name, request.Chart.Version, appConfig.KubeNamespace, options)
+	install, err := k.helm.InstallRelease(request.ReleaseName, request.Chart.Name, request.Chart.Version, appConfig.KubeNamespace, options)
 	if err != nil {
-		response.Result = BuildResult(err)
+		response.Result = BuildResult(false, err.Error())
 		return response
 	}
-
-	_ = install
-
+	response.Result = BuildResult(true, "Deployment Created")
+	response.Deployment.ReleaseName = install.Release.Name
 	return response
 }
 
@@ -250,15 +255,9 @@ func (k *KubeProvisioner) UpdateDeployment(request *proto.UpdateDeploymentReques
 // //	return nil
 // //}
 
-func BuildResult(err error) *proto.Result {
-	if err != nil {
-		return &proto.Result {
-			Success: true,
-			Message: "",
-		}
-	}
+func BuildResult(success bool, message string) *proto.Result {
 	return &proto.Result {
-		Success: false,
-		Message: err.Error(),
+		Success: success,
+		Message: message,
 	}
 }

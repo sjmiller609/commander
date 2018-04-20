@@ -21,15 +21,14 @@ func (s *GRPCServer) FetchDeployment(ctx context.Context, in *proto.FetchDeploym
 
 func (s *GRPCServer) CreateDeployment(ctx context.Context, in *proto.CreateDeploymentRequest) (*proto.CreateDeploymentResponse, error) {
 	fmt.Printf("+%v\n", in)
-	response := &proto.CreateDeploymentResponse{}
-	//response := s.provisioner.InstallDeployment(in)
+	response := s.provisioner.InstallDeployment(in)
 	fmt.Println("CreateDeployment called")
 	return response, nil
 }
 
 func (s *GRPCServer) UpdateDeployment(ctx context.Context, in *proto.UpdateDeploymentRequest) (*proto.UpdateDeploymentResponse, error) {
 	response := s.provisioner.UpdateDeployment(in)
-	fmt.Println("CreateDeployment called")
+	fmt.Println("UpdateDeployment called")
 	return response, nil
 }
 

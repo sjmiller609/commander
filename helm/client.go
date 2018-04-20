@@ -17,8 +17,7 @@ import (
 
 var (
 	appConfig = config.Get()
-	astroRepoName = "astronomer-ee"
-	log       = logrus.WithField("package", "kubernetes")
+	log       = logrus.WithField("package", "helm")
 	stableRepository         = "stable"
 	stableRepositoryURL = "https://kubernetes-charts.storage.googleapis.com"
 )
@@ -78,7 +77,9 @@ func (c *Client) Reset() {
 }
 
 // install a new chart release
-func (c *Client) InstallRelease(chartName, chartVersion, namespace string, options map[string]interface{}) (*services.InstallReleaseResponse, error) {
+func (c *Client) InstallRelease(releaseName, chartName, chartVersion, namespace string, options map[string]interface{}) (*services.InstallReleaseResponse, error) {
+	logger := log.WithField("function", "InstallRelease")
+
 	// the helm pkg client was designed to go out of scope every command, since we don't do that, we need to reset it
 	defer c.Reset()
 
@@ -87,8 +88,9 @@ func (c *Client) InstallRelease(chartName, chartVersion, namespace string, optio
 		return nil, err
 	}
 
-	chartPath, err := c.AcquireChartPath(chartName, chartVersion)
+	chartPath, err := c.AcquireChartPath(c.ChartName(chartName), chartVersion)
 	if err != nil {
+		logger.Errorf("#AcquireChartPath: %s", err.Error())
 		return nil, err
 	}
 
@@ -97,10 +99,11 @@ func (c *Client) InstallRelease(chartName, chartVersion, namespace string, optio
 		return nil, err
 	}
 
+	logger.Debug("#InstallReleaseFromChart")
 	return c.helm.InstallReleaseFromChart(chart,
 		namespace,
 		helm.ValueOverrides(optionsYaml),
-		helm.ReleaseName(""),
+		helm.ReleaseName(releaseName),
 		helm.InstallDryRun(false),
 		helm.InstallReuseName(false),
 		helm.InstallDisableHooks(false),
@@ -110,7 +113,36 @@ func (c *Client) InstallRelease(chartName, chartVersion, namespace string, optio
 }
 
 // update settings of an existing release
-func (c *Client) UpdateRelease(releaseName, options map[string]interface{}) (*services.UpdateReleaseResponse, error) {
+func (c *Client) UpdateRelease(releaseName, chartName, chartVersion string, options map[string]interface{}) (*services.UpdateReleaseResponse, error) {
+	logger := log.WithField("function", "UpdateRelease")
+
+	optionsYaml, err := yaml.Marshal(options)
+	if err != nil {
+		return nil, err
+	}
+
+	chartPath, err := c.AcquireChartPath(c.ChartName(chartName), chartVersion)
+	if err != nil {
+		logger.Errorf("#AcquireChartPath: %s", err.Error())
+		return nil, err
+	}
+
+	chart, err := chartutil.Load(chartPath)
+	if err != nil {
+		return nil, err
+	}
+
+	logger.Debug("#UpdateReleaseFromChart")
+	return c.helm.UpdateReleaseFromChart(releaseName,
+		chart,
+		helm.UpdateValueOverrides(optionsYaml),
+		helm.UpgradeDryRun(false),
+		helm.UpgradeRecreate(true),
+		helm.UpgradeDisableHooks(false),
+		helm.UpgradeTimeout(300),
+		helm.UpgradeWait(false),
+	)
+
 	return nil, nil
 }
 

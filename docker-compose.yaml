@@ -20,3 +20,4 @@ services:
       GRPC_TRACE: all
       GRPC_VERBOSITY: DEBUG
       COMMANDER_KUBE_NAMESPACE: "cj-dev-test"
+      COMMANDER_HELM_REPO: "http://docker.for.mac.localhost:11000/repo"

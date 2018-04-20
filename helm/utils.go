@@ -38,8 +38,12 @@ func (c *Client) LoadRepoIndex() (error) {
 }
 
 func (c *Client) AcquireChartPath(chart string, version string) (string, error) {
+	logger := log.WithField("function", "AcquireChartPath")
+	logger.Debugf("AcquireChartPath(%s, %s)", chart, version)
+
 	parts := strings.SplitN(chart, "/", 2)
 	if len(parts) != 2 {
+		logger.Debug("Invalid chart name")
 		return "", errors.New("chart name should be in the format 'repo/chart name'")
 	}
 	name := strings.TrimSpace(parts[1])
@@ -54,10 +58,10 @@ func (c *Client) AcquireChartPath(chart string, version string) (string, error) 
 	}
 
 	if !c.ChartDownloaded(name, version) {
-		fmt.Println("Chart not downloaded")
+		logger.Debug("Chart not downloaded")
 
 		if !c.ChartKnown(name, version) {
-			fmt.Println("Chart not known")
+			logger.Debug("Chart not known by repository")
 			// if not downloaded, we should see if it is in the index.yaml
 			// if not download the latest repo
 			// after downloading latest repo, check again if its in the index.yaml
@@ -66,11 +70,12 @@ func (c *Client) AcquireChartPath(chart string, version string) (string, error) 
 			//    download the chart
 			//    verify the chart exists in the cache now, and then return the path
 
+			logger.Debug("Update repo")
 			c.DownloadRepository(c.repo)
 			c.LoadRepoIndex()
 
 			if !c.ChartKnown(name, version) {
-				fmt.Println("Chart still not known")
+				logger.Debug("Chart still unknown")
 				return "", fmt.Errorf("chart \"%s-%s\" not found in repository", name, version)
 			}
 		}
@@ -82,6 +87,8 @@ func (c *Client) AcquireChartPath(chart string, version string) (string, error) 
 		}
 
 		if !c.ChartDownloaded(name, version) {
+			logger.Error("Error downloading chart")
+
 			return "", fmt.Errorf("could not download chart for \"%s-%s\"", name, version)
 		}
 	}
@@ -97,6 +104,10 @@ func (c *Client) ChartDownloaded(name string, version string) (bool) {
 		return false
 	}
 	return true
+}
+
+func (c *Client) ChartName(chartName string) string {
+	return fmt.Sprintf("%s/%s", appConfig.HelmRepoName, chartName)
 }
 
 func (c *Client) ChartKnown(name string, version string) (bool) {
@@ -270,6 +281,7 @@ func (c *Client) ensureDirectories() error {
 // ensures that the astronomer-ee chart repo is registered with helm
 // if not it will get added
 func (c *Client) ensureAstroRepo() error {
+	astroRepoName := appConfig.HelmRepoName
 	repoFile := c.settings.Home.RepositoryFile()
 	if fi, err := os.Stat(repoFile); err != nil {
 		f := repo.NewRepoFile()
