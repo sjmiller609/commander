@@ -49,7 +49,7 @@ func New(kubeClient *kubernetes.Client, repo string) *Client {
 	client.OpenTunnel()
 
 	client.helmOptions = []helm.Option{
-		helm.ConnectTimeout(3),
+		helm.ConnectTimeout(5),
 		helm.Host(client.settings.TillerHost),
 	}
 
