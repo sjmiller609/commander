@@ -54,7 +54,7 @@ func setDefaults() {
 	viper.SetDefault("KUBE_NAMESPACE", "astronomer")
 	viper.SetDefault("HELM_REPO", "https://helm.astronomer.io")
 	viper.SetDefault("HELM_REPO_NAME", "astronomer-ee")
-	viper.SetDefault("TILLER_HOST", "127.0.0.1:34477")
+	viper.SetDefault("TILLER_HOST", "127.0.0.1:44134")
 }
 
 // Get returns a populated config struct
