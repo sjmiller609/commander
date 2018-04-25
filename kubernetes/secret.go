@@ -28,6 +28,5 @@ func (s *Secret) Create(name string, key string, value string, namespace string,
 		},
 	}
 
-	s.ClientSet.CoreV1().Secrets(namespace).Create(secret)
-	return secret, nil
+	return s.ClientSet.CoreV1().Secrets(namespace).Create(secret)
 }
