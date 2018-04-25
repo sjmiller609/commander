@@ -20,7 +20,6 @@ func (s *GRPCServer) FetchDeployment(ctx context.Context, in *proto.FetchDeploym
 }
 
 func (s *GRPCServer) CreateDeployment(ctx context.Context, in *proto.CreateDeploymentRequest) (*proto.CreateDeploymentResponse, error) {
-	fmt.Printf("+%v\n", in)
 	response := s.provisioner.InstallDeployment(in)
 	fmt.Println("CreateDeployment called")
 	return response, nil
