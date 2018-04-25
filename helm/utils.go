@@ -98,7 +98,6 @@ func (c *Client) AcquireChartPath(chart string, version string) (string, error) 
 
 func (c *Client) ChartDownloaded(name string, version string) (bool) {
 	absPath := c.buildChartPath(name, version)
-	fmt.Println(absPath)
 	_, err := os.Stat(absPath)
 	if err != nil {
 		return false
@@ -111,13 +110,11 @@ func (c *Client) ChartName(chartName string) string {
 }
 
 func (c *Client) ChartKnown(name string, version string) (bool) {
-	chart, err := c.repo.IndexFile.Get(name, version)
+	_, err := c.repo.IndexFile.Get(name, version)
 	if err != nil {
 		fmt.Printf("ChartKnown error: %s", err.Error())
 		return false
 	}
-	fmt.Printf("%+v\n", chart)
-
 	return true
 }
 
