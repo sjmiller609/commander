@@ -6,11 +6,11 @@ import "common.proto";
 
 option go_package="proto";
 
-message FetchDeploymentRequest {
+message GetDeploymentRequest {
     string name = 1;
 }
 
-message FetchDeploymentResponse {
+message GetDeploymentResponse {
     Result result = 1;
     repeated Deployment deployments = 2;
 }

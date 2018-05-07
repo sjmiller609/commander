@@ -9,7 +9,7 @@ option go_package="proto";
 
 service Commander {
     rpc Ping (PingRequest) returns (PingResponse) {}
-    rpc FetchDeployment (FetchDeploymentRequest) returns (FetchDeploymentResponse) {}
+    rpc GetDeployment (GetDeploymentRequest) returns (GetDeploymentResponse) {}
     rpc CreateDeployment (CreateDeploymentRequest) returns (CreateDeploymentResponse) {}
     rpc UpdateDeployment (UpdateDeploymentRequest) returns (UpdateDeploymentResponse) {}
     rpc UpgradeDeployment (UpgradeDeploymentRequest) returns (UpgradeDeploymentResponse) {}
