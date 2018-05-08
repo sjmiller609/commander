@@ -7,11 +7,17 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    restart: unless-stopped
     ports:
       - "8880:8880"
+      - "50051:50051"
     volumes:
       - ~/.kube/config:/root/.kube/config
       - ~/.config/gcloud:/root/.config/gcloud
+      - /Users/macbook/.minikube/:/Users/macbook/.minikube/
     environment:
-      COMMANDER_KUBE_CONFIG: /root/.kube/config
+      COMMANDER_KUBECONFIG: /root/.kube/config
+      ENVIRONMENT: development
+      GRPC_TRACE: all
+      GRPC_VERBOSITY: DEBUG
+      COMMANDER_KUBE_NAMESPACE: "cj-dev-test"
+      COMMANDER_HELM_REPO: "http://docker.for.mac.localhost:11000/repo"

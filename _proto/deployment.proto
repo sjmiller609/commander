@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package commander;
+
+import "common.proto";
+
+option go_package="proto";
+
+message GetDeploymentRequest {
+    string name = 1;
+}
+
+message GetDeploymentResponse {
+    Result result = 1;
+    repeated Deployment deployments = 2;
+}
+
+message CreateDeploymentRequest {
+    string release_name = 1;
+    string raw_config = 2;
+    Chart chart = 3;
+    UUID organization_uuid = 6;
+    repeated Secret secrets = 10; // secrets to be set
+    repeated EnvSecret env_secret = 11;
+}
+
+message CreateDeploymentResponse {
+    Result result = 1;
+    Deployment deployment = 2;
+}
+
+message UpdateDeploymentRequest {
+    string release_name = 1;
+    string raw_config = 2;
+    Chart chart = 3;
+    UUID organization_uuid = 6;
+    repeated Secret secrets = 10; // secrets to be set
+    repeated EnvSecret env_secret = 11;
+}
+
+message UpdateDeploymentResponse {
+    Result result = 1;
+    Deployment deployment = 2;
+}
+
+message UpgradeDeploymentRequest {
+    string release_name = 1;
+    string raw_config = 2;
+    Chart chart = 3;
+}
+
+message UpgradeDeploymentResponse {
+    Result result = 1;
+    Deployment deployment = 2;
+}
+
+message DeleteDeploymentRequest {
+    string release_name = 1;
+}
+
+message DeleteDeploymentResponse {
+    Result result = 1;
+    Deployment deployment = 2;
+}
+
