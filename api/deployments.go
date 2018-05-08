@@ -15,8 +15,8 @@ func (s *GRPCServer) Ping(ctx context.Context, in *proto.PingRequest) (*proto.Pi
 	}, nil
 }
 
-func (s *GRPCServer) FetchDeployment(ctx context.Context, in *proto.FetchDeploymentRequest) (*proto.FetchDeploymentResponse, error) {
-	return &proto.FetchDeploymentResponse{}, nil
+func (s *GRPCServer) GetDeployment(ctx context.Context, in *proto.GetDeploymentRequest) (*proto.GetDeploymentResponse, error) {
+	return &proto.GetDeploymentResponse{}, nil
 }
 
 func (s *GRPCServer) CreateDeployment(ctx context.Context, in *proto.CreateDeploymentRequest) (*proto.CreateDeploymentResponse, error) {
