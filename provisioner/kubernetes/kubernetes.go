@@ -29,7 +29,7 @@ func New(helm *helm.Client, kube *kubernetes.Client) KubeProvisioner {
 	}
 }
 
-func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentRequest) (*proto.CreateDeploymentResponse) {
+func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentRequest) (*proto.CreateDeploymentResponse, error) {
 	response := &proto.CreateDeploymentResponse{
 		Deployment: &proto.Deployment{},
 	}
@@ -43,20 +43,20 @@ func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentReque
 	options, err := utils.ParseJSON(request.RawConfig)
 	if err != nil {
 		response.Result = BuildResult(false, err.Error())
-		return response
+		return response, nil
 	}
 
 	install, err := k.helm.InstallRelease(request.ReleaseName, request.Chart.Name, request.Chart.Version, appConfig.KubeNamespace, options)
 	if err != nil {
 		response.Result = BuildResult(false, err.Error())
-		return response
+		return response, nil
 	}
 	response.Result = BuildResult(true, "Deployment Created")
 	response.Deployment.ReleaseName = install.Release.Name
-	return response
+	return response, nil
 }
 
-func (k *KubeProvisioner) UpdateDeployment(request *proto.UpdateDeploymentRequest) (*proto.UpdateDeploymentResponse) {
+func (k *KubeProvisioner) UpdateDeployment(request *proto.UpdateDeploymentRequest) (*proto.UpdateDeploymentResponse, error) {
 	response := &proto.UpdateDeploymentResponse{
 		Deployment: &proto.Deployment{},
 	}
@@ -64,18 +64,37 @@ func (k *KubeProvisioner) UpdateDeployment(request *proto.UpdateDeploymentReques
 	options, err := utils.ParseJSON(request.RawConfig)
 	if err != nil {
 		response.Result = BuildResult(false, err.Error())
-		return response
+		return response, nil
 	}
 
 	update, err := k.helm.UpdateRelease(request.ReleaseName, request.Chart.Name, request.Chart.Version, options)
 	if err != nil {
 		response.Result = BuildResult(false, err.Error())
-		return response
+		return response, nil
 	}
 
 	response.Result = BuildResult(true, "Deployment Updated")
 	response.Deployment.ReleaseName = update.Release.Name
-	return response
+	return response, nil
+}
+
+func (k *KubeProvisioner) DeleteDeployment(request *proto.DeleteDeploymentRequest) (*proto.DeleteDeploymentResponse, error) {
+	response := &proto.DeleteDeploymentResponse{
+		Deployment: &proto.Deployment{},
+	}
+
+	releaseName, info, err := k.helm.DeleteRelease(request.ReleaseName)
+	if err != nil {
+		response.Result = BuildResult(false, err.Error())
+		return response, nil
+	}
+
+	err = k.kube.Secret.DeleteByRelease(request.ReleaseName, appConfig.KubeNamespace)
+	response.Result = BuildResult(true, "Deployment Deleted")
+	response.Deployment.ReleaseName = releaseName
+	response.Deployment.Info = info
+
+	return response, nil
 }
 
 func BuildResult(success bool, message string) *proto.Result {

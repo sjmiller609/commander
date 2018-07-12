@@ -99,7 +99,7 @@ func (c *Client) InstallRelease(releaseName, chartName, chartVersion, namespace 
 		return nil, err
 	}
 
-	logger.Debug("#InstallReleaseFromChart")
+	logger.Debug("helm#InstallReleaseFromChart")
 	return c.helm.InstallReleaseFromChart(chart,
 		namespace,
 		helm.ValueOverrides(optionsYaml),
@@ -132,7 +132,7 @@ func (c *Client) UpdateRelease(releaseName, chartName, chartVersion string, opti
 		return nil, err
 	}
 
-	logger.Debug("#UpdateReleaseFromChart")
+	logger.Debug("helm#UpdateReleaseFromChart")
 	return c.helm.UpdateReleaseFromChart(releaseName,
 		chart,
 		helm.UpdateValueOverrides(optionsYaml),
@@ -152,8 +152,15 @@ func (c *Client) UpgradeRelease(releaseName, chartVersion string) {
 }
 
 // delete a release
-func (c *Client) DeleteRelease(releaseName string) {
-	c.helm.DeleteRelease(releaseName)
+func (c *Client) DeleteRelease(releaseName string) (string, string, error) {
+	logger := log.WithField("function", "DeleteRelease")
+
+	logger.Debug("helm#DeleteRelease")
+	response, err := c.helm.DeleteRelease(releaseName)
+	if err != nil {
+		return "", "", err
+	}
+	return response.GetRelease().GetName(), response.GetInfo(), nil
 }
 
 // get release status

@@ -1,6 +1,8 @@
 package kubernetes
 
 import (
+	"fmt"
+
 	kube "k8s.io/client-go/kubernetes"
 	"k8s.io/api/core/v1"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -29,4 +31,13 @@ func (s *Secret) Create(name string, key string, value string, namespace string,
 	}
 
 	return s.ClientSet.CoreV1().Secrets(namespace).Create(secret)
+}
+
+func (s *Secret) DeleteByRelease(releaseName string, namespace string) error {
+	deleteOptions := &meta_v1.DeleteOptions{
+	}
+	listOptions := meta_v1.ListOptions{
+		LabelSelector: fmt.Sprintf("release=%s", releaseName),
+	}
+	return s.ClientSet.CoreV1().Secrets(namespace).DeleteCollection(deleteOptions, listOptions)
 }
