@@ -1,8 +1,6 @@
 package kubernetesProv
 
 import (
-	"fmt"
-
 	"github.com/sirupsen/logrus"
 
 	"github.com/astronomerio/commander/config"
