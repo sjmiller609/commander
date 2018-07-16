@@ -1,6 +1,8 @@
 package kubernetesProv
 
 import (
+	"fmt"
+
 	"github.com/sirupsen/logrus"
 
 	"github.com/astronomerio/commander/config"
@@ -85,32 +87,56 @@ func (k *KubeProvisioner) DeleteDeployment(request *proto.DeleteDeploymentReques
 
 	// (postgres delete will happen on houston)
 
+	fmt.Println("foo-a")
+
 	// helm delete
+	/*
+	opts := []k.helm.DeleteOption{
+		k.helm.DeletePurge(true),
+	}
+	*/
+	// releaseName, info, err := k.helm.DeleteRelease(request.ReleaseName, opts...)
 	releaseName, info, err := k.helm.DeleteRelease(request.ReleaseName)
 	if err != nil {
+		fmt.Println("err1")
+		fmt.Println(fmt.Sprintf("%v", err))
 		response.Result = BuildResult(false, err.Error())
 		return response, nil
 	}
 
+	fmt.Println("foo-b")
+
 	// secret delete (test)
 	err = k.kube.Secret.DeleteByRelease(request.ReleaseName, appConfig.KubeNamespace)
 	if err != nil {
+		fmt.Println("err2")
+		fmt.Println(fmt.Sprintf("%v", err))
 		response.Result = BuildResult(false, err.Error())
 		return response, nil
 	}
+
+	fmt.Println("foo-c")
 
 	// PVCs delete
 	// k.kube.PersistentVolumeClaim.Delete(...)
 	// k.kube.PersistentVolumeClaim.DeleteCollection(...)
 	err = k.kube.PersistentVolumeClaim.DeleteByRelease(request.ReleaseName, appConfig.KubeNamespace)
 	if err != nil {
+		fmt.Println("err3")
+		fmt.Println(fmt.Sprintf("%v", err))
 		response.Result = BuildResult(false, err.Error())
 		return response, nil
 	}
 
+	fmt.Println("foo-d")
+
 	response.Result = BuildResult(true, "Deployment Deleted")
 	response.Deployment.ReleaseName = releaseName
+	//response.Deployment.ReleaseName = request.ReleaseName
 	response.Deployment.Info = info
+	// response.Deployment.Info = "foo"
+
+	fmt.Println("foo-e")
 
 	return response, nil
 }

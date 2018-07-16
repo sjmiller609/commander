@@ -64,7 +64,7 @@ func start() {
 
 	// TODO: remove when done testing
 	request := &proto.DeleteDeploymentRequest{
-		ReleaseName: "jazzy-seastar",
+		ReleaseName: "dangling-narwhal",
 	}
 	response, err := prov.DeleteDeployment(request)
 	fmt.Println("helloooooooooo")

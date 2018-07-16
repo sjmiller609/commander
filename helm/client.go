@@ -156,7 +156,7 @@ func (c *Client) DeleteRelease(releaseName string) (string, string, error) {
 	logger := log.WithField("function", "DeleteRelease")
 
 	logger.Debug("helm#DeleteRelease")
-	response, err := c.helm.DeleteRelease(releaseName)
+	response, err := c.helm.DeleteRelease(releaseName, helm.DeletePurge(true))
 	if err != nil {
 		return "", "", err
 	}
