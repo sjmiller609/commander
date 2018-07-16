@@ -35,6 +35,7 @@ func (s *GRPCServer) UpgradeDeployment(ctx context.Context, in *proto.UpgradeDep
 }
 
 func (s *GRPCServer) DeleteDeployment(ctx context.Context, in *proto.DeleteDeploymentRequest) (*proto.DeleteDeploymentResponse, error) {
+	fmt.Println("DeleteDeployment called")
 	response, err := s.provisioner.DeleteDeployment(in)
 	return response, err
 }

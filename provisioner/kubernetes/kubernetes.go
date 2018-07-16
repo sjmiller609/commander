@@ -83,13 +83,31 @@ func (k *KubeProvisioner) DeleteDeployment(request *proto.DeleteDeploymentReques
 		Deployment: &proto.Deployment{},
 	}
 
+	// (postgres delete will happen on houston)
+
+	// helm delete
 	releaseName, info, err := k.helm.DeleteRelease(request.ReleaseName)
 	if err != nil {
 		response.Result = BuildResult(false, err.Error())
 		return response, nil
 	}
 
+	// secret delete (test)
 	err = k.kube.Secret.DeleteByRelease(request.ReleaseName, appConfig.KubeNamespace)
+	if err != nil {
+		response.Result = BuildResult(false, err.Error())
+		return response, nil
+	}
+
+	// PVCs delete
+	// k.kube.PersistentVolumeClaim.Delete(...)
+	// k.kube.PersistentVolumeClaim.DeleteCollection(...)
+	err = k.kube.PersistentVolumeClaim.DeleteByRelease(request.ReleaseName, appConfig.KubeNamespace)
+	if err != nil {
+		response.Result = BuildResult(false, err.Error())
+		return response, nil
+	}
+
 	response.Result = BuildResult(true, "Deployment Deleted")
 	response.Deployment.ReleaseName = releaseName
 	response.Deployment.Info = info

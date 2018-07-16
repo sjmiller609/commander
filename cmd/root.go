@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/astronomerio/commander/pkg/proto"
+
 	"github.com/astronomerio/commander/api"
 	"github.com/astronomerio/commander/config"
 	"github.com/astronomerio/commander/kubernetes"
@@ -59,6 +61,15 @@ func start() {
 	helmClient := helm.New(kubeClient, appConfig.HelmRepo)
 
 	prov := kubeProv.New(helmClient, kubeClient)
+
+	// TODO: remove when done testing
+	request := &proto.DeleteDeploymentRequest{
+		ReleaseName: "jazzy-seastar",
+	}
+	response, err := prov.DeleteDeployment(request)
+	fmt.Println("helloooooooooo")
+	fmt.Println(fmt.Sprintf("%v", response))
+	fmt.Println(fmt.Sprintf("%v", err))
 
 	httpServer := api.NewHttp()
 	logger.Info(fmt.Sprintf("Starting HTTP server on port %s", appConfig.HttpPort))

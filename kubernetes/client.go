@@ -19,6 +19,7 @@ type Client struct {
 	Config *rest.Config
 	Namespace *Namespace
 	Secret *Secret
+	PersistentVolumeClaim *PersistentVolumeClaim
 }
 
 // NewKubeProvisioner returns a new KubeProvisioner
@@ -38,6 +39,9 @@ func New(kubeConfig *rest.Config) (*Client, error) {
 			ClientSet: clientSet,
 		},
 		Secret: &Secret {
+			ClientSet: clientSet,
+		},
+		PersistentVolumeClaim: &PersistentVolumeClaim {
 			ClientSet: clientSet,
 		},
 	}, nil
