@@ -7,10 +7,10 @@ import (
 // of containers running on various container orchestrators.
 type Provisioner interface {
 	// ListDeployments(organizationID string) (*ListDeploymentResponse, error)
-	InstallDeployment(request *proto.CreateDeploymentRequest) (*proto.CreateDeploymentResponse)
-	UpdateDeployment(request *proto.UpdateDeploymentRequest) (*proto.UpdateDeploymentResponse)
+	InstallDeployment(request *proto.CreateDeploymentRequest) (*proto.CreateDeploymentResponse, error)
+	UpdateDeployment(request *proto.UpdateDeploymentRequest) (*proto.UpdateDeploymentResponse, error)
 	// UpgradeDeployment()
-	// DeleteDeployment()
+	DeleteDeployment(request *proto.DeleteDeploymentRequest) (*proto.DeleteDeploymentResponse, error)
 	// FetchDeployments()
 	// PatchDeployment(patchReq *PatchDeploymentRequest) (*PatchDeploymentResponse, error)
 }

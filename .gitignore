@@ -3,3 +3,5 @@ commander
 # IDEs
 .idea/
 .vscode/
+
+.DS_Store
