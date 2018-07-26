@@ -137,7 +137,6 @@ func (c *Client) UpdateRelease(releaseName, chartName, chartVersion string, opti
 		chart,
 		helm.UpdateValueOverrides(optionsYaml),
 		helm.UpgradeDryRun(false),
-		helm.UpgradeRecreate(true),
 		helm.UpgradeDisableHooks(false),
 		helm.UpgradeTimeout(300),
 		helm.UpgradeWait(false),
