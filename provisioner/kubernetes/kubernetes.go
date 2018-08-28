@@ -36,7 +36,7 @@ func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentReque
 
 	if len(request.Secrets) > 0 {
 		for _, secret := range request.Secrets {
-			k.kube.Secret.Create(secret.Name, secret.Key, secret.Value, appConfig.KubeNamespace, request.ReleaseName)
+			k.kube.Secret.Create(secret.Name, secret.Key, secret.Value, request.Namespace, request.ReleaseName)
 		}
 	}
 
@@ -46,7 +46,7 @@ func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentReque
 		return response, nil
 	}
 
-	install, err := k.helm.InstallRelease(request.ReleaseName, request.Chart.Name, request.Chart.Version, appConfig.KubeNamespace, options)
+	install, err := k.helm.InstallRelease(request.ReleaseName, request.Chart.Name, request.Chart.Version, request.Namespace, options)
 	if err != nil {
 		response.Result = BuildResult(false, err.Error())
 		return response, nil
@@ -92,14 +92,21 @@ func (k *KubeProvisioner) DeleteDeployment(request *proto.DeleteDeploymentReques
 	}
 
 	// secret delete (test)
-	err = k.kube.Secret.DeleteByRelease(request.ReleaseName, appConfig.KubeNamespace)
+	err = k.kube.Secret.DeleteByRelease(request.ReleaseName, request.Namespace)
 	if err != nil {
 		response.Result = BuildResult(false, err.Error())
 		return response, nil
 	}
 
 	// PVCs delete
-	err = k.kube.PersistentVolumeClaim.DeleteByRelease(request.ReleaseName, appConfig.KubeNamespace)
+	err = k.kube.PersistentVolumeClaim.DeleteByRelease(request.ReleaseName, request.Namespace)
+	if err != nil {
+		response.Result = BuildResult(false, err.Error())
+		return response, nil
+	}
+
+	// Namespace delete
+	err = k.kube.Namespace.Delete(request.Namespace)
 	if err != nil {
 		response.Result = BuildResult(false, err.Error())
 		return response, nil

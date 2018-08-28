@@ -33,6 +33,20 @@ func (n *Namespace) Create(namespace string) (*v1.Namespace, error) {
 	return n.ClientSet.Core().Namespaces().Create(ns)
 }
 
+func (n *Namespace) Delete(namespace string) error {
+	// set options
+	propagation := metav1.DeletePropagationForeground
+	gracePeriod := int64(0)
+
+	// create k8 DeleteOptions object
+	options := metav1.DeleteOptions{
+		PropagationPolicy: &propagation,
+		GracePeriodSeconds: &gracePeriod,
+	}
+
+	return n.ClientSet.Core().Namespaces().Delete(namespace, &options)
+}
+
 func (n *Namespace) Ensure(namespace string) (error) {
 	exists, err := n.Exists(namespace)
 	if err != nil {
