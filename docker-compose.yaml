@@ -19,7 +19,5 @@ services:
       ENVIRONMENT: development
       GRPC_TRACE: all
       GRPC_VERBOSITY: DEBUG
-      # COMMANDER_KUBE_NAMESPACE: "taylor-dev-test"
-      COMMANDER_KUBE_NAMESPACE: "default"
-      # COMMANDER_HELM_REPO: "https://helm.astronomer.io"
+      COMMANDER_HELM_REPO: "https://helm.astronomer.io"
       COMMANDER_TILLER_HOST: "docker.for.mac.localhost:44134"

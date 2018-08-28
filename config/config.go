@@ -19,7 +19,6 @@ type Configuration struct {
 	HttpPort          string `mapstructure:"HTTP_PORT"`
 	GRPCPort          string `mapstructure:"GRPC_PORT"`
 	KubeConfig    string `mapstructure:"KUBECONFIG"`
-	KubeNamespace string `mapstructure:"KUBE_NAMESPACE"`
 	HelmRepo	  string `mapstructure:"HELM_REPO"`
 	HelmRepoName	  string `mapstructure:"HELM_REPO_NAME"`
 	TillerHost		string `mapstructure:"TILLER_HOST"`
@@ -51,7 +50,6 @@ func setDefaults() {
 	viper.SetDefault("HTTP_PORT", "8880")
 	viper.SetDefault("GRPC_PORT", "50051")
 	viper.SetDefault("KUBECONFIG", "")
-	viper.SetDefault("KUBE_NAMESPACE", "astronomer")
 	viper.SetDefault("HELM_REPO", "https://helm.astronomer.io")
 	viper.SetDefault("HELM_REPO_NAME", "astronomer-ee")
 	viper.SetDefault("TILLER_HOST", "127.0.0.1:44134")
