@@ -4,6 +4,7 @@ package commander;
 
 import "common.proto";
 import "deployment.proto";
+import "secret.proto";
 
 option go_package="proto";
 
@@ -14,4 +15,5 @@ service Commander {
     rpc UpdateDeployment (UpdateDeploymentRequest) returns (UpdateDeploymentResponse) {}
     rpc UpgradeDeployment (UpgradeDeploymentRequest) returns (UpgradeDeploymentResponse) {}
     rpc DeleteDeployment (DeleteDeploymentRequest) returns (DeleteDeploymentResponse) {}
+    rpc GetSecret (GetSecretRequest) returns (GetSecretResponse) {}
 }

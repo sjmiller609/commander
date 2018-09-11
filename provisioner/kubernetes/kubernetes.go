@@ -8,7 +8,6 @@ import (
 	"github.com/astronomerio/commander/kubernetes"
 	"github.com/astronomerio/commander/pkg/proto"
 	"github.com/astronomerio/commander/utils"
-
 )
 
 var (
@@ -18,8 +17,8 @@ var (
 
 // KubeProvisioner is capable of deploying and maintaining jobs on Kubernetes.
 type KubeProvisioner struct {
-	helm  *helm.Client
-	kube  *kubernetes.Client
+	helm *helm.Client
+	kube *kubernetes.Client
 }
 
 func New(helm *helm.Client, kube *kubernetes.Client) KubeProvisioner {
@@ -34,11 +33,12 @@ func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentReque
 		Deployment: &proto.Deployment{},
 	}
 
-	if len(request.Secrets) > 0 {
-		for _, secret := range request.Secrets {
-			k.kube.Secret.Create(secret.Name, secret.Key, secret.Value, request.Namespace, request.ReleaseName)
-		}
-	}
+	// Format has changed but is also not used right now
+	// if len(request.Secrets) > 0 {
+	// 	for _, secret := range request.Secrets {
+	// 		k.kube.Secret.Create(secret.Name, secret.Key, secret.Value, request.Namespace, request.ReleaseName)
+	// 	}
+	// }
 
 	options, err := utils.ParseJSON(request.RawConfig)
 	if err != nil {
@@ -119,8 +119,24 @@ func (k *KubeProvisioner) DeleteDeployment(request *proto.DeleteDeploymentReques
 	return response, nil
 }
 
+func (k *KubeProvisioner) GetSecret(request *proto.GetSecretRequest) (*proto.GetSecretResponse, error) {
+	response := &proto.GetSecretResponse{
+		Secret: &proto.Secret{},
+	}
+	secret, err := k.kube.Secret.Get(request.Name, request.Namespace)
+	if err != nil {
+		response.Result = BuildResult(false, err.Error())
+		return response, nil
+	}
+
+	response.Result = BuildResult(true, "")
+	response.Secret.Name = request.Name
+	response.Secret.Data = secret.StringData
+	return response, nil
+}
+
 func BuildResult(success bool, message string) *proto.Result {
-	return &proto.Result {
+	return &proto.Result{
 		Success: success,
 		Message: message,
 	}

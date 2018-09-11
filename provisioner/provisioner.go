@@ -3,6 +3,7 @@ package provisioner
 import (
 	"github.com/astronomerio/commander/pkg/proto"
 )
+
 // Provisioner types are capable of scheduling and various maintenace tasks
 // of containers running on various container orchestrators.
 type Provisioner interface {
@@ -13,6 +14,7 @@ type Provisioner interface {
 	DeleteDeployment(request *proto.DeleteDeploymentRequest) (*proto.DeleteDeploymentResponse, error)
 	// FetchDeployments()
 	// PatchDeployment(patchReq *PatchDeploymentRequest) (*PatchDeploymentResponse, error)
+	GetSecret(request *proto.GetSecretRequest) (*proto.GetSecretResponse, error)
 }
 
 // ListDeploymentResponse is a response from listing deployments.
@@ -35,5 +37,4 @@ type PatchDeploymentRequest struct {
 
 // PatchDeploymentResponse is a response from patching an existing deployment.
 type PatchDeploymentResponse struct {
-
 }

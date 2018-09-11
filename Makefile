@@ -7,7 +7,7 @@ PROTO_DEST ?= $(shell pwd)/pkg/proto
 dep:
 	dep ensure
 
-build:
+build: build-proto
 	go build -o ${OUTPUT} main.go
 
 build-image:
