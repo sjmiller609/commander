@@ -44,5 +44,14 @@ func (s *Secret) DeleteByRelease(releaseName string, namespace string) error {
 
 func (s *Secret) Get(secretName string, namespace string) (*v1.Secret, error) {
 	getOptions := meta_v1.GetOptions{}
-	return s.ClientSet.CoreV1().Secrets(namespace).Get(secretName, getOptions)
+	secret, err := s.ClientSet.CoreV1().Secrets(namespace).Get(secretName, getOptions)
+	if err != nil {
+		return nil, err
+	}
+
+	secret.StringData = map[string]string{}
+	for key := range secret.Data {
+		secret.StringData[key] = string(secret.Data[key])[:]
+	}
+	return secret, nil
 }
