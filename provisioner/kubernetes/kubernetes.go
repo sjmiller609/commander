@@ -105,11 +105,13 @@ func (k *KubeProvisioner) DeleteDeployment(request *proto.DeleteDeploymentReques
 		return response, nil
 	}
 
-	// Namespace delete
-	err = k.kube.Namespace.Delete(request.Namespace)
-	if err != nil {
-		response.Result = BuildResult(false, err.Error())
-		return response, nil
+	if request.DeleteNamespace {
+		// Namespace delete
+		err = k.kube.Namespace.Delete(request.Namespace)
+		if err != nil {
+			response.Result = BuildResult(false, err.Error())
+			return response, nil
+		}
 	}
 
 	response.Result = BuildResult(true, "Deployment Deleted")

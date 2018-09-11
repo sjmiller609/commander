@@ -57,6 +57,7 @@ message UpgradeDeploymentResponse {
 message DeleteDeploymentRequest {
     string release_name = 1;
     string namespace = 2;
+    bool delete_namespace = 5;
 }
 
 message DeleteDeploymentResponse {
