@@ -33,12 +33,11 @@ func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentReque
 		Deployment: &proto.Deployment{},
 	}
 
-	// Format has changed but is also not used right now
-	// if len(request.Secrets) > 0 {
-	// 	for _, secret := range request.Secrets {
-	// 		k.kube.Secret.Create(secret.Name, secret.Key, secret.Value, request.Namespace, request.ReleaseName)
-	// 	}
-	// }
+	if len(request.Secrets) > 0 {
+		for _, secret := range request.Secrets {
+			k.kube.Secret.Create(secret.Name, secret.Data, request.Namespace, request.ReleaseName)
+		}
+	}
 
 	options, err := utils.ParseJSON(request.RawConfig)
 	if err != nil {
