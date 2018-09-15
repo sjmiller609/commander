@@ -1,0 +1,4 @@
+pipeline:
+  build:
+    image: golang
+    command: make build
