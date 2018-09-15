@@ -3,6 +3,14 @@ workspace:
   path: src/github.com/astronomerio/commander
 
 pipeline:
+  trigger:
+    image: plugins/downstream
+    server: http://drone.astronomer.io
+    fork: true
+    token: "$$DRONE_TOKEN"
+    repositories:
+      - astronomerio/astronomer
+
   build:
     image: golang
     commands: make build
