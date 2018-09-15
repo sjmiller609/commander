@@ -16,7 +16,7 @@ Commander is the provisioning component of the Astronomer Platform. It is respon
 ## gRPC functions
 
 * CreateDeployment
-* ~~FetchDeployment~~
+* GetDeployment
 * DeleteDeployment
 * UpdateDeployment
 * PatchDeployment
