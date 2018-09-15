@@ -1,4 +1,4 @@
 pipeline:
   build:
     image: golang
-    command: make build
+    commands: make build
