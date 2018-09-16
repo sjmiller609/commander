@@ -1,6 +1,6 @@
 # Commander
 
-Commander is the provisioning component of the Astronomer Platform. It is responsible for interacting with the underlying infrastructure layer. It takes care of deployments on different scheduling systems like Kubernetes and Marathon.
+Commander is the provisioning component of the Astronomer Platform. It is responsible for interacting with the underlying infrastructure layer.
 
 ## Configuration
 
