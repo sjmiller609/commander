@@ -3,6 +3,10 @@ workspace:
   path: src/github.com/astronomerio/commander
 
 pipeline:
+  build:
+    image: golang
+    commands: make build
+
   trigger:
     image: plugins/downstream
     server: http://drone.astronomer.io
@@ -10,7 +14,3 @@ pipeline:
     secrets: [ downstream_token ]
     repositories:
       - astronomerio/astronomer
-
-  build:
-    image: golang
-    commands: make build
