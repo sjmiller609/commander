@@ -4,7 +4,7 @@ workspace:
 
 pipeline:
   build:
-    image: golang
+    image: golang:alpine
     commands: make build
 
   trigger:
@@ -14,3 +14,5 @@ pipeline:
     secrets: [ downstream_token ]
     repositories:
       - astronomerio/astronomer
+    when:
+      branch: master
