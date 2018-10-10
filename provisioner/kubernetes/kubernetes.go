@@ -120,6 +120,33 @@ func (k *KubeProvisioner) DeleteDeployment(request *proto.DeleteDeploymentReques
 	return response, nil
 }
 
+
+func (k *KubeProvisioner) SetSecret(request *proto.SetSecretRequest) (*proto.SetSecretResponse, error) {
+	response := &proto.SetSecretResponse{}
+
+	secret, err := k.kube.Secret.Get(request.Secret.Name, request.Namespace)
+	if err != nil {
+		response.Result = BuildResult(false, err.Error())
+		return response, nil
+	}
+
+	if secret == nil {
+		secret, err = k.kube.Secret.Create(request.Secret.Name, request.Secret.Data, request.Namespace, request.ReleaseName)
+	} else {
+		secret.StringData = request.Secret.Data
+		secret.Data = nil
+		secret, err = k.kube.Secret.Update(secret, request.Namespace)
+	}
+
+	if err != nil {
+		response.Result = BuildResult(false, err.Error())
+		return response, nil
+	}
+
+	response.Result = BuildResult(true, "")
+	return response, nil
+}
+
 func (k *KubeProvisioner) GetSecret(request *proto.GetSecretRequest) (*proto.GetSecretResponse, error) {
 	response := &proto.GetSecretResponse{
 		Secret: &proto.Secret{},

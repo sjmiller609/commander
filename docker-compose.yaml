@@ -13,7 +13,6 @@ services:
     volumes:
       - ~/.kube/config:/root/.kube/config
       - ~/.config/gcloud:/root/.config/gcloud
-      # - /Users/macbook/.minikube/:/Users/macbook/.minikube/
     environment:
       COMMANDER_KUBECONFIG: /root/.kube/config
       ENVIRONMENT: development

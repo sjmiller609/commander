@@ -16,4 +16,5 @@ service Commander {
     rpc UpgradeDeployment (UpgradeDeploymentRequest) returns (UpgradeDeploymentResponse) {}
     rpc DeleteDeployment (DeleteDeploymentRequest) returns (DeleteDeploymentResponse) {}
     rpc GetSecret (GetSecretRequest) returns (GetSecretResponse) {}
+    rpc SetSecret (SetSecretRequest) returns (SetSecretResponse) {}
 }

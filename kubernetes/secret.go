@@ -2,6 +2,7 @@ package kubernetes
 
 import (
 	"fmt"
+	"strings"
 
 	"k8s.io/api/core/v1"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -32,6 +33,10 @@ func (s *Secret) Create(name string, data map[string]string, namespace string, r
 	return s.ClientSet.CoreV1().Secrets(namespace).Create(secret)
 }
 
+func (s *Secret) Update(secret *v1.Secret, namespace string) (*v1.Secret, error) {
+	return s.ClientSet.CoreV1().Secrets(namespace).Update(secret)
+}
+
 func (s *Secret) DeleteByRelease(releaseName string, namespace string) error {
 	deleteOptions := &meta_v1.DeleteOptions{}
 	listOptions := meta_v1.ListOptions{
@@ -44,6 +49,9 @@ func (s *Secret) Get(secretName string, namespace string) (*v1.Secret, error) {
 	getOptions := meta_v1.GetOptions{}
 	secret, err := s.ClientSet.CoreV1().Secrets(namespace).Get(secretName, getOptions)
 	if err != nil {
+		if strings.Compare(err.Error(), fmt.Sprintf("secrets \"%s\" not found", secretName)) == 0 {
+			return nil, nil
+		}
 		return nil, err
 	}
 

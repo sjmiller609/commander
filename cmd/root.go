@@ -55,7 +55,7 @@ func start() {
 
 	prov := kubeProv.New(helmClient, kubeClient)
 
-	httpServer := api.NewHttp()
+	httpServer := api.NewHttp(kubeClient)
 	logger.Info(fmt.Sprintf("Starting HTTP server on port %s", appConfig.HttpPort))
 	httpServer.Serve(appConfig.HttpPort)
 

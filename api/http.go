@@ -1,11 +1,13 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
+	"github.com/astronomerio/commander/kubernetes"
 	"github.com/astronomerio/commander/utils"
 )
 
@@ -20,14 +22,16 @@ type RouteHandler interface {
 // Server for HTTP API
 type HttpServer struct {
 	server *gin.Engine
+	kubeClient *kubernetes.Client
 	handlers []RouteHandler
 }
 
 
 // NewClient creates a new API client
-func NewHttp() *HttpServer {
+func NewHttp(kubeClient *kubernetes.Client) *HttpServer {
 	return &HttpServer{
 		server: gin.Default(),
+		kubeClient: kubeClient,
 		handlers: make([]RouteHandler, 0),
 	}
 }
@@ -53,7 +57,16 @@ func (s *HttpServer) Serve(port string) {
 	}
 
 	s.server.GET("/healthz", func(c *gin.Context) {
-		c.String(http.StatusOK, "OK")
+		version, err := s.kubeClient.ClientSet.Discovery().ServerVersion()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"kubeVersion" : "",
+			})
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"kubeVersion" : fmt.Sprintf("%s", version),
+		})
 	})
 
 	go func() {

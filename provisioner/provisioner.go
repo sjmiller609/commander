@@ -14,7 +14,9 @@ type Provisioner interface {
 	DeleteDeployment(request *proto.DeleteDeploymentRequest) (*proto.DeleteDeploymentResponse, error)
 	// FetchDeployments()
 	// PatchDeployment(patchReq *PatchDeploymentRequest) (*PatchDeploymentResponse, error)
+
 	GetSecret(request *proto.GetSecretRequest) (*proto.GetSecretResponse, error)
+	SetSecret(request *proto.SetSecretRequest) (*proto.SetSecretResponse, error)
 }
 
 // ListDeploymentResponse is a response from listing deployments.
