@@ -1,0 +1,18 @@
+workspace:
+  base: /go
+  path: src/github.com/astronomerio/commander
+
+pipeline:
+  build:
+    image: golang
+    commands: make build
+
+  # trigger:
+  #   image: plugins/downstream
+  #   server: http://drone.astronomer.io
+  #   fork: true
+  #   secrets: [ downstream_token ]
+  #   repositories:
+  #     - astronomerio/astronomer
+  #   when:
+  #     branch: master
