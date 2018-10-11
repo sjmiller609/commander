@@ -124,6 +124,12 @@ func (k *KubeProvisioner) DeleteDeployment(request *proto.DeleteDeploymentReques
 func (k *KubeProvisioner) SetSecret(request *proto.SetSecretRequest) (*proto.SetSecretResponse, error) {
 	response := &proto.SetSecretResponse{}
 
+	err := k.kube.Namespace.Ensure(request.Namespace)
+	if err != nil {
+		response.Result = BuildResult(false, err.Error())
+		return response, nil
+	}
+
 	secret, err := k.kube.Secret.Get(request.Secret.Name, request.Namespace)
 	if err != nil {
 		response.Result = BuildResult(false, err.Error())
