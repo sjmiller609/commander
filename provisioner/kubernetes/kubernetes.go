@@ -163,6 +163,11 @@ func (k *KubeProvisioner) GetSecret(request *proto.GetSecretRequest) (*proto.Get
 		return response, nil
 	}
 
+	if secret == nil {
+		response.Result = BuildResult(false, "Secret not found")
+		return response, nil
+	}
+
 	response.Result = BuildResult(true, "")
 	response.Secret.Name = request.Name
 	response.Secret.Data = secret.StringData
