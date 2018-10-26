@@ -18,12 +18,12 @@ pipeline:
       - cd /root/go/src/github.com/astronomerio/commander
       - make test
 
-  # trigger:
-  #   image: plugins/downstream
-  #   server: http://drone.astronomer.io
-  #   fork: true
-  #   secrets: [ downstream_token ]
-  #   repositories:
-  #     - astronomerio/astronomer
-  #   when:
-  #     branch: master
+  trigger:
+    image: plugins/downstream
+    server: http://drone.astronomer.io
+    fork: true
+    secrets: [ downstream_token ]
+    repositories:
+      - astronomerio/astronomer
+    when:
+      branch: master
