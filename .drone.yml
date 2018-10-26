@@ -4,8 +4,19 @@ workspace:
 
 pipeline:
   build:
-    image: golang
-    commands: make build
+    image: astronomerio/ap-build:0.0.9
+    environment:
+      - IMAGE_NAME=commander:${DRONE_COMMIT_SHA}
+    commands:
+      - make build-image
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  test:
+    image: commander:${DRONE_COMMIT_SHA}
+    commands:
+      - cd /root/go/src/github.com/astronomerio/commander
+      - make test
 
   # trigger:
   #   image: plugins/downstream

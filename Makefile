@@ -16,6 +16,9 @@ build-image:
 build-proto:
 	protoc --proto_path=${PROTO_SRC} --go_out=plugins=grpc:${PROTO_DEST} $(shell find ${PROTO_SRC} -type f -name "*.proto")
 
+test:
+	go test ./...
+
 install: build
 	mkdir -p $(DESTDIR)
 	cp ${OUTPUT} $(DESTDIR)
