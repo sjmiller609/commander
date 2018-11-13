@@ -77,6 +77,28 @@ func (k *KubeProvisioner) UpdateDeployment(request *proto.UpdateDeploymentReques
 	return response, nil
 }
 
+func (k *KubeProvisioner) UpgradeDeployment(request *proto.UpgradeDeploymentRequest) (*proto.UpgradeDeploymentResponse, error) {
+	response := &proto.UpgradeDeploymentResponse{
+		Deployment: &proto.Deployment{},
+	}
+
+	options, err := utils.ParseJSON(request.RawConfig)
+	if err != nil {
+		response.Result = BuildResult(false, err.Error())
+		return response, nil
+	}
+
+	update, err := k.helm.UpgradeRelease(request.ReleaseName, request.Chart.Name, request.Chart.Version, options)
+	if err != nil {
+		response.Result = BuildResult(false, err.Error())
+		return response, nil
+	}
+
+	response.Result = BuildResult(true, "Deployment Updated")
+	response.Deployment.ReleaseName = update.Release.Name
+	return response, nil
+}
+
 func (k *KubeProvisioner) DeleteDeployment(request *proto.DeleteDeploymentRequest) (*proto.DeleteDeploymentResponse, error) {
 	response := &proto.DeleteDeploymentResponse{
 		Deployment: &proto.Deployment{},

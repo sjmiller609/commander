@@ -30,8 +30,8 @@ func (s *GRPCServer) UpdateDeployment(ctx context.Context, in *proto.UpdateDeplo
 }
 
 func (s *GRPCServer) UpgradeDeployment(ctx context.Context, in *proto.UpgradeDeploymentRequest) (*proto.UpgradeDeploymentResponse, error) {
-	fmt.Println("UpgradeDeployment called")
-	return &proto.UpgradeDeploymentResponse{}, nil
+	response, err := s.provisioner.UpgradeDeployment(in)
+	return response, err
 }
 
 func (s *GRPCServer) DeleteDeployment(ctx context.Context, in *proto.DeleteDeploymentRequest) (*proto.DeleteDeploymentResponse, error) {
