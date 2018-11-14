@@ -94,7 +94,7 @@ func (k *KubeProvisioner) UpgradeDeployment(request *proto.UpgradeDeploymentRequ
 		return response, nil
 	}
 
-	response.Result = BuildResult(true, "Deployment Updated")
+	response.Result = BuildResult(true, "Deployment Upgraded")
 	response.Deployment.ReleaseName = update.Release.Name
 	return response, nil
 }
