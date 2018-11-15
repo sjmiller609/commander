@@ -47,6 +47,8 @@ message UpgradeDeploymentRequest {
     string release_name = 1;
     string raw_config = 2;
     Chart chart = 3;
+    repeated Secret secrets = 10; // secrets to be set
+    repeated EnvSecret env_secret = 11;
 }
 
 message UpgradeDeploymentResponse {

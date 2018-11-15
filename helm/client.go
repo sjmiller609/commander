@@ -147,8 +147,36 @@ func (c *Client) UpdateRelease(releaseName, chartName, chartVersion string, opti
 }
 
 // upgrade a release to a later version of the chart
-func (c *Client) UpgradeRelease(releaseName, chartVersion string) {
+func (c *Client) UpgradeRelease(releaseName, chartName, chartVersion string, options map[string]interface{}) (*services.UpdateReleaseResponse, error) {
+	logger := log.WithField("function", "UpgradeRelease")
 
+	optionsYaml, err := yaml.Marshal(options)
+	if err != nil {
+		return nil, err
+	}
+
+	chartPath, err := c.AcquireChartPath(c.ChartName(chartName), chartVersion)
+	if err != nil {
+		logger.Errorf("#AcquireChartPath: %s", err.Error())
+		return nil, err
+	}
+
+	chart, err := chartutil.Load(chartPath)
+	if err != nil {
+		return nil, err
+	}
+
+	logger.Debug("helm#UpgradeReleaseFromChart")
+	return c.helm.UpdateReleaseFromChart(releaseName,
+		chart,
+		helm.UpdateValueOverrides(optionsYaml),
+		helm.UpgradeDryRun(false),
+		helm.ReuseValues(true),
+		helm.UpgradeTimeout(300),
+		helm.UpgradeWait(false),
+	)
+
+	return nil, nil
 }
 
 // delete a release
