@@ -24,6 +24,6 @@ pipeline:
     fork: true
     secrets: [ downstream_token ]
     repositories:
-      - astronomerio/astronomer
+      - astronomer/astronomer
     when:
       branch: master
