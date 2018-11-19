@@ -4,19 +4,35 @@ workspace:
 
 pipeline:
   build:
-    image: astronomerio/ap-build:0.0.9
-    environment:
-      - IMAGE_NAME=commander:${DRONE_COMMIT_SHA}
+    image: astronomerio/ap-build:0.1.1
     commands:
-      - make build-image
+      - docker build -t astronomerinc/ap-commander:dev .
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    when:
+      event: push
+      branch: [ master ]
 
   test:
-    image: commander:${DRONE_COMMIT_SHA}
+    image: astronomerinc/ap-commander:dev
     commands:
       - cd /root/go/src/github.com/astronomerio/commander
       - make test
+    when:
+      event: push
+      branch: [ master ]
+
+  push:
+    image: astronomerio/ap-build:0.1.1
+    commands:
+      - docker login -u $${DOCKER_USERNAME} -p $${DOCKER_PASSWORD}
+      - docker push astronomerinc/ap-commander:dev
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    secrets: [ docker_username, docker_password ]
+    when:
+      event: push
+      branch: [ master ]
 
   trigger:
     image: plugins/downstream
