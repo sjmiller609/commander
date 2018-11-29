@@ -1,34 +1,34 @@
 package helm
 
 import (
-	"github.com/sirupsen/logrus"
 	"github.com/ghodss/yaml"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
 	"k8s.io/helm/pkg/chartutil"
 	"k8s.io/helm/pkg/helm"
 	"k8s.io/helm/pkg/helm/environment"
 	"k8s.io/helm/pkg/kube"
-	"k8s.io/helm/pkg/repo"
 	"k8s.io/helm/pkg/proto/hapi/services"
+	"k8s.io/helm/pkg/repo"
 
 	"github.com/astronomerio/commander/config"
 	"github.com/astronomerio/commander/kubernetes"
 )
 
 var (
-	appConfig = config.Get()
-	log       = logrus.WithField("package", "helm")
-	stableRepository         = "stable"
+	appConfig           = config.Get()
+	log                 = logrus.WithField("package", "helm")
+	stableRepository    = "stable"
 	stableRepositoryURL = "https://kubernetes-charts.storage.googleapis.com"
 )
 
 type Client struct {
-	helm *helm.Client
-	helmOptions []helm.Option
-	repo *repo.ChartRepository
-	repoUrl string
-	settings environment.EnvSettings
-	kubeClient *kubernetes.Client
+	helm         *helm.Client
+	helmOptions  []helm.Option
+	repo         *repo.ChartRepository
+	repoUrl      string
+	settings     environment.EnvSettings
+	kubeClient   *kubernetes.Client
 	tillerTunnel *kube.Tunnel
 }
 
@@ -40,8 +40,8 @@ func New(kubeClient *kubernetes.Client, repo string) *Client {
 	settings.Init(flags)
 
 	client := &Client{
-		repoUrl: repo,
-		settings: settings,
+		repoUrl:    repo,
+		settings:   settings,
 		kubeClient: kubeClient,
 	}
 
@@ -171,6 +171,7 @@ func (c *Client) UpgradeRelease(releaseName, chartName, chartVersion string, opt
 		chart,
 		helm.UpdateValueOverrides(optionsYaml),
 		helm.UpgradeDryRun(false),
+		helm.UpgradeForce(true),
 		helm.ReuseValues(true),
 		helm.UpgradeTimeout(300),
 		helm.UpgradeWait(false),
@@ -195,4 +196,3 @@ func (c *Client) DeleteRelease(releaseName string) (string, string, error) {
 func (c *Client) FetchRelease() {
 
 }
-
