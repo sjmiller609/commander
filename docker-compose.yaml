@@ -3,7 +3,7 @@ version: "2"
 
 services:
   commander:
-    image: astronomerinc/ap-pce-commander
+    image: astronomerinc/ap-commander
     build:
       context: .
       dockerfile: Dockerfile
