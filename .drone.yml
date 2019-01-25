@@ -42,6 +42,7 @@ pipeline:
     repositories:
       - astronomer/astronomer
     when:
+      event: push
       branch: master
 
   notify:
