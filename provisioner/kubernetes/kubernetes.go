@@ -29,22 +29,35 @@ func New(helm *helm.Client, kube *kubernetes.Client) KubeProvisioner {
 }
 
 func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentRequest) (*proto.CreateDeploymentResponse, error) {
+	logger := log.WithField("function", "InstallDeployment")
 	response := &proto.CreateDeploymentResponse{
 		Deployment: &proto.Deployment{},
 	}
 
+	// If we have any secrets, create them.
 	if len(request.Secrets) > 0 {
 		for _, secret := range request.Secrets {
 			k.kube.Secret.Create(secret.Name, secret.Data, request.Namespace, request.ReleaseName)
 		}
 	}
 
-	options, err := utils.ParseJSON(request.RawConfig)
+	// Create the namespace for this installation.
+	err := k.kube.Namespace.Ensure(request.Namespace)
 	if err != nil {
+		logger.Errorf("Error creating namespace: %s", err.Error())
 		response.Result = BuildResult(false, err.Error())
 		return response, nil
 	}
 
+	// Parse the raw helm config for this installation.
+	options, err := utils.ParseJSON(request.RawConfig)
+	if err != nil {
+		logger.Errorf("Error parsing helm config: %s", err.Error())
+		response.Result = BuildResult(false, err.Error())
+		return response, nil
+	}
+
+	// Helm install the new release.
 	install, err := k.helm.InstallRelease(request.ReleaseName, request.Chart.Name, request.Chart.Version, request.Namespace, options)
 	if err != nil {
 		response.Result = BuildResult(false, err.Error())
@@ -141,7 +154,6 @@ func (k *KubeProvisioner) DeleteDeployment(request *proto.DeleteDeploymentReques
 
 	return response, nil
 }
-
 
 func (k *KubeProvisioner) SetSecret(request *proto.SetSecretRequest) (*proto.SetSecretResponse, error) {
 	response := &proto.SetSecretResponse{}

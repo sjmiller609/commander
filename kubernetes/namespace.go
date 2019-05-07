@@ -3,10 +3,11 @@ package kubernetes
 import (
 	"fmt"
 
-	kube "k8s.io/client-go/kubernetes"
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	kube "k8s.io/client-go/kubernetes"
 )
+
 type Namespace struct {
 	ClientSet *kube.Clientset
 }
@@ -23,11 +24,13 @@ func (n *Namespace) Exists(namespace string) (bool, error) {
 	return true, nil
 }
 
-
 func (n *Namespace) Create(namespace string) (*v1.Namespace, error) {
 	ns := &v1.Namespace{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: namespace,
+			Labels: map[string]string{
+				"tier": "airflow",
+			},
 		},
 	}
 	return n.ClientSet.Core().Namespaces().Create(ns)
@@ -40,14 +43,14 @@ func (n *Namespace) Delete(namespace string) error {
 
 	// create k8 DeleteOptions object
 	options := metav1.DeleteOptions{
-		PropagationPolicy: &propagation,
+		PropagationPolicy:  &propagation,
 		GracePeriodSeconds: &gracePeriod,
 	}
 
 	return n.ClientSet.Core().Namespaces().Delete(namespace, &options)
 }
 
-func (n *Namespace) Ensure(namespace string) (error) {
+func (n *Namespace) Ensure(namespace string) error {
 	exists, err := n.Exists(namespace)
 	if err != nil {
 		return err
