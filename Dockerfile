@@ -2,7 +2,7 @@
 # Commander
 # Astronomer Platform Provisioning Service
 
-FROM alpine:3.8
+FROM alpine:3.9
 MAINTAINER Astronomer <humans@astronomer.io>
 
 ARG BUILD_NUMBER=-1
@@ -19,6 +19,7 @@ ENV GOPATH=/root/go
 ENV GOBIN=/root/go/bin
 ENV PATH=${PATH}:${GOBIN}
 
+# Install dependencies
 RUN apk update \
 	&& apk add \
 		build-base \
@@ -35,9 +36,11 @@ RUN apk update \
 	&& mkdir "${GOPATH}/src" \
 	&& mkdir "${GOPATH}/bin"
 
+# Switch into source dir under GOPATH
 WORKDIR ${GOPATH}/src/${REPO}
 
+# Copy all source code in
 COPY . .
 
-RUN make build
-ENTRYPOINT ["./commander"]
+# Run Commander
+ENTRYPOINT ["go", "run", "main.go"]
