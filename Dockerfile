@@ -42,5 +42,8 @@ WORKDIR ${GOPATH}/src/${REPO}
 # Copy all source code in
 COPY . .
 
+# Build commander
+RUN make build
+
 # Run Commander
-ENTRYPOINT ["go", "run", "main.go"]
+ENTRYPOINT ["./commander"]
