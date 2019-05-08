@@ -15,13 +15,14 @@ var (
 
 // Configuration is a struct to hold provisioner configs
 type Configuration struct {
-	DebugMode     bool   `mapstructure:"DEBUG_MODE"`
-	HttpPort          string `mapstructure:"HTTP_PORT"`
-	GRPCPort          string `mapstructure:"GRPC_PORT"`
-	KubeConfig    string `mapstructure:"KUBECONFIG"`
-	HelmRepo	  string `mapstructure:"HELM_REPO"`
-	HelmRepoName	  string `mapstructure:"HELM_REPO_NAME"`
-	TillerHost		string `mapstructure:"TILLER_HOST"`
+	DebugMode       bool   `mapstructure:"DEBUG_MODE"`
+	HttpPort        string `mapstructure:"HTTP_PORT"`
+	GRPCPort        string `mapstructure:"GRPC_PORT"`
+	KubeConfig      string `mapstructure:"KUBECONFIG"`
+	HelmRepo        string `mapstructure:"HELM_REPO"`
+	HelmRepoName    string `mapstructure:"HELM_REPO_NAME"`
+	TillerHost      string `mapstructure:"TILLER_HOST"`
+	PlatformRelease string `mapstructure:"PLATFORM_RELEASE"`
 }
 
 // Log will log the configuation struct out
@@ -53,6 +54,7 @@ func setDefaults() {
 	viper.SetDefault("HELM_REPO", "https://helm.astronomer.io")
 	viper.SetDefault("HELM_REPO_NAME", "astronomer-ee")
 	viper.SetDefault("TILLER_HOST", "127.0.0.1:44134")
+	viper.SetDefault("PLATFORM_RELEASE", "")
 }
 
 // Get returns a populated config struct

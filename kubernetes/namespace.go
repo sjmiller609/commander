@@ -29,7 +29,7 @@ func (n *Namespace) Create(namespace string) (*v1.Namespace, error) {
 		ObjectMeta: metav1.ObjectMeta{
 			Name: namespace,
 			Labels: map[string]string{
-				"tier": "airflow",
+				"platform-release": appConfig.PlatformRelease,
 			},
 		},
 	}
