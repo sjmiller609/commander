@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"github.com/astronomerio/commander/kubernetes"
-	"github.com/astronomerio/commander/utils"
+	"github.com/astronomer/commander/kubernetes"
+	"github.com/astronomer/commander/utils"
 )
 
 var (

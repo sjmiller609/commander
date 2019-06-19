@@ -942,34 +942,6 @@
   revision = "9389c055a838d4f208b699b3c7c51b70f2368861"
 
 [[projects]]
-  name = "k8s.io/helm"
-  packages = [
-    "pkg/chartutil",
-    "pkg/downloader",
-    "pkg/getter",
-    "pkg/helm",
-    "pkg/helm/environment",
-    "pkg/helm/helmpath",
-    "pkg/helm/portforwarder",
-    "pkg/ignore",
-    "pkg/kube",
-    "pkg/plugin",
-    "pkg/proto/hapi/chart",
-    "pkg/proto/hapi/release",
-    "pkg/proto/hapi/services",
-    "pkg/proto/hapi/version",
-    "pkg/provenance",
-    "pkg/repo",
-    "pkg/resolver",
-    "pkg/sympath",
-    "pkg/tlsutil",
-    "pkg/urlutil",
-    "pkg/version"
-  ]
-  revision = "a80231648a1473929271764b920a8e346f6de844"
-  version = "v2.8.2"
-
-[[projects]]
   branch = "master"
   name = "k8s.io/kube-openapi"
   packages = [

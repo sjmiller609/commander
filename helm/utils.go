@@ -7,10 +7,10 @@ import (
 	"os"
 	"strings"
 
-	"k8s.io/helm/pkg/downloader"
-	"k8s.io/helm/pkg/getter"
-	"k8s.io/helm/pkg/kube"
-	"k8s.io/helm/pkg/repo"
+	"helm.sh/helm/pkg/downloader"
+	"helm.sh/helm/pkg/getter"
+	"helm.sh/helm/pkg/kube"
+	"helm.sh/helm/pkg/repo"
 )
 
 func (c *Client) AddRepository(cacheFile, repoName, repoUrl string) (*repo.ChartRepository, error) {

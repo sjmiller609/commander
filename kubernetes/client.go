@@ -5,7 +5,7 @@ import (
 	kube "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 
-	"github.com/astronomerio/commander/config"
+	"github.com/astronomer/commander/config"
 )
 
 var (

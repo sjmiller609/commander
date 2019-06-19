@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/astronomerio/commander/api"
-	"github.com/astronomerio/commander/config"
-	"github.com/astronomerio/commander/helm"
-	"github.com/astronomerio/commander/kubernetes"
-	kubeProv "github.com/astronomerio/commander/provisioner/kubernetes"
+	"github.com/astronomer/commander/api"
+	"github.com/astronomer/commander/config"
+	"github.com/astronomer/commander/helm"
+	"github.com/astronomer/commander/kubernetes"
+	kubeProv "github.com/astronomer/commander/provisioner/kubernetes"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

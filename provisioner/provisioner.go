@@ -1,7 +1,7 @@
 package provisioner
 
 import (
-	"github.com/astronomerio/commander/pkg/proto"
+	"github.com/astronomer/commander/pkg/proto"
 )
 
 // Provisioner types are capable of scheduling and various maintenace tasks

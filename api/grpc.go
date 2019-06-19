@@ -6,9 +6,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	"github.com/astronomerio/commander/pkg/proto"
-	"github.com/astronomerio/commander/provisioner"
-	"github.com/astronomerio/commander/utils"
+	"github.com/astronomer/commander/pkg/proto"
+	"github.com/astronomer/commander/provisioner"
+	"github.com/astronomer/commander/utils"
 )
 
 const (

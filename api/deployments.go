@@ -6,7 +6,7 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/astronomerio/commander/pkg/proto"
+	"github.com/astronomer/commander/pkg/proto"
 )
 
 func (s *GRPCServer) Ping(ctx context.Context, in *proto.PingRequest) (*proto.PingResponse, error) {

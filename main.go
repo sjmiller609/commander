@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/astronomerio/commander/cmd"
+	"github.com/astronomer/commander/cmd"
 )
 
 func main() {

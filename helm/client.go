@@ -4,15 +4,15 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/ghodss/yaml"
 	"github.com/spf13/pflag"
-	"k8s.io/helm/pkg/chartutil"
-	"k8s.io/helm/pkg/helm"
-	"k8s.io/helm/pkg/helm/environment"
-	"k8s.io/helm/pkg/kube"
-	"k8s.io/helm/pkg/repo"
-	"k8s.io/helm/pkg/proto/hapi/services"
+	"helm.sh/helm/pkg/chartutil"
+	//"helm.sh/helm/pkg/helm"
+	//"helm.sh/helm/pkg/helm/environment"
+	"helm.sh/helm/pkg/kube"
+	"helm.sh/helm/pkg/repo"
+	//"helm.sh/helm/pkg/proto/hapi/services"
 
-	"github.com/astronomerio/commander/config"
-	"github.com/astronomerio/commander/kubernetes"
+	"github.com/astronomer/commander/config"
+	"github.com/astronomer/commander/kubernetes"
 )
 
 var (

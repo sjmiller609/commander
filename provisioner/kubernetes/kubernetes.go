@@ -3,11 +3,11 @@ package kubernetesProv
 import (
 	"github.com/sirupsen/logrus"
 
-	"github.com/astronomerio/commander/config"
-	"github.com/astronomerio/commander/helm"
-	"github.com/astronomerio/commander/kubernetes"
-	"github.com/astronomerio/commander/pkg/proto"
-	"github.com/astronomerio/commander/utils"
+	"github.com/astronomer/commander/config"
+	"github.com/astronomer/commander/helm"
+	"github.com/astronomer/commander/kubernetes"
+	"github.com/astronomer/commander/pkg/proto"
+	"github.com/astronomer/commander/utils"
 )
 
 var (

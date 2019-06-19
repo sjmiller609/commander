@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/astronomerio/commander/pkg/proto"
+	"github.com/astronomer/commander/pkg/proto"
 	"golang.org/x/net/context"
 )
 
