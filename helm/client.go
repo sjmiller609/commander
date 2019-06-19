@@ -1,18 +1,14 @@
 package helm
 
 import (
-	"github.com/sirupsen/logrus"
-	"github.com/ghodss/yaml"
-	"github.com/spf13/pflag"
-	"helm.sh/helm/pkg/chartutil"
-	//"helm.sh/helm/pkg/helm"
-	//"helm.sh/helm/pkg/helm/environment"
-	"helm.sh/helm/pkg/kube"
-	"helm.sh/helm/pkg/repo"
-	//"helm.sh/helm/pkg/proto/hapi/services"
-
 	"github.com/astronomer/commander/config"
 	"github.com/astronomer/commander/kubernetes"
+	"github.com/ghodss/yaml"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/pflag"
+	"helm.sh/helm/pkg/chartutil"
+	"helm.sh/helm/pkg/kube"
+	"helm.sh/helm/pkg/repo"
 )
 
 var (
@@ -23,13 +19,12 @@ var (
 )
 
 type Client struct {
-	helm *helm.Client
-	helmOptions []helm.Option
+	helm *kube.Client
+	//helmOptions []helm.Option
 	repo *repo.ChartRepository
 	repoUrl string
-	settings environment.EnvSettings
+	//settings environment.EnvSettings
 	kubeClient *kubernetes.Client
-	tillerTunnel *kube.Tunnel
 }
 
 func New(kubeClient *kubernetes.Client, repo string) *Client {
@@ -41,7 +36,7 @@ func New(kubeClient *kubernetes.Client, repo string) *Client {
 
 	client := &Client{
 		repoUrl: repo,
-		settings: settings,
+		//settings: settings,
 		kubeClient: kubeClient,
 	}
 
@@ -54,7 +49,7 @@ func New(kubeClient *kubernetes.Client, repo string) *Client {
 	}
 
 	// create helm client
-	client.helm = helm.NewClient(client.helmOptions...)
+	client.helm = kube.New(client.helmOptions...)
 
 	// some helm commands expect `helm init` to have happened.
 	// as this isn't an exposed function, we'll just manually do the setup we need

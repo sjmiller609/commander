@@ -39,42 +39,30 @@
   version = "1.10.0"
 
 [[constraint]]
-  branch = "master"
   name = "k8s.io/apimachinery"
+  branch = "release-1.14"
+
+[[constraint]]
+  name = "k8s.io/api"
+  branch = "release-1.14"
 
 [[constraint]]
   name = "k8s.io/client-go"
-  version = "6.0.0"
+  version = "kubernetes-1.14.1"
 
 [[constraint]]
   name = "helm.sh/helm"
-  branch = "dev-v3"
-
-
-[[override]]
-  name = "github.com/docker/distribution"
-  revision = "429c75faf07af01f426f0b9ec8347eef44919d60"
+  version = "v3.0.0-alpha.1"
 
 [[override]]
   name = "github.com/docker/docker"
-  revision = "1009e6a40b295187e038b67e184e9c0384d95538"
+  source = "https://github.com/docker/engine.git"
+  revision = "200b524eff60a9c95a22bc2518042ac2ff617d07" # 18.09 branch
 
 [[override]]
-  name = "k8s.io/kubernetes"
-  revision = "ef56a8d6bb3800ab7803713eafc4191e8202ad6e"
-
-[[override]]
-  name = "k8s.io/client-go"
-  revision = "9389c055a838d4f208b699b3c7c51b70f2368861"
+  name = "github.com/docker/distribution"
+  revision = "6664ec703991875e14419ff4960921cce7678bab"
 
 [[override]]
   name = "github.com/Azure/go-autorest"
   revision = "fc3b03a2d2d1f43fad3007038bd16f044f870722"
-
-[[override]]
-  name = "github.com/russross/blackfriday"
-  revision = "55d61fa8aa702f59229e6cff85793c22e580eaf5"
-
-[[override]]
-  name = "google.golang.org/grpc"
-  revision = "5ffe3083946d5603a0578721101dc8165b1d5b5f"

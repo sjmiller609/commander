@@ -3,8 +3,8 @@ package helm
 import (
 	"errors"
 	"fmt"
-	"path/filepath"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"helm.sh/helm/pkg/downloader"
