@@ -57,14 +57,14 @@ func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentReque
 		return response, nil
 	}
 
-	// Helm install the new release.
-	install, err := k.helm.InstallRelease(request.ReleaseName, request.Chart.Name, request.Chart.Version, request.Namespace, options)
+	// Helm release the new release.
+	release, err := k.helm.InstallRelease(request.ReleaseName, request.Chart.Name, request.Chart.Version, request.Namespace, options)
 	if err != nil {
 		response.Result = BuildResult(false, err.Error())
 		return response, nil
 	}
 	response.Result = BuildResult(true, "Deployment Created")
-	response.Deployment.ReleaseName = install.Release.Name
+	response.Deployment.ReleaseName = release.Name
 	return response, nil
 }
 
@@ -86,7 +86,7 @@ func (k *KubeProvisioner) UpdateDeployment(request *proto.UpdateDeploymentReques
 	}
 
 	response.Result = BuildResult(true, "Deployment Updated")
-	response.Deployment.ReleaseName = update.Release.Name
+	response.Deployment.ReleaseName = update.Name
 	return response, nil
 }
 

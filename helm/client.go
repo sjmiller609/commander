@@ -10,6 +10,7 @@ import (
 	"helm.sh/helm/pkg/chartutil"
 	"helm.sh/helm/pkg/cli"
 	"helm.sh/helm/pkg/kube"
+	"helm.sh/helm/pkg/release"
 	"helm.sh/helm/pkg/repo"
 )
 
@@ -65,7 +66,7 @@ func (c *Client) Reset() {
 }
 
 // install a new chart release
-func (c *Client) InstallRelease(releaseName, chartName, chartVersion, namespace string, options map[string]interface{}) (*services.InstallReleaseResponse, error) {
+func (c *Client) InstallRelease(releaseName, chartName, chartVersion, namespace string, options map[string]interface{}) (*release.Release, error) {
 	logger := log.WithField("function", "InstallRelease")
 
 	// the helm pkg client was designed to go out of scope every command, since we don't do that, we need to reset it
@@ -82,7 +83,7 @@ func (c *Client) InstallRelease(releaseName, chartName, chartVersion, namespace 
 		return nil, err
 	}
 
-	chart, err := chartutil.Load(chartPath)
+	chartPath, err := chartutil.LoadChartfile(chartPath)
 	if err != nil {
 		return nil, err
 	}
