@@ -6,7 +6,9 @@ import (
 	"github.com/ghodss/yaml"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
+	"helm.sh/helm/pkg/action"
 	"helm.sh/helm/pkg/chartutil"
+	"helm.sh/helm/pkg/cli"
 	"helm.sh/helm/pkg/kube"
 	"helm.sh/helm/pkg/repo"
 )
@@ -20,36 +22,27 @@ var (
 
 type Client struct {
 	helm *kube.Client
-	//helmOptions []helm.Option
 	repo *repo.ChartRepository
 	repoUrl string
-	//settings environment.EnvSettings
+	settings cli.EnvSettings
 	kubeClient *kubernetes.Client
 }
 
 func New(kubeClient *kubernetes.Client, repo string) *Client {
 	// create settings object
 	flags := pflag.NewFlagSet("production", pflag.PanicOnError)
-	settings := environment.EnvSettings{}
+	settings := cli.EnvSettings{}
 	settings.AddFlags(flags)
 	settings.Init(flags)
 
 	client := &Client{
 		repoUrl: repo,
-		//settings: settings,
+		settings: settings,
 		kubeClient: kubeClient,
 	}
 
-	// open tunnel to tiller (if needed)
-	client.OpenTunnel()
-
-	client.helmOptions = []helm.Option{
-		helm.ConnectTimeout(5),
-		helm.Host(client.settings.TillerHost),
-	}
-
 	// create helm client
-	client.helm = kube.New(client.helmOptions...)
+	client.helm = kube.New(kube.GetConfig(settings.KubeConfig, settings.KubeContext, settings.Namespace))
 
 	// some helm commands expect `helm init` to have happened.
 	// as this isn't an exposed function, we'll just manually do the setup we need
@@ -68,7 +61,7 @@ func New(kubeClient *kubernetes.Client, repo string) *Client {
 }
 
 func (c *Client) Reset() {
-	c.helm = helm.NewClient(c.helmOptions...)
+	c.helm = kube.New(nil)
 }
 
 // install a new chart release
@@ -95,16 +88,14 @@ func (c *Client) InstallRelease(releaseName, chartName, chartVersion, namespace 
 	}
 
 	logger.Debug("helm#InstallReleaseFromChart")
-	return c.helm.InstallReleaseFromChart(chart,
-		namespace,
-		helm.ValueOverrides(optionsYaml),
-		helm.ReleaseName(releaseName),
-		helm.InstallDryRun(false),
-		helm.InstallReuseName(false),
-		helm.InstallDisableHooks(false),
-		helm.InstallTimeout(300),
-		helm.InstallWait(false),
-	)
+	client := action.NewInstall(cfg)
+	client.Namespace = namespace
+	client.DryRun = false
+	client.DisableHooks = false
+	client.Timeout = 300
+	client.Wait = false
+	//client.ValueOptions
+	return client.Run(chartPath)
 }
 
 // update settings of an existing release
