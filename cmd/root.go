@@ -42,8 +42,8 @@ func start() {
 	logger := log.WithField("function", "start")
 	logger.Info("Starting commander")
 
-	kubernetes.GetKubeConfig()
-	//_ = kubeConfig
+	kubeConfig := kubernetes.GetKubeConfig()
+	_ = kubeConfig
 
 	//kubeClient := kube.New(kubeConfig)
 
