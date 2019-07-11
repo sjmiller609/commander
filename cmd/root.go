@@ -1,14 +1,15 @@
 package cmd
 
 import (
-	"fmt"
+	"github.com/astronomer/commander/kubernetes"
+	//"helm.sh/helm/pkg/kube"
 	"os"
 
-	"github.com/astronomer/commander/api"
+	//"github.com/astronomer/commander/api"
 	"github.com/astronomer/commander/config"
-	"github.com/astronomer/commander/helm"
-	"github.com/astronomer/commander/kubernetes"
-	kubeProv "github.com/astronomer/commander/provisioner/kubernetes"
+	//"github.com/astronomer/commander/helm"
+	//"github.com/astronomer/commander/kubernetes"
+	//kubeProv "github.com/astronomer/commander/provisioner/kubernetes"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -41,25 +42,19 @@ func start() {
 	logger := log.WithField("function", "start")
 	logger.Info("Starting commander")
 
-	kubeConfig, err := kubernetes.GetKubeConfig()
-	if err != nil {
-		logger.Panic(err)
-	}
+	kubernetes.GetKubeConfig()
+	//_ = kubeConfig
 
-	kubeClient, err := kubernetes.New(kubeConfig)
-	if err != nil {
-		logger.Panic(err)
-	}
+	//kubeClient := kube.New(kubeConfig)
 
-	helmClient := helm.New(kubeClient, appConfig.HelmRepo)
+	//helmClient := helm.NewActionConfig(kubeConfig, kubeClient)
+	//prov := kubeProv.New(helmClient, kubeClient)
 
-	prov := kubeProv.New(helmClient, kubeClient)
-
-	httpServer := api.NewHttp(kubeClient)
-	logger.Info(fmt.Sprintf("Starting HTTP server on port %s", appConfig.HttpPort))
-	httpServer.Serve(appConfig.HttpPort)
-
-	grpcServer := api.NewGRPC(&prov)
-	logger.Info(fmt.Sprintf("Starting gRPC server on port %s", appConfig.GRPCPort))
-	grpcServer.Serve(appConfig.GRPCPort)
+	//httpServer := api.NewHttp(kubeClient)
+	//logger.Info(fmt.Sprintf("Starting HTTP server on port %s", appConfig.HttpPort))
+	//httpServer.Serve(appConfig.HttpPort)
+	//
+	//grpcServer := api.NewGRPC(&prov)
+	//logger.Info(fmt.Sprintf("Starting gRPC server on port %s", appConfig.GRPCPort))
+	//grpcServer.Serve(appConfig.GRPCPort)
 }

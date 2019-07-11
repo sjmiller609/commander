@@ -13,7 +13,7 @@ type Namespace struct {
 }
 
 func (n *Namespace) Exists(namespace string) (bool, error) {
-	_, err := n.ClientSet.Core().Namespaces().Get(namespace, metav1.GetOptions{})
+	_, err := n.ClientSet.CoreV1().Namespaces().Get(namespace, metav1.GetOptions{})
 	if err != nil {
 		// Maybe better to list all namespaces and search it so we don't have to do a dirty check
 		if err.Error() == fmt.Sprintf("namespaces \"%s\" not found", namespace) {
@@ -33,7 +33,7 @@ func (n *Namespace) Create(namespace string) (*v1.Namespace, error) {
 			},
 		},
 	}
-	return n.ClientSet.Core().Namespaces().Create(ns)
+	return n.ClientSet.CoreV1().Namespaces().Create(ns)
 }
 
 func (n *Namespace) Delete(namespace string) error {
@@ -47,7 +47,7 @@ func (n *Namespace) Delete(namespace string) error {
 		GracePeriodSeconds: &gracePeriod,
 	}
 
-	return n.ClientSet.Core().Namespaces().Delete(namespace, &options)
+	return n.ClientSet.CoreV1().Namespaces().Delete(namespace, &options)
 }
 
 func (n *Namespace) Ensure(namespace string) error {

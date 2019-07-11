@@ -29,7 +29,7 @@ type Client struct {
 	kubeClient *kubernetes.Client
 }
 
-func New(kubeClient *kubernetes.Client, repo string) *Client {
+func NewClient(kubeClient *kubernetes.Client, repo string) *Client {
 	// create settings object
 	flags := pflag.NewFlagSet("production", pflag.PanicOnError)
 	settings := cli.EnvSettings{}
@@ -72,10 +72,10 @@ func (c *Client) InstallRelease(releaseName, chartName, chartVersion, namespace 
 	// the helm pkg client was designed to go out of scope every command, since we don't do that, we need to reset it
 	defer c.Reset()
 
-	optionsYaml, err := yaml.Marshal(options)
-	if err != nil {
-		return nil, err
-	}
+	//optionsYaml, err := yaml.Marshal(options)
+	//if err != nil {
+	//	return nil, err
+	//}
 
 	chartPath, err := c.AcquireChartPath(c.ChartName(chartName), chartVersion)
 	if err != nil {
@@ -83,7 +83,7 @@ func (c *Client) InstallRelease(releaseName, chartName, chartVersion, namespace 
 		return nil, err
 	}
 
-	chartPath, err := chartutil.LoadChartfile(chartPath)
+	chart, err := chartutil.LoadChartfile(chartPath)
 	if err != nil {
 		return nil, err
 	}
@@ -95,8 +95,8 @@ func (c *Client) InstallRelease(releaseName, chartName, chartVersion, namespace 
 	client.DisableHooks = false
 	client.Timeout = 300
 	client.Wait = false
-	//client.ValueOptions
-	return client.Run(chartPath)
+	//client.ValueOptions = action.ValueOptions{Values: optionsYaml}
+	return client.Run(chart)
 }
 
 // update settings of an existing release
@@ -168,14 +168,17 @@ func (c *Client) UpgradeRelease(releaseName, chartName, chartVersion string, opt
 
 // delete a release
 func (c *Client) DeleteRelease(releaseName string) (string, string, error) {
-	logger := log.WithField("function", "DeleteRelease")
+	logger := log.WithField("function", "UninstallRelease")
 
 	logger.Debug("helm#DeleteRelease")
-	response, err := c.helm.DeleteRelease(releaseName, helm.DeletePurge(true))
+	uninstall := action.NewUninstall(c)
+	uninstall.KeepHistory = false
+	response, err := uninstall.Run(releaseName)
+
 	if err != nil {
 		return "", "", err
 	}
-	return response.GetRelease().GetName(), response.GetInfo(), nil
+	return response.Release.Name, response.Info, nil
 }
 
 // get release status

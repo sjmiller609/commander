@@ -5,7 +5,7 @@ PROTO_DEST ?= $(shell pwd)/pkg/proto
 .DEFAULT_GOAL := build
 
 dep:
-	dep ensure
+	dep ensure -v --vendor-only
 
 build:
 	go build -o ${OUTPUT} main.go

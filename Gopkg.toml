@@ -16,11 +16,11 @@
 
 [[constraint]]
   name = "github.com/sirupsen/logrus"
-  version = "1.0.5"
+  version = "1.3.0"
 
 [[constraint]]
   name = "github.com/spf13/cobra"
-  version = "0.0.1"
+  version = "0.0.4"
 
 [[constraint]]
   name = "github.com/spf13/pflag"
@@ -50,19 +50,44 @@
   name = "k8s.io/client-go"
   version = "kubernetes-1.14.1"
 
+[[override]]
+  name = "k8s.io/kubernetes"
+  revision = "a2e9891cd681b2682895dfd04f4cd31186cc2ac4"
+
 [[constraint]]
   name = "helm.sh/helm"
   version = "v3.0.0-alpha.1"
 
 [[override]]
-  name = "github.com/docker/docker"
-  source = "https://github.com/docker/engine.git"
-  revision = "200b524eff60a9c95a22bc2518042ac2ff617d07" # 18.09 branch
+  name = "sigs.k8s.io/kustomize"
+  version = "2.0.3"
+
+[[override]]
+  name = "k8s.io/apiserver"
+  branch = "release-1.14"
+
+[[override]]
+  name = "k8s.io/apiextensions-apiserver"
+  branch = "release-1.14"
+
+# This override below necessary for using docker/distribution as a test dependency
+[[override]]
+  name = "rsc.io/letsencrypt"
+  branch = "master"
+  source = "https://github.com/dmcgowan/letsencrypt.git"
 
 [[override]]
   name = "github.com/docker/distribution"
-  revision = "6664ec703991875e14419ff4960921cce7678bab"
+  revision = "40b7b5830a2337bb07627617740c0e39eb92800c"
 
 [[override]]
-  name = "github.com/Azure/go-autorest"
-  revision = "fc3b03a2d2d1f43fad3007038bd16f044f870722"
+  name = "github.com/russross/blackfriday"
+  revision = "05f3235734ad95d0016f6a23902f06461fcf567a"
+
+[[override]]
+  name = "github.com/docker/docker"
+  revision = "a9fbbdc8dd8794b20af358382ab780559bca589d"
+
+[[override]]
+  name = "k8s.io/cli-runtime"
+  revision = "44a48934c135b31e4f1c0d12e91d384e1cb2304c"
