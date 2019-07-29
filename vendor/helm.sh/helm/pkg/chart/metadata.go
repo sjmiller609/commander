@@ -15,8 +15,6 @@ limitations under the License.
 
 package chart
 
-import "errors"
-
 // Maintainer describes a Chart maintainer.
 type Maintainer struct {
 	// Name is a user name or organization name
@@ -28,8 +26,6 @@ type Maintainer struct {
 }
 
 // Metadata for a Chart file. This models the structure of a Chart.yaml file.
-//
-// Spec: https://helm.sh/helm/blob/master/docs/design/chart_format.md#the-chart-file
 type Metadata struct {
 	// The name of the chart
 	Name string `json:"name,omitempty"`
@@ -70,17 +66,28 @@ type Metadata struct {
 
 func (md *Metadata) Validate() error {
 	if md == nil {
-		return errors.New("metadata is required")
+		return ValidationError("chart.metadata is required")
 	}
 	if md.APIVersion == "" {
-		return errors.New("metadata apiVersion is required")
+		return ValidationError("chart.metadata.apiVersion is required")
 	}
 	if md.Name == "" {
-		return errors.New("metadata name is required")
+		return ValidationError("chart.metadata.name is required")
 	}
 	if md.Version == "" {
-		return errors.New("metadata version is required")
+		return ValidationError("chart.metadata.version is required")
+	}
+	if !isValidChartType(md.Type) {
+		return ValidationError("chart.metadata.type must be application or library")
 	}
 	// TODO validate valid semver here?
 	return nil
+}
+
+func isValidChartType(in string) bool {
+	switch in {
+	case "", "application", "library":
+		return true
+	}
+	return false
 }

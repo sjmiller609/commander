@@ -27,8 +27,8 @@ import (
 	"sync"
 
 	"github.com/Masterminds/semver"
-	"github.com/ghodss/yaml"
 	"github.com/pkg/errors"
+	"sigs.k8s.io/yaml"
 
 	"helm.sh/helm/pkg/chart"
 	"helm.sh/helm/pkg/chart/loader"
@@ -121,13 +121,6 @@ func (m *Manager) Update() error {
 		return nil
 	}
 
-	// Hash dependencies
-	// FIXME should this hash all of Chart.yaml
-	hash, err := resolver.HashReq(req)
-	if err != nil {
-		return err
-	}
-
 	// Check that all of the repos we're dependent on actually exist and
 	// the repo index names.
 	repoNames, err := m.getRepoNames(req)
@@ -144,7 +137,7 @@ func (m *Manager) Update() error {
 
 	// Now we need to find out which version of a chart best satisfies the
 	// dependencies in the Chart.yaml
-	lock, err := m.resolve(req, repoNames, hash)
+	lock, err := m.resolve(req, repoNames)
 	if err != nil {
 		return err
 	}
@@ -176,9 +169,9 @@ func (m *Manager) loadChartDir() (*chart.Chart, error) {
 // resolve takes a list of dependencies and translates them into an exact version to download.
 //
 // This returns a lock file, which has all of the dependencies normalized to a specific version.
-func (m *Manager) resolve(req []*chart.Dependency, repoNames map[string]string, hash string) (*chart.Lock, error) {
+func (m *Manager) resolve(req []*chart.Dependency, repoNames map[string]string) (*chart.Lock, error) {
 	res := resolver.New(m.ChartPath, m.HelmHome)
-	return res.Resolve(req, repoNames, hash)
+	return res.Resolve(req, repoNames)
 }
 
 // downloadAll takes a list of dependencies and downloads them into charts/
@@ -243,8 +236,9 @@ func (m *Manager) downloadAll(deps []*chart.Dependency) error {
 			Keyring:  m.Keyring,
 			HelmHome: m.HelmHome,
 			Getters:  m.Getters,
-			Username: username,
-			Password: password,
+			Options: []getter.Option{
+				getter.WithBasicAuth(username, password),
+			},
 		}
 
 		if _, _, err := dl.DownloadTo(churl, "", destPath); err != nil {

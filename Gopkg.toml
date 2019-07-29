@@ -40,23 +40,23 @@
 
 [[constraint]]
   name = "k8s.io/apimachinery"
-  branch = "release-1.14"
+  branch = "release-1.15"
 
 [[constraint]]
   name = "k8s.io/api"
-  branch = "release-1.14"
+  branch = "release-1.15"
 
 [[constraint]]
   name = "k8s.io/client-go"
-  version = "kubernetes-1.14.1"
+  version = "kubernetes-1.15.1"
 
-[[override]]
+[[constraint]]
   name = "k8s.io/kubernetes"
-  revision = "a2e9891cd681b2682895dfd04f4cd31186cc2ac4"
+  branch = "release-1.15"
 
 [[constraint]]
   name = "helm.sh/helm"
-  version = "v3.0.0-alpha.1"
+  version = "v3.0.0-alpha.2"
 
 [[override]]
   name = "sigs.k8s.io/kustomize"
@@ -64,11 +64,11 @@
 
 [[override]]
   name = "k8s.io/apiserver"
-  branch = "release-1.14"
+  branch = "release-1.15"
 
 [[override]]
   name = "k8s.io/apiextensions-apiserver"
-  branch = "release-1.14"
+  branch = "release-1.15"
 
 # This override below necessary for using docker/distribution as a test dependency
 [[override]]
@@ -86,7 +86,7 @@
 
 [[override]]
   name = "github.com/docker/docker"
-  revision = "a9fbbdc8dd8794b20af358382ab780559bca589d"
+  revision = "2cb26cfe9cbf8a64c5046c74d65f4528b22e67f4"
 
 [[override]]
   name = "k8s.io/cli-runtime"

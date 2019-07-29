@@ -20,8 +20,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ghodss/yaml"
 	"github.com/pkg/errors"
+	"sigs.k8s.io/yaml"
 
 	"helm.sh/helm/pkg/chart/loader"
 	"helm.sh/helm/pkg/chartutil"
@@ -68,6 +68,7 @@ func Templates(linter *support.Linter, values map[string]interface{}, namespace 
 	}
 	var e engine.Engine
 	e.Strict = strict
+	e.LintMode = true
 	renderedContentMap, err := e.Render(chart, valuesToRender)
 
 	renderOk := linter.RunLinterRule(support.ErrorSev, path, err)

@@ -31,8 +31,8 @@ import (
 	"time"
 
 	"github.com/Masterminds/sprig"
-	"github.com/ghodss/yaml"
 	"github.com/pkg/errors"
+	"sigs.k8s.io/yaml"
 
 	"helm.sh/helm/pkg/chart"
 	"helm.sh/helm/pkg/chartutil"
@@ -41,9 +41,12 @@ import (
 	"helm.sh/helm/pkg/engine"
 	"helm.sh/helm/pkg/getter"
 	"helm.sh/helm/pkg/hooks"
+	kubefake "helm.sh/helm/pkg/kube/fake"
 	"helm.sh/helm/pkg/release"
 	"helm.sh/helm/pkg/releaseutil"
 	"helm.sh/helm/pkg/repo"
+	"helm.sh/helm/pkg/storage"
+	"helm.sh/helm/pkg/storage/driver"
 	"helm.sh/helm/pkg/strvals"
 	"helm.sh/helm/pkg/version"
 )
@@ -61,6 +64,8 @@ const releaseNameMaxLen = 53
 // since there can be filepath in front of it.
 const notesFileSuffix = "NOTES.txt"
 
+const defaultDirectoryPermission = 0755
+
 // Install performs an installation operation.
 type Install struct {
 	cfg *Configuration
@@ -68,6 +73,7 @@ type Install struct {
 	ChartPathOptions
 	ValueOptions
 
+	ClientOnly       bool
 	DryRun           bool
 	DisableHooks     bool
 	Replace          bool
@@ -79,6 +85,8 @@ type Install struct {
 	ReleaseName      string
 	GenerateName     bool
 	NameTemplate     string
+	OutputDir        string
+	Atomic           bool
 }
 
 type ValueOptions struct {
@@ -115,6 +123,18 @@ func (i *Install) Run(chrt *chart.Chart) (*release.Release, error) {
 		return nil, err
 	}
 
+	if i.ClientOnly {
+		// Add mock objects in here so it doesn't use Kube API server
+		// NOTE(bacongobbler): used for `helm template`
+		i.cfg.Capabilities = chartutil.DefaultCapabilities
+		i.cfg.KubeClient = &kubefake.PrintingKubeClient{Out: ioutil.Discard}
+		i.cfg.Releases = storage.Init(driver.NewMemory())
+	}
+
+	// Make sure if Atomic is set, that wait is set as well. This makes it so
+	// the user doesn't have to specify both
+	i.Wait = i.Wait || i.Atomic
+
 	caps, err := i.cfg.getCapabilities()
 	if err != nil {
 		return nil, err
@@ -132,7 +152,7 @@ func (i *Install) Run(chrt *chart.Chart) (*release.Release, error) {
 
 	rel := i.createRelease(chrt, i.rawValues)
 	var manifestDoc *bytes.Buffer
-	rel.Hooks, manifestDoc, rel.Info.Notes, err = i.cfg.renderResources(chrt, valuesToRender)
+	rel.Hooks, manifestDoc, rel.Info.Notes, err = i.cfg.renderResources(chrt, valuesToRender, i.OutputDir)
 	// Even for errors, attach this if available
 	if manifestDoc != nil {
 		rel.Manifest = manifestDoc.String()
@@ -175,9 +195,7 @@ func (i *Install) Run(chrt *chart.Chart) (*release.Release, error) {
 	// pre-install hooks
 	if !i.DisableHooks {
 		if err := i.execHook(rel.Hooks, hooks.PreInstall); err != nil {
-			rel.SetStatus(release.StatusFailed, "failed pre-install: "+err.Error())
-			_ = i.replaceRelease(rel)
-			return rel, err
+			return i.failRelease(rel, fmt.Errorf("failed pre-install: %s", err))
 		}
 	}
 
@@ -186,26 +204,20 @@ func (i *Install) Run(chrt *chart.Chart) (*release.Release, error) {
 	// to true, since that is basically an upgrade operation.
 	buf := bytes.NewBufferString(rel.Manifest)
 	if err := i.cfg.KubeClient.Create(buf); err != nil {
-		rel.SetStatus(release.StatusFailed, fmt.Sprintf("Release %q failed: %s", i.ReleaseName, err.Error()))
-		i.recordRelease(rel) // Ignore the error, since we have another error to deal with.
-		return rel, errors.Wrapf(err, "release %s failed", i.ReleaseName)
+		return i.failRelease(rel, err)
 	}
 
 	if i.Wait {
 		buf := bytes.NewBufferString(rel.Manifest)
 		if err := i.cfg.KubeClient.Wait(buf, i.Timeout); err != nil {
-			rel.SetStatus(release.StatusFailed, fmt.Sprintf("Release %q failed: %s", i.ReleaseName, err.Error()))
-			i.recordRelease(rel) // Ignore the error, since we have another error to deal with.
-			return rel, errors.Wrapf(err, "release %s failed", i.ReleaseName)
+			return i.failRelease(rel, err)
 		}
 
 	}
 
 	if !i.DisableHooks {
 		if err := i.execHook(rel.Hooks, hooks.PostInstall); err != nil {
-			rel.SetStatus(release.StatusFailed, "failed post-install: "+err.Error())
-			_ = i.replaceRelease(rel)
-			return rel, err
+			return i.failRelease(rel, fmt.Errorf("failed post-install: %s", err))
 		}
 	}
 
@@ -221,6 +233,23 @@ func (i *Install) Run(chrt *chart.Chart) (*release.Release, error) {
 	i.recordRelease(rel)
 
 	return rel, nil
+}
+
+func (i *Install) failRelease(rel *release.Release, err error) (*release.Release, error) {
+	rel.SetStatus(release.StatusFailed, fmt.Sprintf("Release %q failed: %s", i.ReleaseName, err.Error()))
+	if i.Atomic {
+		i.cfg.Log("Install failed and atomic is set, uninstalling release")
+		uninstall := NewUninstall(i.cfg)
+		uninstall.DisableHooks = i.DisableHooks
+		uninstall.KeepHistory = false
+		uninstall.Timeout = i.Timeout
+		if _, uninstallErr := uninstall.Run(i.ReleaseName); uninstallErr != nil {
+			return rel, errors.Wrapf(uninstallErr, "an error occurred while uninstalling the release. original install error: %s", err)
+		}
+		return rel, errors.Wrapf(err, "release %s failed, and has been uninstalled due to atomic being set", i.ReleaseName)
+	}
+	i.recordRelease(rel) // Ignore the error, since we have another error to deal with.
+	return rel, err
 }
 
 // availableName tests whether a name is available
@@ -305,7 +334,7 @@ func (i *Install) replaceRelease(rel *release.Release) error {
 }
 
 // renderResources renders the templates in a chart
-func (c *Configuration) renderResources(ch *chart.Chart, values chartutil.Values) ([]*release.Hook, *bytes.Buffer, string, error) {
+func (c *Configuration) renderResources(ch *chart.Chart, values chartutil.Values, outputDir string) ([]*release.Hook, *bytes.Buffer, string, error) {
 	hs := []*release.Hook{}
 	b := bytes.NewBuffer(nil)
 
@@ -362,11 +391,64 @@ func (c *Configuration) renderResources(ch *chart.Chart, values chartutil.Values
 	}
 
 	// Aggregate all valid manifests into one big doc.
+	fileWritten := make(map[string]bool)
 	for _, m := range manifests {
-		fmt.Fprintf(b, "---\n# Source: %s\n%s\n", m.Name, m.Content)
+		if outputDir == "" {
+			fmt.Fprintf(b, "---\n# Source: %s\n%s\n", m.Name, m.Content)
+		} else {
+			err = writeToFile(outputDir, m.Name, m.Content, fileWritten[m.Name])
+			if err != nil {
+				return hs, b, "", err
+			}
+			fileWritten[m.Name] = true
+		}
 	}
 
 	return hs, b, notes, nil
+}
+
+// write the <data> to <output-dir>/<name>. <append> controls if the file is created or content will be appended
+func writeToFile(outputDir string, name string, data string, append bool) error {
+	outfileName := strings.Join([]string{outputDir, name}, string(filepath.Separator))
+
+	err := ensureDirectoryForFile(outfileName)
+	if err != nil {
+		return err
+	}
+
+	f, err := createOrOpenFile(outfileName, append)
+	if err != nil {
+		return err
+	}
+
+	defer f.Close()
+
+	_, err = f.WriteString(fmt.Sprintf("---\n# Source: %s\n%s\n", name, data))
+
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("wrote %s\n", outfileName)
+	return nil
+}
+
+func createOrOpenFile(filename string, append bool) (*os.File, error) {
+	if append {
+		return os.OpenFile(filename, os.O_APPEND|os.O_WRONLY, 0600)
+	}
+	return os.Create(filename)
+}
+
+// check if the directory exists to create file. creates if don't exists
+func ensureDirectoryForFile(file string) error {
+	baseDir := path.Dir(file)
+	_, err := os.Stat(baseDir)
+	if err != nil && !os.IsNotExist(err) {
+		return err
+	}
+
+	return os.MkdirAll(baseDir, defaultDirectoryPermission)
 }
 
 // validateManifest checks to see whether the given manifest is valid for the current Kubernetes
@@ -574,8 +656,9 @@ func (c *ChartPathOptions) LocateChart(name string, settings cli.EnvSettings) (s
 		Out:      os.Stdout,
 		Keyring:  c.Keyring,
 		Getters:  getter.All(settings),
-		Username: c.Username,
-		Password: c.Password,
+		Options: []getter.Option{
+			getter.WithBasicAuth(c.Username, c.Password),
+		},
 	}
 	if c.Verify {
 		dl.Verify = downloader.VerifyAlways
@@ -646,6 +729,12 @@ func (v *ValueOptions) MergeValues(settings cli.EnvSettings) error {
 	return nil
 }
 
+func NewValueOptions(values map[string]interface{}) ValueOptions {
+	return ValueOptions{
+		rawValues: values,
+	}
+}
+
 // mergeValues merges source and destination map, preferring values from the source map
 func mergeValues(dest, src map[string]interface{}) map[string]interface{} {
 	out := make(map[string]interface{})
@@ -704,7 +793,7 @@ func readFile(filePath string, settings cli.EnvSettings) ([]byte, error) {
 		return ioutil.ReadFile(filePath)
 	}
 
-	getter, err := getterConstructor(filePath, "", "", "")
+	getter, err := getterConstructor(getter.WithURL(filePath))
 	if err != nil {
 		return []byte{}, err
 	}

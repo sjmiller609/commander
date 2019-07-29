@@ -28,21 +28,8 @@ import (
 
 // HTTPGetter is the efault HTTP(/S) backend handler
 type HTTPGetter struct {
-	client    *http.Client
-	username  string
-	password  string
-	userAgent string
-}
-
-// SetCredentials sets the credentials for the getter
-func (g *HTTPGetter) SetCredentials(username, password string) {
-	g.username = username
-	g.password = password
-}
-
-// SetUserAgent sets the HTTP User-Agent for the getter
-func (g *HTTPGetter) SetUserAgent(userAgent string) {
-	g.userAgent = userAgent
+	client *http.Client
+	opts   options
 }
 
 //Get performs a Get from repo.Getter and returns the body.
@@ -60,12 +47,12 @@ func (g *HTTPGetter) get(href string) (*bytes.Buffer, error) {
 		return buf, err
 	}
 	// req.Header.Set("User-Agent", "Helm/"+strings.TrimPrefix(version.GetVersion(), "v"))
-	if g.userAgent != "" {
-		req.Header.Set("User-Agent", g.userAgent)
+	if g.opts.userAgent != "" {
+		req.Header.Set("User-Agent", g.opts.userAgent)
 	}
 
-	if g.username != "" && g.password != "" {
-		req.SetBasicAuth(g.username, g.password)
+	if g.opts.username != "" && g.opts.password != "" {
+		req.SetBasicAuth(g.opts.username, g.opts.password)
 	}
 
 	resp, err := g.client.Do(req)
@@ -81,22 +68,22 @@ func (g *HTTPGetter) get(href string) (*bytes.Buffer, error) {
 	return buf, err
 }
 
-// newHTTPGetter constructs a valid http/https client as Getter
-func newHTTPGetter(URL, CertFile, KeyFile, CAFile string) (Getter, error) {
-	return NewHTTPGetter(URL, CertFile, KeyFile, CAFile)
-}
-
-// NewHTTPGetter constructs a valid http/https client as HTTPGetter
-func NewHTTPGetter(URL, CertFile, KeyFile, CAFile string) (*HTTPGetter, error) {
+// NewHTTPGetter constructs a valid http/https client as a Getter
+func NewHTTPGetter(options ...Option) (Getter, error) {
 	var client HTTPGetter
-	if CertFile != "" && KeyFile != "" {
-		tlsConf, err := tlsutil.NewClientTLS(CertFile, KeyFile, CAFile)
+
+	for _, opt := range options {
+		opt(&client.opts)
+	}
+
+	if client.opts.certFile != "" && client.opts.keyFile != "" {
+		tlsConf, err := tlsutil.NewClientTLS(client.opts.certFile, client.opts.keyFile, client.opts.caFile)
 		if err != nil {
 			return &client, errors.Wrap(err, "can't create TLS config for client")
 		}
 		tlsConf.BuildNameToCertificate()
 
-		sni, err := urlutil.ExtractHostname(URL)
+		sni, err := urlutil.ExtractHostname(client.opts.url)
 		if err != nil {
 			return &client, err
 		}
@@ -111,5 +98,6 @@ func NewHTTPGetter(URL, CertFile, KeyFile, CAFile string) (*HTTPGetter, error) {
 	} else {
 		client.client = http.DefaultClient
 	}
+
 	return &client, nil
 }

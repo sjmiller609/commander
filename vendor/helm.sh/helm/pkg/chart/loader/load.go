@@ -22,8 +22,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ghodss/yaml"
 	"github.com/pkg/errors"
+	"sigs.k8s.io/yaml"
 
 	"helm.sh/helm/pkg/chart"
 )
@@ -97,7 +97,6 @@ func LoadFiles(files []*BufferedFile) (*chart.Chart, error) {
 			if err := yaml.Unmarshal(f.Data, &c.Values); err != nil {
 				return c, errors.Wrap(err, "cannot load values.yaml")
 			}
-			c.RawValues = f.Data
 		case f.Name == "values.schema.json":
 			c.Schema = f.Data
 
