@@ -1,188 +1,103 @@
 package helm
 
 import (
-	"github.com/astronomer/commander/config"
-	"github.com/astronomer/commander/kubernetes"
-	"github.com/ghodss/yaml"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/pflag"
 	"helm.sh/helm/pkg/action"
-	"helm.sh/helm/pkg/chartutil"
+	"helm.sh/helm/pkg/chart/loader"
 	"helm.sh/helm/pkg/cli"
-	"helm.sh/helm/pkg/kube"
+	"helm.sh/helm/pkg/downloader"
+	"helm.sh/helm/pkg/getter"
 	"helm.sh/helm/pkg/release"
-	"helm.sh/helm/pkg/repo"
 )
 
+
 var (
-	appConfig = config.Get()
 	log       = logrus.WithField("package", "helm")
-	stableRepository         = "stable"
-	stableRepositoryURL = "https://kubernetes-charts.storage.googleapis.com"
+	settings   cli.EnvSettings
 )
 
 type Client struct {
-	helm *kube.Client
-	repo *repo.ChartRepository
-	repoUrl string
-	settings cli.EnvSettings
-	kubeClient *kubernetes.Client
+	actionConfig *action.Configuration
 }
 
-func NewClient(kubeClient *kubernetes.Client, repo string) *Client {
-	// create settings object
-	flags := pflag.NewFlagSet("production", pflag.PanicOnError)
-	settings := cli.EnvSettings{}
-	settings.AddFlags(flags)
-	settings.Init(flags)
 
+func NewClient(actionConfig *action.Configuration) *Client {
 	client := &Client{
-		repoUrl: repo,
-		settings: settings,
-		kubeClient: kubeClient,
+		actionConfig: actionConfig,
 	}
-
-	// create helm client
-	client.helm = kube.New(kube.GetConfig(settings.KubeConfig, settings.KubeContext, settings.Namespace))
-
-	// some helm commands expect `helm init` to have happened.
-	// as this isn't an exposed function, we'll just manually do the setup we need
-
-	// As of now, the parts of helm init we need are doing are
-	// - Creating helm home and all its subdirectories
-	// - Preloading repositories for charts
-	if err := client.ensureDirectories(); err != nil {
-		panic(err.Error())
-	}
-	if err := client.ensureAstroRepo(); err != nil {
-		panic(err.Error())
-	}
-
 	return client
 }
 
-func (c *Client) Reset() {
-	c.helm = kube.New(nil)
-}
 
 // install a new chart release
-func (c *Client) InstallRelease(releaseName, chartName, chartVersion, namespace string, options map[string]interface{}) (*release.Release, error) {
+func (c *Client) InstallRelease(releaseName, chart, chartVersion, namespace string, options map[string]interface{}) (*release.Release, error) {
+	client := action.NewInstall(c.actionConfig)
 	logger := log.WithField("function", "InstallRelease")
 
-	// the helm pkg client was designed to go out of scope every command, since we don't do that, we need to reset it
-	defer c.Reset()
+	logger.Info("Starting commander")
+	logger.Info("Original chart version: %q", client.Version)
 
-	//optionsYaml, err := yaml.Marshal(options)
-	//if err != nil {
-	//	return nil, err
-	//}
-
-	chartPath, err := c.AcquireChartPath(c.ChartName(chartName), chartVersion)
-	if err != nil {
-		logger.Errorf("#AcquireChartPath: %s", err.Error())
-		return nil, err
+	if client.Version == "" && client.Devel {
+		logger.Info("setting version to >0.0.0-0")
+		client.Version = ">0.0.0-0"
 	}
 
-	chart, err := chartutil.LoadChartfile(chartPath)
+	client.ReleaseName = releaseName
+
+	cp, err := client.ChartPathOptions.LocateChart(chart, settings)
 	if err != nil {
 		return nil, err
 	}
 
-	logger.Debug("helm#InstallReleaseFromChart")
-	client := action.NewInstall(cfg)
-	client.Namespace = namespace
-	client.DryRun = false
-	client.DisableHooks = false
-	client.Timeout = 300
-	client.Wait = false
-	//client.ValueOptions = action.ValueOptions{Values: optionsYaml}
-	return client.Run(chart)
+	logger.Info("CHART PATH: %s\n", cp)
+
+	vals := make(map[string]interface{})
+
+	// Check chart dependencies to make sure all are present in /charts
+	chartRequested, err := loader.Load(cp)
+	if err != nil {
+		return nil, err
+	}
+
+	validInstallableChart, err := isChartInstallable(chartRequested)
+	if !validInstallableChart {
+		return nil, err
+	}
+
+	if req := chartRequested.Metadata.Dependencies; req != nil {
+		// If CheckDependencies returns an error, we have unfulfilled dependencies.
+		// As of Helm 2.4.0, this is treated as a stopping condition:
+		// https://github.com/helm/helm/issues/2209
+		if err := action.CheckDependencies(chartRequested, req); err != nil {
+			if client.DependencyUpdate {
+				man := &downloader.Manager{
+					//Out:        out,
+					ChartPath:  cp,
+					Keyring:    client.ChartPathOptions.Keyring,
+					SkipUpdate: false,
+					Getters:    getter.All(settings),
+				}
+				if err := man.Update(); err != nil {
+					return nil, err
+				}
+			} else {
+				return nil, err
+			}
+		}
+	}
+
+	client.Namespace = GetNamespace()
+	return client.Run(chartRequested, vals)
 }
 
-// update settings of an existing release
-func (c *Client) UpdateRelease(releaseName, chartName, chartVersion string, options map[string]interface{}) (*services.UpdateReleaseResponse, error) {
-	logger := log.WithField("function", "UpdateRelease")
-
-	optionsYaml, err := yaml.Marshal(options)
-	if err != nil {
-		return nil, err
-	}
-
-	chartPath, err := c.AcquireChartPath(c.ChartName(chartName), chartVersion)
-	if err != nil {
-		logger.Errorf("#AcquireChartPath: %s", err.Error())
-		return nil, err
-	}
-
-	chart, err := chartutil.Load(chartPath)
-	if err != nil {
-		return nil, err
-	}
-
-	logger.Debug("helm#UpdateReleaseFromChart")
-	return c.helm.UpdateReleaseFromChart(releaseName,
-		chart,
-		helm.UpdateValueOverrides(optionsYaml),
-		helm.UpgradeDryRun(false),
-		helm.ReuseValues(true),
-		helm.UpgradeDisableHooks(false),
-		helm.UpgradeTimeout(300),
-		helm.UpgradeWait(false),
-	)
-
+func (c *Client) UpdateRelease(s string, s2 string, s3 string, options map[string]interface{}) (interface{}, error) {
 	return nil, nil
 }
 
-// upgrade a release to a later version of the chart
-func (c *Client) UpgradeRelease(releaseName, chartName, chartVersion string, options map[string]interface{}) (*services.UpdateReleaseResponse, error) {
-	logger := log.WithField("function", "UpgradeRelease")
-
-	optionsYaml, err := yaml.Marshal(options)
-	if err != nil {
-		return nil, err
-	}
-
-	chartPath, err := c.AcquireChartPath(c.ChartName(chartName), chartVersion)
-	if err != nil {
-		logger.Errorf("#AcquireChartPath: %s", err.Error())
-		return nil, err
-	}
-
-	chart, err := chartutil.Load(chartPath)
-	if err != nil {
-		return nil, err
-	}
-
-	logger.Debug("helm#UpgradeReleaseFromChart")
-	return c.helm.UpdateReleaseFromChart(releaseName,
-		chart,
-		helm.UpdateValueOverrides(optionsYaml),
-		helm.UpgradeDryRun(false),
-		helm.ReuseValues(true),
-		helm.UpgradeTimeout(300),
-		helm.UpgradeWait(false),
-	)
-
+func (c *Client) UpgradeRelease(s string, s2 string, s3 string, options map[string]interface{}) (interface{}, error) {
 	return nil, nil
 }
 
-// delete a release
-func (c *Client) DeleteRelease(releaseName string) (string, string, error) {
-	logger := log.WithField("function", "UninstallRelease")
-
-	logger.Debug("helm#DeleteRelease")
-	uninstall := action.NewUninstall(c)
-	uninstall.KeepHistory = false
-	response, err := uninstall.Run(releaseName)
-
-	if err != nil {
-		return "", "", err
-	}
-	return response.Release.Name, response.Info, nil
+func (c *Client) DeleteRelease(s string) (interface{}, interface{}, interface{}) {
+	return nil, nil, nil
 }
-
-// get release status
-func (c *Client) FetchRelease() {
-
-}
-

@@ -44,7 +44,7 @@ type waiter struct {
 
 // waitForResources polls to get the current status of all pods, PVCs, and Services
 // until all are ready or a timeout is reached
-func (w *waiter) waitForResources(created Result) error {
+func (w *waiter) waitForResources(created ResourceList) error {
 	w.log("beginning wait for %d resources with timeout of %v", len(created), w.timeout)
 
 	return wait.Poll(2*time.Second, w.timeout, func() (bool, error) {
@@ -56,7 +56,7 @@ func (w *waiter) waitForResources(created Result) error {
 				ok  = true
 				err error
 			)
-			switch value := asVersioned(v).(type) {
+			switch value := AsVersioned(v).(type) {
 			case *corev1.Pod:
 				pod, err := w.c.CoreV1().Pods(value.Namespace).Get(value.Name, metav1.GetOptions{})
 				if err != nil || !w.isPodReady(pod) {
@@ -178,7 +178,7 @@ func (w *waiter) podsReadyForObject(namespace string, obj runtime.Object) (bool,
 }
 
 func (w *waiter) podsforObject(namespace string, obj runtime.Object) ([]corev1.Pod, error) {
-	selector, err := selectorsForObject(obj)
+	selector, err := SelectorsForObject(obj)
 	if err != nil {
 		return nil, err
 	}
@@ -267,7 +267,10 @@ func (w *waiter) statefulSetReady(sts *appsv1.StatefulSet) bool {
 	var partition int
 	// 1 is the default for replicas if not set
 	var replicas = 1
-	if sts.Spec.UpdateStrategy.RollingUpdate.Partition != nil {
+	// For some reason, even if the update strategy is a rolling update, the
+	// actual rollingUpdate field can be nil. If it is, we can safely assume
+	// there is no partition value
+	if sts.Spec.UpdateStrategy.RollingUpdate != nil && sts.Spec.UpdateStrategy.RollingUpdate.Partition != nil {
 		partition = int(*sts.Spec.UpdateStrategy.RollingUpdate.Partition)
 	}
 	if sts.Spec.Replicas != nil {
@@ -300,10 +303,10 @@ func getPods(client kubernetes.Interface, namespace, selector string) ([]corev1.
 	return list.Items, err
 }
 
-// selectorsForObject returns the pod label selector for a given object
+// SelectorsForObject returns the pod label selector for a given object
 //
 // Modified version of https://github.com/kubernetes/kubernetes/blob/v1.14.1/pkg/kubectl/polymorphichelpers/helpers.go#L84
-func selectorsForObject(object runtime.Object) (selector labels.Selector, err error) {
+func SelectorsForObject(object runtime.Object) (selector labels.Selector, err error) {
 	switch t := object.(type) {
 	case *extensionsv1beta1.ReplicaSet:
 		selector, err = metav1.LabelSelectorAsSelector(t.Spec.Selector)

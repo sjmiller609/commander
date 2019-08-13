@@ -24,11 +24,12 @@ import (
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/client-go/discovery"
+	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 
+	"helm.sh/helm/internal/experimental/registry"
 	"helm.sh/helm/pkg/chartutil"
 	"helm.sh/helm/pkg/kube"
-	"helm.sh/helm/pkg/registry"
 	"helm.sh/helm/pkg/release"
 	"helm.sh/helm/pkg/storage"
 )
@@ -108,6 +109,15 @@ func (c *Configuration) getCapabilities() (*chartutil.Capabilities, error) {
 		},
 	}
 	return c.Capabilities, nil
+}
+
+func (c *Configuration) KubernetesClientSet() (kubernetes.Interface, error) {
+	conf, err := c.RESTClientGetter.ToRESTConfig()
+	if err != nil {
+		return nil, errors.Wrap(err, "unable to generate config for kubernetes client")
+	}
+
+	return kubernetes.NewForConfig(conf)
 }
 
 // Now generates a timestamp

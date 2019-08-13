@@ -61,6 +61,49 @@
   version = "v2.20.0"
 
 [[projects]]
+  digest = "1:d5e752c67b445baa5b6cb6f8aa706775c2aa8e41aca95a0c651520ff2c80361a"
+  name = "github.com/Microsoft/go-winio"
+  packages = [
+    ".",
+    "pkg/guid",
+  ]
+  pruneopts = "UT"
+  revision = "6c72808b55902eae4c5943626030429ff20f3b63"
+  version = "v0.4.14"
+
+[[projects]]
+  digest = "1:6a16b820c16f0587d63a3c462a9d787106f966adae5056aa430ebca18c7fba46"
+  name = "github.com/Microsoft/hcsshim"
+  packages = [
+    ".",
+    "internal/guestrequest",
+    "internal/guid",
+    "internal/hcs",
+    "internal/hcserror",
+    "internal/hns",
+    "internal/interop",
+    "internal/logfields",
+    "internal/longpath",
+    "internal/mergemaps",
+    "internal/safefile",
+    "internal/schema1",
+    "internal/schema2",
+    "internal/timeout",
+    "internal/wclayer",
+  ]
+  pruneopts = "UT"
+  revision = "f92b8fb9c92e17da496af5a69e3ee13fbe9916e1"
+  version = "v0.8.6"
+
+[[projects]]
+  branch = "master"
+  digest = "1:3721a10686511b80c052323423f0de17a8c06d417dbdd3b392b1578432a33aae"
+  name = "github.com/Nvveen/Gotty"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "cd527374f1e5bff4938207604a14f2e38a9cf512"
+
+[[projects]]
   digest = "1:a2682518d905d662d984ef9959984ef87cecb777d379bfa9d9fe40e78069b3e4"
   name = "github.com/PuerkitoBio/purell"
   packages = ["."]
@@ -85,20 +128,49 @@
   version = "v9"
 
 [[projects]]
-  digest = "1:9c3e006f2c443dc081d465905d6e1c43d5e2f400f5b9b7cdf8bbed8b2ac582bb"
+  digest = "1:d6afaeed1502aa28e80a4ed0981d570ad91b2579193404256ce672ed0a609e0d"
+  name = "github.com/beorn7/perks"
+  packages = ["quantile"]
+  pruneopts = "UT"
+  revision = "37c8de3658fcb183f997c4e13e8337516ab753e6"
+  version = "v1.0.1"
+
+[[projects]]
+  digest = "1:444213f5e5de68872ec92ee1b5116c397405a91bf8584e7f862bf3ce9d95f528"
   name = "github.com/containerd/containerd"
   packages = [
     "content",
+    "content/local",
     "errdefs",
+    "filters",
     "images",
     "log",
     "platforms",
     "reference",
     "remotes",
+    "remotes/docker",
+    "sys",
+    "version",
   ]
   pruneopts = "UT"
   revision = "85f6aa58b8a3170aec9824568f7a31832878b603"
   version = "v1.2.7"
+
+[[projects]]
+  branch = "master"
+  digest = "1:b3175aa9299c7c81134df7cffce8c08d40021ee35fc81a513e88f77b83348e56"
+  name = "github.com/containerd/continuity"
+  packages = [
+    ".",
+    "devices",
+    "driver",
+    "pathdriver",
+    "proto",
+    "syscallx",
+    "sysx",
+  ]
+  pruneopts = "UT"
+  revision = "aaeac12a7ffcd198ae25440a9dff125c2e2703a7"
 
 [[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
@@ -109,37 +181,115 @@
   version = "v1.1.1"
 
 [[projects]]
-  digest = "1:35d11536e59c45cef908aecfc7b61606b4f7a0a6e7729525d704ca15b016b5c7"
+  digest = "1:572c370bf45f46d2c7a3d3c6bb3f80b80396538722b843a1d35af2d0b33917ec"
   name = "github.com/deislabs/oras"
   packages = [
     "pkg/auth",
+    "pkg/auth/docker",
     "pkg/content",
     "pkg/context",
     "pkg/oras",
   ]
   pruneopts = "UT"
-  revision = "b3b6ce7eeb31a5c0d891d33f585c84ae3dcc9046"
-  version = "v0.5.0"
+  revision = "b285197778e05cd348abb8ff50faf0ef7e3554a2"
+  version = "v0.6.0"
 
 [[projects]]
-  digest = "1:4ddc17aeaa82cb18c5f0a25d7c253a10682f518f4b2558a82869506eec223d76"
+  digest = "1:92ebc9c068ab8e3fff03a58694ee33830964f6febd0130069aadce328802de14"
+  name = "github.com/docker/cli"
+  packages = [
+    "cli/config",
+    "cli/config/configfile",
+    "cli/config/credentials",
+    "cli/config/types",
+  ]
+  pruneopts = "UT"
+  revision = "5b38d82aa0767e32f53b5821a9a5044f20eeef29"
+  version = "v19.03.1"
+
+[[projects]]
+  digest = "1:46c007f315d323589cb66c22a1bee5ed7fefb85961615d11bf0f924e3bf67b55"
   name = "github.com/docker/distribution"
   packages = [
+    ".",
     "digestset",
+    "metrics",
     "reference",
+    "registry/api/errcode",
+    "registry/api/v2",
+    "registry/client",
+    "registry/client/auth",
+    "registry/client/auth/challenge",
+    "registry/client/transport",
+    "registry/storage/cache",
+    "registry/storage/cache/memory",
   ]
   pruneopts = "UT"
   revision = "40b7b5830a2337bb07627617740c0e39eb92800c"
 
 [[projects]]
-  digest = "1:8da8bb2b12c31c632e96ca6f15666a36c36cd390326b6c5e1c5e309cf4b5419a"
+  digest = "1:b5be0d9940d8fa3ff7df4949a8e8c47a7f93ea8251239ad074e1a6b0db55876a"
   name = "github.com/docker/docker"
   packages = [
+    "api/types",
+    "api/types/blkiodev",
+    "api/types/container",
+    "api/types/filters",
+    "api/types/mount",
+    "api/types/network",
+    "api/types/registry",
+    "api/types/strslice",
+    "api/types/swarm",
+    "api/types/swarm/runtime",
+    "api/types/versions",
+    "errdefs",
+    "pkg/homedir",
+    "pkg/idtools",
+    "pkg/ioutils",
+    "pkg/jsonmessage",
+    "pkg/longpath",
+    "pkg/mount",
+    "pkg/stringid",
+    "pkg/system",
+    "pkg/tarsum",
     "pkg/term",
     "pkg/term/windows",
+    "registry",
+    "registry/resumable",
   ]
   pruneopts = "UT"
   revision = "2cb26cfe9cbf8a64c5046c74d65f4528b22e67f4"
+
+[[projects]]
+  digest = "1:9f3f49b4e32d3da2dd6ed07cc568627b53cc80205c0dcf69f4091f027416cb60"
+  name = "github.com/docker/docker-credential-helpers"
+  packages = [
+    "client",
+    "credentials",
+  ]
+  pruneopts = "UT"
+  revision = "54f0238b6bf101fc3ad3b34114cb5520beb562f5"
+  version = "v0.6.3"
+
+[[projects]]
+  digest = "1:811c86996b1ca46729bad2724d4499014c4b9effd05ef8c71b852aad90deb0ce"
+  name = "github.com/docker/go-connections"
+  packages = [
+    "nat",
+    "sockets",
+    "tlsconfig",
+  ]
+  pruneopts = "UT"
+  revision = "7395e3f8aa162843a74ed6d48e79627d9792ac55"
+  version = "v0.4.0"
+
+[[projects]]
+  branch = "master"
+  digest = "1:2b126e77be4ab4b92cdb3924c87894dd76bf365ba282f358a13133e848aa0059"
+  name = "github.com/docker/go-metrics"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "b84716841b82eab644a0c64fc8b42d480e49add5"
 
 [[projects]]
   digest = "1:6f82cacd0af5921e99bf3f46748705239b36489464f4529a1589bc895764fb18"
@@ -366,6 +516,14 @@
   version = "v0.3.0"
 
 [[projects]]
+  digest = "1:cbec35fe4d5a4fba369a656a8cd65e244ea2c743007d8f6c1ccb132acf9d1296"
+  name = "github.com/gorilla/mux"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "00bdffe0f3c77e27d2cf6f5c70232a2d3e4d9c15"
+  version = "v1.7.3"
+
+[[projects]]
   branch = "master"
   digest = "1:d959625ad576a561d91aae105f7266ea6b245d4822d86bc322823823bb88261a"
   name = "github.com/gosuri/uitable"
@@ -503,6 +661,14 @@
   version = "v0.0.4"
 
 [[projects]]
+  digest = "1:ff5ebae34cfbf047d505ee150de27e60570e8c394b3b8fdbb720ff6ac71985fc"
+  name = "github.com/matttproud/golang_protobuf_extensions"
+  packages = ["pbutil"]
+  pruneopts = "UT"
+  revision = "c12348ce28de40eed0136aa2b644d0ee0650e56c"
+  version = "v1.0.1"
+
+[[projects]]
   digest = "1:abf08734a6527df70ed361d7c369fb580e6840d8f7a6012e5f609fdfd93b4e48"
   name = "github.com/mitchellh/go-wordwrap"
   packages = ["."]
@@ -554,6 +720,17 @@
   version = "v1.0.1"
 
 [[projects]]
+  digest = "1:1869683e323ebff2bdf8adcb560f82bf6f8d94019d35099e3403f7df12e9c07e"
+  name = "github.com/opencontainers/runc"
+  packages = [
+    "libcontainer/system",
+    "libcontainer/user",
+  ]
+  pruneopts = "UT"
+  revision = "baf6536d6259209c3edfa2b22237af82942d3dfa"
+  version = "v0.1.1"
+
+[[projects]]
   digest = "1:93131d8002d7025da13582877c32d1fc302486775a1b06f62241741006428c5e"
   name = "github.com/pelletier/go-toml"
   packages = ["."]
@@ -584,6 +761,49 @@
   pruneopts = "UT"
   revision = "ba968bfe8b2f7e042a574c888954fccecfa385b4"
   version = "v0.8.1"
+
+[[projects]]
+  digest = "1:eb04f69c8991e52eff33c428bd729e04208bf03235be88e4df0d88497c6861b9"
+  name = "github.com/prometheus/client_golang"
+  packages = [
+    "prometheus",
+    "prometheus/internal",
+    "prometheus/promhttp",
+  ]
+  pruneopts = "UT"
+  revision = "170205fb58decfd011f1550d4cfb737230d7ae4f"
+  version = "v1.1.0"
+
+[[projects]]
+  branch = "master"
+  digest = "1:2d5cd61daa5565187e1d96bae64dbbc6080dacf741448e9629c64fd93203b0d4"
+  name = "github.com/prometheus/client_model"
+  packages = ["go"]
+  pruneopts = "UT"
+  revision = "14fe0d1b01d4d5fc031dd4bec1823bd3ebbe8016"
+
+[[projects]]
+  digest = "1:8dcedf2e8f06c7f94e48267dea0bc0be261fa97b377f3ae3e87843a92a549481"
+  name = "github.com/prometheus/common"
+  packages = [
+    "expfmt",
+    "internal/bitbucket.org/ww/goautoneg",
+    "model",
+  ]
+  pruneopts = "UT"
+  revision = "31bed53e4047fd6c510e43a941f90cb31be0972a"
+  version = "v0.6.0"
+
+[[projects]]
+  digest = "1:366f5aa02ff6c1e2eccce9ca03a22a6d983da89eecff8a89965401764534eb7c"
+  name = "github.com/prometheus/procfs"
+  packages = [
+    ".",
+    "internal/fs",
+  ]
+  pruneopts = "UT"
+  revision = "3f98efb27840a48a7a2898ec80be07674d19f9c8"
+  version = "v0.0.3"
 
 [[projects]]
   digest = "1:b36a0ede02c4c2aef7df7f91cbbb7bb88a98b5d253509d4f997dda526e50c88c"
@@ -707,7 +927,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:eae689808191546269bf951e1e66e0b6bc468be58a0498c0f037feeef2c67bab"
+  digest = "1:5025253ad8aebd9c1768c4e3e3f3fac430355a30fd84ad7202549be35a8a0296"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -716,7 +936,9 @@
     "http2",
     "http2/hpack",
     "idna",
+    "internal/socks",
     "internal/timeseries",
+    "proxy",
     "trace",
   ]
   pruneopts = "UT"
@@ -904,9 +1126,17 @@
   version = "v2.2.2"
 
 [[projects]]
-  digest = "1:6fdec31a6e5ddae24e035d9e55ffa61b057057d47bed4e2e125d57a48635945e"
+  branch = "dev-v3"
+  digest = "1:3b61b66bf24687e599074402ecaf17e5033224918bfb97ff0f37065b9e27aa5c"
   name = "helm.sh/helm"
   packages = [
+    "internal/experimental/registry",
+    "internal/ignore",
+    "internal/resolver",
+    "internal/sympath",
+    "internal/tlsutil",
+    "internal/urlutil",
+    "internal/version",
     "pkg/action",
     "pkg/chart",
     "pkg/chart/loader",
@@ -916,8 +1146,7 @@
     "pkg/engine",
     "pkg/getter",
     "pkg/helmpath",
-    "pkg/hooks",
-    "pkg/ignore",
+    "pkg/helmpath/xdg",
     "pkg/kube",
     "pkg/kube/fake",
     "pkg/lint",
@@ -925,23 +1154,14 @@
     "pkg/lint/support",
     "pkg/plugin",
     "pkg/provenance",
-    "pkg/registry",
     "pkg/release",
-    "pkg/releasetesting",
     "pkg/releaseutil",
     "pkg/repo",
-    "pkg/resolver",
     "pkg/storage",
     "pkg/storage/driver",
-    "pkg/strvals",
-    "pkg/sympath",
-    "pkg/tlsutil",
-    "pkg/urlutil",
-    "pkg/version",
   ]
   pruneopts = "UT"
-  revision = "97e7461e41455e58d89b4d7d192fed5352001d44"
-  version = "v3.0.0-alpha.2"
+  revision = "29d6853659e212aebe9a8e4ebcb10f4bf66989eb"
 
 [[projects]]
   branch = "release-1.15"
@@ -1399,24 +1619,20 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/ghodss/yaml",
     "github.com/gin-gonic/gin",
     "github.com/golang/protobuf/proto",
     "github.com/sirupsen/logrus",
     "github.com/spf13/cobra",
-    "github.com/spf13/pflag",
     "github.com/spf13/viper",
     "golang.org/x/net/context",
     "google.golang.org/grpc",
     "google.golang.org/grpc/reflection",
     "helm.sh/helm/pkg/action",
-    "helm.sh/helm/pkg/chartutil",
     "helm.sh/helm/pkg/cli",
     "helm.sh/helm/pkg/downloader",
     "helm.sh/helm/pkg/getter",
     "helm.sh/helm/pkg/kube",
     "helm.sh/helm/pkg/release",
-    "helm.sh/helm/pkg/repo",
     "helm.sh/helm/pkg/storage",
     "helm.sh/helm/pkg/storage/driver",
     "k8s.io/api/core/v1",
