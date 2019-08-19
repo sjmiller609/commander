@@ -3,49 +3,19 @@
 
 package proto
 
+import proto1 "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
+
 import (
-	context "context"
-	fmt "fmt"
-	proto "github.com/golang/protobuf/proto"
+	context "golang.org/x/net/context"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
-	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
-var _ = proto.Marshal
+var _ = proto1.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the proto package it is being compiled against.
-// A compilation error at this line likely means your copy of the
-// proto package needs to be updated.
-const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
-
-func init() { proto.RegisterFile("commander.proto", fileDescriptor_36bf467611423882) }
-
-var fileDescriptor_36bf467611423882 = []byte{
-	// 261 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x4f, 0xce, 0xcf, 0xcd,
-	0x4d, 0xcc, 0x4b, 0x49, 0x2d, 0xd2, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x84, 0x0b, 0x48,
-	0xf1, 0x80, 0x98, 0xf9, 0x79, 0x10, 0x09, 0x29, 0x81, 0x94, 0xd4, 0x82, 0x9c, 0xfc, 0xca, 0xdc,
-	0xd4, 0xbc, 0x12, 0xa8, 0x08, 0x4f, 0x71, 0x6a, 0x72, 0x51, 0x2a, 0x94, 0x67, 0xb4, 0x9e, 0x95,
-	0x8b, 0xd3, 0x19, 0xa6, 0x57, 0xc8, 0x92, 0x8b, 0x25, 0x20, 0x33, 0x2f, 0x5d, 0x48, 0x4c, 0x0f,
-	0x61, 0x01, 0x48, 0x20, 0x28, 0xb5, 0xb0, 0x34, 0xb5, 0xb8, 0x44, 0x4a, 0x1c, 0x43, 0xbc, 0xb8,
-	0x20, 0x3f, 0xaf, 0x38, 0x55, 0x89, 0x41, 0x28, 0x84, 0x8b, 0xd7, 0x3d, 0xb5, 0xc4, 0x05, 0x6e,
-	0x9b, 0x90, 0x3c, 0x92, 0x5a, 0x14, 0x19, 0x98, 0x61, 0x0a, 0xb8, 0x15, 0xc0, 0x4d, 0x8d, 0xe5,
-	0x12, 0x70, 0x2e, 0x4a, 0x4d, 0x2c, 0x49, 0x45, 0x32, 0x58, 0x09, 0x49, 0x1f, 0xba, 0x24, 0xcc,
-	0x6c, 0x65, 0xbc, 0x6a, 0x90, 0x8d, 0x0f, 0x2d, 0x48, 0xc1, 0x6d, 0x3c, 0xba, 0x24, 0x36, 0xe3,
-	0x31, 0xd5, 0xc0, 0x8d, 0x4f, 0xe0, 0x12, 0x0c, 0x2d, 0x48, 0x2f, 0x4a, 0x4c, 0x41, 0x36, 0x1f,
-	0x55, 0x2f, 0x9a, 0x2c, 0xcc, 0x02, 0x15, 0xfc, 0x8a, 0x90, 0x3d, 0xe0, 0x92, 0x9a, 0x93, 0x8a,
-	0xd3, 0x03, 0xe8, 0x92, 0xd8, 0x3c, 0x80, 0xa9, 0x06, 0x6e, 0xbc, 0x07, 0x17, 0xa7, 0x7b, 0x6a,
-	0x49, 0x30, 0x38, 0xc1, 0x08, 0x49, 0xa3, 0xc6, 0x17, 0x44, 0x14, 0x66, 0xa0, 0x0c, 0x76, 0x49,
-	0x64, 0x93, 0x82, 0xb1, 0x9a, 0x14, 0x8c, 0xcf, 0xa4, 0x60, 0x4c, 0x93, 0x9c, 0xd8, 0xa3, 0x58,
-	0xc1, 0x49, 0x37, 0x89, 0x0d, 0x4c, 0x19, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0x99, 0xd9, 0xb7,
-	0x77, 0x0d, 0x03, 0x00, 0x00,
-}
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
@@ -55,9 +25,8 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// CommanderClient is the client API for Commander service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+// Client API for Commander service
+
 type CommanderClient interface {
 	Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error)
 	GetDeployment(ctx context.Context, in *GetDeploymentRequest, opts ...grpc.CallOption) (*GetDeploymentResponse, error)
@@ -79,7 +48,7 @@ func NewCommanderClient(cc *grpc.ClientConn) CommanderClient {
 
 func (c *commanderClient) Ping(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PingResponse, error) {
 	out := new(PingResponse)
-	err := c.cc.Invoke(ctx, "/commander.Commander/Ping", in, out, opts...)
+	err := grpc.Invoke(ctx, "/commander.Commander/Ping", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +57,7 @@ func (c *commanderClient) Ping(ctx context.Context, in *PingRequest, opts ...grp
 
 func (c *commanderClient) GetDeployment(ctx context.Context, in *GetDeploymentRequest, opts ...grpc.CallOption) (*GetDeploymentResponse, error) {
 	out := new(GetDeploymentResponse)
-	err := c.cc.Invoke(ctx, "/commander.Commander/GetDeployment", in, out, opts...)
+	err := grpc.Invoke(ctx, "/commander.Commander/GetDeployment", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +66,7 @@ func (c *commanderClient) GetDeployment(ctx context.Context, in *GetDeploymentRe
 
 func (c *commanderClient) CreateDeployment(ctx context.Context, in *CreateDeploymentRequest, opts ...grpc.CallOption) (*CreateDeploymentResponse, error) {
 	out := new(CreateDeploymentResponse)
-	err := c.cc.Invoke(ctx, "/commander.Commander/CreateDeployment", in, out, opts...)
+	err := grpc.Invoke(ctx, "/commander.Commander/CreateDeployment", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -106,7 +75,7 @@ func (c *commanderClient) CreateDeployment(ctx context.Context, in *CreateDeploy
 
 func (c *commanderClient) UpdateDeployment(ctx context.Context, in *UpdateDeploymentRequest, opts ...grpc.CallOption) (*UpdateDeploymentResponse, error) {
 	out := new(UpdateDeploymentResponse)
-	err := c.cc.Invoke(ctx, "/commander.Commander/UpdateDeployment", in, out, opts...)
+	err := grpc.Invoke(ctx, "/commander.Commander/UpdateDeployment", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +84,7 @@ func (c *commanderClient) UpdateDeployment(ctx context.Context, in *UpdateDeploy
 
 func (c *commanderClient) UpgradeDeployment(ctx context.Context, in *UpgradeDeploymentRequest, opts ...grpc.CallOption) (*UpgradeDeploymentResponse, error) {
 	out := new(UpgradeDeploymentResponse)
-	err := c.cc.Invoke(ctx, "/commander.Commander/UpgradeDeployment", in, out, opts...)
+	err := grpc.Invoke(ctx, "/commander.Commander/UpgradeDeployment", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +93,7 @@ func (c *commanderClient) UpgradeDeployment(ctx context.Context, in *UpgradeDepl
 
 func (c *commanderClient) DeleteDeployment(ctx context.Context, in *DeleteDeploymentRequest, opts ...grpc.CallOption) (*DeleteDeploymentResponse, error) {
 	out := new(DeleteDeploymentResponse)
-	err := c.cc.Invoke(ctx, "/commander.Commander/DeleteDeployment", in, out, opts...)
+	err := grpc.Invoke(ctx, "/commander.Commander/DeleteDeployment", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +102,7 @@ func (c *commanderClient) DeleteDeployment(ctx context.Context, in *DeleteDeploy
 
 func (c *commanderClient) GetSecret(ctx context.Context, in *GetSecretRequest, opts ...grpc.CallOption) (*GetSecretResponse, error) {
 	out := new(GetSecretResponse)
-	err := c.cc.Invoke(ctx, "/commander.Commander/GetSecret", in, out, opts...)
+	err := grpc.Invoke(ctx, "/commander.Commander/GetSecret", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -142,14 +111,15 @@ func (c *commanderClient) GetSecret(ctx context.Context, in *GetSecretRequest, o
 
 func (c *commanderClient) SetSecret(ctx context.Context, in *SetSecretRequest, opts ...grpc.CallOption) (*SetSecretResponse, error) {
 	out := new(SetSecretResponse)
-	err := c.cc.Invoke(ctx, "/commander.Commander/SetSecret", in, out, opts...)
+	err := grpc.Invoke(ctx, "/commander.Commander/SetSecret", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// CommanderServer is the server API for Commander service.
+// Server API for Commander service
+
 type CommanderServer interface {
 	Ping(context.Context, *PingRequest) (*PingResponse, error)
 	GetDeployment(context.Context, *GetDeploymentRequest) (*GetDeploymentResponse, error)
@@ -159,35 +129,6 @@ type CommanderServer interface {
 	DeleteDeployment(context.Context, *DeleteDeploymentRequest) (*DeleteDeploymentResponse, error)
 	GetSecret(context.Context, *GetSecretRequest) (*GetSecretResponse, error)
 	SetSecret(context.Context, *SetSecretRequest) (*SetSecretResponse, error)
-}
-
-// UnimplementedCommanderServer can be embedded to have forward compatible implementations.
-type UnimplementedCommanderServer struct {
-}
-
-func (*UnimplementedCommanderServer) Ping(ctx context.Context, req *PingRequest) (*PingResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
-}
-func (*UnimplementedCommanderServer) GetDeployment(ctx context.Context, req *GetDeploymentRequest) (*GetDeploymentResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetDeployment not implemented")
-}
-func (*UnimplementedCommanderServer) CreateDeployment(ctx context.Context, req *CreateDeploymentRequest) (*CreateDeploymentResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateDeployment not implemented")
-}
-func (*UnimplementedCommanderServer) UpdateDeployment(ctx context.Context, req *UpdateDeploymentRequest) (*UpdateDeploymentResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateDeployment not implemented")
-}
-func (*UnimplementedCommanderServer) UpgradeDeployment(ctx context.Context, req *UpgradeDeploymentRequest) (*UpgradeDeploymentResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpgradeDeployment not implemented")
-}
-func (*UnimplementedCommanderServer) DeleteDeployment(ctx context.Context, req *DeleteDeploymentRequest) (*DeleteDeploymentResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteDeployment not implemented")
-}
-func (*UnimplementedCommanderServer) GetSecret(ctx context.Context, req *GetSecretRequest) (*GetSecretResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetSecret not implemented")
-}
-func (*UnimplementedCommanderServer) SetSecret(ctx context.Context, req *SetSecretRequest) (*SetSecretResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetSecret not implemented")
 }
 
 func RegisterCommanderServer(s *grpc.Server, srv CommanderServer) {
@@ -377,4 +318,27 @@ var _Commander_serviceDesc = grpc.ServiceDesc{
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "commander.proto",
+}
+
+func init() { proto1.RegisterFile("commander.proto", fileDescriptor1) }
+
+var fileDescriptor1 = []byte{
+	// 261 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x4f, 0xce, 0xcf, 0xcd,
+	0x4d, 0xcc, 0x4b, 0x49, 0x2d, 0xd2, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x84, 0x0b, 0x48,
+	0xf1, 0x80, 0x98, 0xf9, 0x79, 0x10, 0x09, 0x29, 0x81, 0x94, 0xd4, 0x82, 0x9c, 0xfc, 0xca, 0xdc,
+	0xd4, 0xbc, 0x12, 0xa8, 0x08, 0x4f, 0x71, 0x6a, 0x72, 0x51, 0x2a, 0x94, 0x67, 0xb4, 0x9e, 0x95,
+	0x8b, 0xd3, 0x19, 0xa6, 0x57, 0xc8, 0x92, 0x8b, 0x25, 0x20, 0x33, 0x2f, 0x5d, 0x48, 0x4c, 0x0f,
+	0x61, 0x01, 0x48, 0x20, 0x28, 0xb5, 0xb0, 0x34, 0xb5, 0xb8, 0x44, 0x4a, 0x1c, 0x43, 0xbc, 0xb8,
+	0x20, 0x3f, 0xaf, 0x38, 0x55, 0x89, 0x41, 0x28, 0x84, 0x8b, 0xd7, 0x3d, 0xb5, 0xc4, 0x05, 0x6e,
+	0x9b, 0x90, 0x3c, 0x92, 0x5a, 0x14, 0x19, 0x98, 0x61, 0x0a, 0xb8, 0x15, 0xc0, 0x4d, 0x8d, 0xe5,
+	0x12, 0x70, 0x2e, 0x4a, 0x4d, 0x2c, 0x49, 0x45, 0x32, 0x58, 0x09, 0x49, 0x1f, 0xba, 0x24, 0xcc,
+	0x6c, 0x65, 0xbc, 0x6a, 0x90, 0x8d, 0x0f, 0x2d, 0x48, 0xc1, 0x6d, 0x3c, 0xba, 0x24, 0x36, 0xe3,
+	0x31, 0xd5, 0xc0, 0x8d, 0x4f, 0xe0, 0x12, 0x0c, 0x2d, 0x48, 0x2f, 0x4a, 0x4c, 0x41, 0x36, 0x1f,
+	0x55, 0x2f, 0x9a, 0x2c, 0xcc, 0x02, 0x15, 0xfc, 0x8a, 0x90, 0x3d, 0xe0, 0x92, 0x9a, 0x93, 0x8a,
+	0xd3, 0x03, 0xe8, 0x92, 0xd8, 0x3c, 0x80, 0xa9, 0x06, 0x6e, 0xbc, 0x07, 0x17, 0xa7, 0x7b, 0x6a,
+	0x49, 0x30, 0x38, 0xc1, 0x08, 0x49, 0xa3, 0xc6, 0x17, 0x44, 0x14, 0x66, 0xa0, 0x0c, 0x76, 0x49,
+	0x64, 0x93, 0x82, 0xb1, 0x9a, 0x14, 0x8c, 0xcf, 0xa4, 0x60, 0x4c, 0x93, 0x9c, 0xd8, 0xa3, 0x58,
+	0xc1, 0x49, 0x37, 0x89, 0x0d, 0x4c, 0x19, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0x99, 0xd9, 0xb7,
+	0x77, 0x0d, 0x03, 0x00, 0x00,
 }

@@ -3,85 +3,31 @@
 
 package proto
 
-import (
-	fmt "fmt"
-	proto "github.com/golang/protobuf/proto"
-	math "math"
-)
+import proto1 "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
 
 // Reference imports to suppress errors if they are not otherwise used.
-var _ = proto.Marshal
+var _ = proto1.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the proto package it is being compiled against.
-// A compilation error at this line likely means your copy of the
-// proto package needs to be updated.
-const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
-
 type PingRequest struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *PingRequest) Reset()         { *m = PingRequest{} }
-func (m *PingRequest) String() string { return proto.CompactTextString(m) }
-func (*PingRequest) ProtoMessage()    {}
-func (*PingRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_555bd8c177793206, []int{0}
-}
-
-func (m *PingRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_PingRequest.Unmarshal(m, b)
-}
-func (m *PingRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_PingRequest.Marshal(b, m, deterministic)
-}
-func (m *PingRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PingRequest.Merge(m, src)
-}
-func (m *PingRequest) XXX_Size() int {
-	return xxx_messageInfo_PingRequest.Size(m)
-}
-func (m *PingRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_PingRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_PingRequest proto.InternalMessageInfo
+func (m *PingRequest) Reset()                    { *m = PingRequest{} }
+func (m *PingRequest) String() string            { return proto1.CompactTextString(m) }
+func (*PingRequest) ProtoMessage()               {}
+func (*PingRequest) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0} }
 
 type PingResponse struct {
-	Received             int64    `protobuf:"varint,1,opt,name=received,proto3" json:"received,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Received int64 `protobuf:"varint,1,opt,name=received" json:"received,omitempty"`
 }
 
-func (m *PingResponse) Reset()         { *m = PingResponse{} }
-func (m *PingResponse) String() string { return proto.CompactTextString(m) }
-func (*PingResponse) ProtoMessage()    {}
-func (*PingResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_555bd8c177793206, []int{1}
-}
-
-func (m *PingResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_PingResponse.Unmarshal(m, b)
-}
-func (m *PingResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_PingResponse.Marshal(b, m, deterministic)
-}
-func (m *PingResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PingResponse.Merge(m, src)
-}
-func (m *PingResponse) XXX_Size() int {
-	return xxx_messageInfo_PingResponse.Size(m)
-}
-func (m *PingResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_PingResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_PingResponse proto.InternalMessageInfo
+func (m *PingResponse) Reset()                    { *m = PingResponse{} }
+func (m *PingResponse) String() string            { return proto1.CompactTextString(m) }
+func (*PingResponse) ProtoMessage()               {}
+func (*PingResponse) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{1} }
 
 func (m *PingResponse) GetReceived() int64 {
 	if m != nil {
@@ -91,36 +37,13 @@ func (m *PingResponse) GetReceived() int64 {
 }
 
 type UUID struct {
-	Value                string   `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Value string `protobuf:"bytes,1,opt,name=value" json:"value,omitempty"`
 }
 
-func (m *UUID) Reset()         { *m = UUID{} }
-func (m *UUID) String() string { return proto.CompactTextString(m) }
-func (*UUID) ProtoMessage()    {}
-func (*UUID) Descriptor() ([]byte, []int) {
-	return fileDescriptor_555bd8c177793206, []int{2}
-}
-
-func (m *UUID) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_UUID.Unmarshal(m, b)
-}
-func (m *UUID) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_UUID.Marshal(b, m, deterministic)
-}
-func (m *UUID) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UUID.Merge(m, src)
-}
-func (m *UUID) XXX_Size() int {
-	return xxx_messageInfo_UUID.Size(m)
-}
-func (m *UUID) XXX_DiscardUnknown() {
-	xxx_messageInfo_UUID.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_UUID proto.InternalMessageInfo
+func (m *UUID) Reset()                    { *m = UUID{} }
+func (m *UUID) String() string            { return proto1.CompactTextString(m) }
+func (*UUID) ProtoMessage()               {}
+func (*UUID) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{2} }
 
 func (m *UUID) GetValue() string {
 	if m != nil {
@@ -130,37 +53,14 @@ func (m *UUID) GetValue() string {
 }
 
 type Env struct {
-	Key                  string   `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Value                string   `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Key   string `protobuf:"bytes,1,opt,name=key" json:"key,omitempty"`
+	Value string `protobuf:"bytes,2,opt,name=value" json:"value,omitempty"`
 }
 
-func (m *Env) Reset()         { *m = Env{} }
-func (m *Env) String() string { return proto.CompactTextString(m) }
-func (*Env) ProtoMessage()    {}
-func (*Env) Descriptor() ([]byte, []int) {
-	return fileDescriptor_555bd8c177793206, []int{3}
-}
-
-func (m *Env) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Env.Unmarshal(m, b)
-}
-func (m *Env) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Env.Marshal(b, m, deterministic)
-}
-func (m *Env) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Env.Merge(m, src)
-}
-func (m *Env) XXX_Size() int {
-	return xxx_messageInfo_Env.Size(m)
-}
-func (m *Env) XXX_DiscardUnknown() {
-	xxx_messageInfo_Env.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Env proto.InternalMessageInfo
+func (m *Env) Reset()                    { *m = Env{} }
+func (m *Env) String() string            { return proto1.CompactTextString(m) }
+func (*Env) ProtoMessage()               {}
+func (*Env) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{3} }
 
 func (m *Env) GetKey() string {
 	if m != nil {
@@ -177,37 +77,14 @@ func (m *Env) GetValue() string {
 }
 
 type EnvSecret struct {
-	Key                  string   `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Key  string `protobuf:"bytes,1,opt,name=key" json:"key,omitempty"`
+	Name string `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
 }
 
-func (m *EnvSecret) Reset()         { *m = EnvSecret{} }
-func (m *EnvSecret) String() string { return proto.CompactTextString(m) }
-func (*EnvSecret) ProtoMessage()    {}
-func (*EnvSecret) Descriptor() ([]byte, []int) {
-	return fileDescriptor_555bd8c177793206, []int{4}
-}
-
-func (m *EnvSecret) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_EnvSecret.Unmarshal(m, b)
-}
-func (m *EnvSecret) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_EnvSecret.Marshal(b, m, deterministic)
-}
-func (m *EnvSecret) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EnvSecret.Merge(m, src)
-}
-func (m *EnvSecret) XXX_Size() int {
-	return xxx_messageInfo_EnvSecret.Size(m)
-}
-func (m *EnvSecret) XXX_DiscardUnknown() {
-	xxx_messageInfo_EnvSecret.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_EnvSecret proto.InternalMessageInfo
+func (m *EnvSecret) Reset()                    { *m = EnvSecret{} }
+func (m *EnvSecret) String() string            { return proto1.CompactTextString(m) }
+func (*EnvSecret) ProtoMessage()               {}
+func (*EnvSecret) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{4} }
 
 func (m *EnvSecret) GetKey() string {
 	if m != nil {
@@ -225,37 +102,14 @@ func (m *EnvSecret) GetName() string {
 
 // k8s label
 type Label struct {
-	Key                  string   `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
-	Value                string   `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Key   string `protobuf:"bytes,1,opt,name=key" json:"key,omitempty"`
+	Value string `protobuf:"bytes,2,opt,name=value" json:"value,omitempty"`
 }
 
-func (m *Label) Reset()         { *m = Label{} }
-func (m *Label) String() string { return proto.CompactTextString(m) }
-func (*Label) ProtoMessage()    {}
-func (*Label) Descriptor() ([]byte, []int) {
-	return fileDescriptor_555bd8c177793206, []int{5}
-}
-
-func (m *Label) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Label.Unmarshal(m, b)
-}
-func (m *Label) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Label.Marshal(b, m, deterministic)
-}
-func (m *Label) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Label.Merge(m, src)
-}
-func (m *Label) XXX_Size() int {
-	return xxx_messageInfo_Label.Size(m)
-}
-func (m *Label) XXX_DiscardUnknown() {
-	xxx_messageInfo_Label.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Label proto.InternalMessageInfo
+func (m *Label) Reset()                    { *m = Label{} }
+func (m *Label) String() string            { return proto1.CompactTextString(m) }
+func (*Label) ProtoMessage()               {}
+func (*Label) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{5} }
 
 func (m *Label) GetKey() string {
 	if m != nil {
@@ -272,37 +126,14 @@ func (m *Label) GetValue() string {
 }
 
 type Secret struct {
-	Name                 string            `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Data                 map[string]string `protobuf:"bytes,2,rep,name=data,proto3" json:"data,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
-	XXX_unrecognized     []byte            `json:"-"`
-	XXX_sizecache        int32             `json:"-"`
+	Name string            `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+	Data map[string]string `protobuf:"bytes,2,rep,name=data" json:"data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 }
 
-func (m *Secret) Reset()         { *m = Secret{} }
-func (m *Secret) String() string { return proto.CompactTextString(m) }
-func (*Secret) ProtoMessage()    {}
-func (*Secret) Descriptor() ([]byte, []int) {
-	return fileDescriptor_555bd8c177793206, []int{6}
-}
-
-func (m *Secret) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Secret.Unmarshal(m, b)
-}
-func (m *Secret) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Secret.Marshal(b, m, deterministic)
-}
-func (m *Secret) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Secret.Merge(m, src)
-}
-func (m *Secret) XXX_Size() int {
-	return xxx_messageInfo_Secret.Size(m)
-}
-func (m *Secret) XXX_DiscardUnknown() {
-	xxx_messageInfo_Secret.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Secret proto.InternalMessageInfo
+func (m *Secret) Reset()                    { *m = Secret{} }
+func (m *Secret) String() string            { return proto1.CompactTextString(m) }
+func (*Secret) ProtoMessage()               {}
+func (*Secret) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{6} }
 
 func (m *Secret) GetName() string {
 	if m != nil {
@@ -319,37 +150,14 @@ func (m *Secret) GetData() map[string]string {
 }
 
 type Result struct {
-	Success              bool     `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	Message              string   `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Success bool   `protobuf:"varint,1,opt,name=success" json:"success,omitempty"`
+	Message string `protobuf:"bytes,2,opt,name=message" json:"message,omitempty"`
 }
 
-func (m *Result) Reset()         { *m = Result{} }
-func (m *Result) String() string { return proto.CompactTextString(m) }
-func (*Result) ProtoMessage()    {}
-func (*Result) Descriptor() ([]byte, []int) {
-	return fileDescriptor_555bd8c177793206, []int{7}
-}
-
-func (m *Result) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Result.Unmarshal(m, b)
-}
-func (m *Result) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Result.Marshal(b, m, deterministic)
-}
-func (m *Result) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Result.Merge(m, src)
-}
-func (m *Result) XXX_Size() int {
-	return xxx_messageInfo_Result.Size(m)
-}
-func (m *Result) XXX_DiscardUnknown() {
-	xxx_messageInfo_Result.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Result proto.InternalMessageInfo
+func (m *Result) Reset()                    { *m = Result{} }
+func (m *Result) String() string            { return proto1.CompactTextString(m) }
+func (*Result) ProtoMessage()               {}
+func (*Result) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{7} }
 
 func (m *Result) GetSuccess() bool {
 	if m != nil {
@@ -366,37 +174,14 @@ func (m *Result) GetMessage() string {
 }
 
 type Chart struct {
-	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Version              string   `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Name    string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+	Version string `protobuf:"bytes,2,opt,name=version" json:"version,omitempty"`
 }
 
-func (m *Chart) Reset()         { *m = Chart{} }
-func (m *Chart) String() string { return proto.CompactTextString(m) }
-func (*Chart) ProtoMessage()    {}
-func (*Chart) Descriptor() ([]byte, []int) {
-	return fileDescriptor_555bd8c177793206, []int{8}
-}
-
-func (m *Chart) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Chart.Unmarshal(m, b)
-}
-func (m *Chart) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Chart.Marshal(b, m, deterministic)
-}
-func (m *Chart) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Chart.Merge(m, src)
-}
-func (m *Chart) XXX_Size() int {
-	return xxx_messageInfo_Chart.Size(m)
-}
-func (m *Chart) XXX_DiscardUnknown() {
-	xxx_messageInfo_Chart.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Chart proto.InternalMessageInfo
+func (m *Chart) Reset()                    { *m = Chart{} }
+func (m *Chart) String() string            { return proto1.CompactTextString(m) }
+func (*Chart) ProtoMessage()               {}
+func (*Chart) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{8} }
 
 func (m *Chart) GetName() string {
 	if m != nil {
@@ -413,37 +198,14 @@ func (m *Chart) GetVersion() string {
 }
 
 type Deployment struct {
-	ReleaseName          string   `protobuf:"bytes,1,opt,name=release_name,json=releaseName,proto3" json:"release_name,omitempty"`
-	Info                 string   `protobuf:"bytes,2,opt,name=info,proto3" json:"info,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	ReleaseName string `protobuf:"bytes,1,opt,name=release_name,json=releaseName" json:"release_name,omitempty"`
+	Info        string `protobuf:"bytes,2,opt,name=info" json:"info,omitempty"`
 }
 
-func (m *Deployment) Reset()         { *m = Deployment{} }
-func (m *Deployment) String() string { return proto.CompactTextString(m) }
-func (*Deployment) ProtoMessage()    {}
-func (*Deployment) Descriptor() ([]byte, []int) {
-	return fileDescriptor_555bd8c177793206, []int{9}
-}
-
-func (m *Deployment) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Deployment.Unmarshal(m, b)
-}
-func (m *Deployment) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Deployment.Marshal(b, m, deterministic)
-}
-func (m *Deployment) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Deployment.Merge(m, src)
-}
-func (m *Deployment) XXX_Size() int {
-	return xxx_messageInfo_Deployment.Size(m)
-}
-func (m *Deployment) XXX_DiscardUnknown() {
-	xxx_messageInfo_Deployment.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_Deployment proto.InternalMessageInfo
+func (m *Deployment) Reset()                    { *m = Deployment{} }
+func (m *Deployment) String() string            { return proto1.CompactTextString(m) }
+func (*Deployment) ProtoMessage()               {}
+func (*Deployment) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{9} }
 
 func (m *Deployment) GetReleaseName() string {
 	if m != nil {
@@ -460,22 +222,21 @@ func (m *Deployment) GetInfo() string {
 }
 
 func init() {
-	proto.RegisterType((*PingRequest)(nil), "commander.PingRequest")
-	proto.RegisterType((*PingResponse)(nil), "commander.PingResponse")
-	proto.RegisterType((*UUID)(nil), "commander.UUID")
-	proto.RegisterType((*Env)(nil), "commander.Env")
-	proto.RegisterType((*EnvSecret)(nil), "commander.EnvSecret")
-	proto.RegisterType((*Label)(nil), "commander.Label")
-	proto.RegisterType((*Secret)(nil), "commander.Secret")
-	proto.RegisterMapType((map[string]string)(nil), "commander.Secret.DataEntry")
-	proto.RegisterType((*Result)(nil), "commander.Result")
-	proto.RegisterType((*Chart)(nil), "commander.Chart")
-	proto.RegisterType((*Deployment)(nil), "commander.Deployment")
+	proto1.RegisterType((*PingRequest)(nil), "commander.PingRequest")
+	proto1.RegisterType((*PingResponse)(nil), "commander.PingResponse")
+	proto1.RegisterType((*UUID)(nil), "commander.UUID")
+	proto1.RegisterType((*Env)(nil), "commander.Env")
+	proto1.RegisterType((*EnvSecret)(nil), "commander.EnvSecret")
+	proto1.RegisterType((*Label)(nil), "commander.Label")
+	proto1.RegisterType((*Secret)(nil), "commander.Secret")
+	proto1.RegisterType((*Result)(nil), "commander.Result")
+	proto1.RegisterType((*Chart)(nil), "commander.Chart")
+	proto1.RegisterType((*Deployment)(nil), "commander.Deployment")
 }
 
-func init() { proto.RegisterFile("common.proto", fileDescriptor_555bd8c177793206) }
+func init() { proto1.RegisterFile("common.proto", fileDescriptor3) }
 
-var fileDescriptor_555bd8c177793206 = []byte{
+var fileDescriptor3 = []byte{
 	// 333 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x92, 0x41, 0x4b, 0xc3, 0x40,
 	0x10, 0x85, 0x49, 0x93, 0xb4, 0xcd, 0xb4, 0x82, 0x2c, 0x1e, 0x42, 0xf5, 0x50, 0xf7, 0x54, 0x04,
