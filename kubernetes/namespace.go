@@ -24,13 +24,12 @@ func (n *Namespace) Exists(namespace string) (bool, error) {
 	return true, nil
 }
 
-func (n *Namespace) Create(namespace string) (*v1.Namespace, error) {
+func (n *Namespace) Create(namespace string, labels map[string]string) (*v1.Namespace, error) {
+
 	ns := &v1.Namespace{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: namespace,
-			Labels: map[string]string{
-				"platform-release": appConfig.PlatformRelease,
-			},
+			Name:   namespace,
+			Labels: labels,
 		},
 	}
 	return n.ClientSet.Core().Namespaces().Create(ns)
@@ -50,15 +49,27 @@ func (n *Namespace) Delete(namespace string) error {
 	return n.ClientSet.Core().Namespaces().Delete(namespace, &options)
 }
 
-func (n *Namespace) Ensure(namespace string) error {
+func (n *Namespace) Ensure(namespace string, labels map[string]string) error {
 	exists, err := n.Exists(namespace)
 	if err != nil {
 		return err
 	}
 	if exists {
+		n.UpdateLabels(namespace, labels)
 		return nil
 	}
 
-	_, err = n.Create(namespace)
+	_, err = n.Create(namespace, labels)
+	return err
+}
+
+func (n *Namespace) UpdateLabels(namespace string, labels map[string]string) error {
+	ns := &v1.Namespace{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:   namespace,
+			Labels: labels,
+		},
+	}
+	_, err := n.ClientSet.Core().Namespaces().Update(ns)
 	return err
 }

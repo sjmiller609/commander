@@ -3,24 +3,55 @@
 
 package proto
 
-import proto1 "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
+import (
+	fmt "fmt"
+	proto "github.com/golang/protobuf/proto"
+	math "math"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
-var _ = proto1.Marshal
+var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
+
 type GetSecretRequest struct {
-	Namespace string `protobuf:"bytes,1,opt,name=namespace" json:"namespace,omitempty"`
-	Name      string `protobuf:"bytes,2,opt,name=name" json:"name,omitempty"`
+	Namespace            string   `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GetSecretRequest) Reset()                    { *m = GetSecretRequest{} }
-func (m *GetSecretRequest) String() string            { return proto1.CompactTextString(m) }
-func (*GetSecretRequest) ProtoMessage()               {}
-func (*GetSecretRequest) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0} }
+func (m *GetSecretRequest) Reset()         { *m = GetSecretRequest{} }
+func (m *GetSecretRequest) String() string { return proto.CompactTextString(m) }
+func (*GetSecretRequest) ProtoMessage()    {}
+func (*GetSecretRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6acf428160d7a216, []int{0}
+}
+
+func (m *GetSecretRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetSecretRequest.Unmarshal(m, b)
+}
+func (m *GetSecretRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetSecretRequest.Marshal(b, m, deterministic)
+}
+func (m *GetSecretRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSecretRequest.Merge(m, src)
+}
+func (m *GetSecretRequest) XXX_Size() int {
+	return xxx_messageInfo_GetSecretRequest.Size(m)
+}
+func (m *GetSecretRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSecretRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSecretRequest proto.InternalMessageInfo
 
 func (m *GetSecretRequest) GetNamespace() string {
 	if m != nil {
@@ -37,14 +68,37 @@ func (m *GetSecretRequest) GetName() string {
 }
 
 type GetSecretResponse struct {
-	Result *Result `protobuf:"bytes,1,opt,name=result" json:"result,omitempty"`
-	Secret *Secret `protobuf:"bytes,2,opt,name=secret" json:"secret,omitempty"`
+	Result               *Result  `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Secret               *Secret  `protobuf:"bytes,2,opt,name=secret,proto3" json:"secret,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GetSecretResponse) Reset()                    { *m = GetSecretResponse{} }
-func (m *GetSecretResponse) String() string            { return proto1.CompactTextString(m) }
-func (*GetSecretResponse) ProtoMessage()               {}
-func (*GetSecretResponse) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{1} }
+func (m *GetSecretResponse) Reset()         { *m = GetSecretResponse{} }
+func (m *GetSecretResponse) String() string { return proto.CompactTextString(m) }
+func (*GetSecretResponse) ProtoMessage()    {}
+func (*GetSecretResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6acf428160d7a216, []int{1}
+}
+
+func (m *GetSecretResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetSecretResponse.Unmarshal(m, b)
+}
+func (m *GetSecretResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetSecretResponse.Marshal(b, m, deterministic)
+}
+func (m *GetSecretResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetSecretResponse.Merge(m, src)
+}
+func (m *GetSecretResponse) XXX_Size() int {
+	return xxx_messageInfo_GetSecretResponse.Size(m)
+}
+func (m *GetSecretResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetSecretResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetSecretResponse proto.InternalMessageInfo
 
 func (m *GetSecretResponse) GetResult() *Result {
 	if m != nil {
@@ -61,15 +115,38 @@ func (m *GetSecretResponse) GetSecret() *Secret {
 }
 
 type SetSecretRequest struct {
-	ReleaseName string  `protobuf:"bytes,1,opt,name=release_name,json=releaseName" json:"release_name,omitempty"`
-	Namespace   string  `protobuf:"bytes,2,opt,name=namespace" json:"namespace,omitempty"`
-	Secret      *Secret `protobuf:"bytes,5,opt,name=secret" json:"secret,omitempty"`
+	ReleaseName          string   `protobuf:"bytes,1,opt,name=release_name,json=releaseName,proto3" json:"release_name,omitempty"`
+	Namespace            string   `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Secret               *Secret  `protobuf:"bytes,5,opt,name=secret,proto3" json:"secret,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *SetSecretRequest) Reset()                    { *m = SetSecretRequest{} }
-func (m *SetSecretRequest) String() string            { return proto1.CompactTextString(m) }
-func (*SetSecretRequest) ProtoMessage()               {}
-func (*SetSecretRequest) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{2} }
+func (m *SetSecretRequest) Reset()         { *m = SetSecretRequest{} }
+func (m *SetSecretRequest) String() string { return proto.CompactTextString(m) }
+func (*SetSecretRequest) ProtoMessage()    {}
+func (*SetSecretRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6acf428160d7a216, []int{2}
+}
+
+func (m *SetSecretRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SetSecretRequest.Unmarshal(m, b)
+}
+func (m *SetSecretRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SetSecretRequest.Marshal(b, m, deterministic)
+}
+func (m *SetSecretRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetSecretRequest.Merge(m, src)
+}
+func (m *SetSecretRequest) XXX_Size() int {
+	return xxx_messageInfo_SetSecretRequest.Size(m)
+}
+func (m *SetSecretRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetSecretRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetSecretRequest proto.InternalMessageInfo
 
 func (m *SetSecretRequest) GetReleaseName() string {
 	if m != nil {
@@ -93,13 +170,36 @@ func (m *SetSecretRequest) GetSecret() *Secret {
 }
 
 type SetSecretResponse struct {
-	Result *Result `protobuf:"bytes,1,opt,name=result" json:"result,omitempty"`
+	Result               *Result  `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *SetSecretResponse) Reset()                    { *m = SetSecretResponse{} }
-func (m *SetSecretResponse) String() string            { return proto1.CompactTextString(m) }
-func (*SetSecretResponse) ProtoMessage()               {}
-func (*SetSecretResponse) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{3} }
+func (m *SetSecretResponse) Reset()         { *m = SetSecretResponse{} }
+func (m *SetSecretResponse) String() string { return proto.CompactTextString(m) }
+func (*SetSecretResponse) ProtoMessage()    {}
+func (*SetSecretResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6acf428160d7a216, []int{3}
+}
+
+func (m *SetSecretResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SetSecretResponse.Unmarshal(m, b)
+}
+func (m *SetSecretResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SetSecretResponse.Marshal(b, m, deterministic)
+}
+func (m *SetSecretResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetSecretResponse.Merge(m, src)
+}
+func (m *SetSecretResponse) XXX_Size() int {
+	return xxx_messageInfo_SetSecretResponse.Size(m)
+}
+func (m *SetSecretResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetSecretResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetSecretResponse proto.InternalMessageInfo
 
 func (m *SetSecretResponse) GetResult() *Result {
 	if m != nil {
@@ -109,15 +209,15 @@ func (m *SetSecretResponse) GetResult() *Result {
 }
 
 func init() {
-	proto1.RegisterType((*GetSecretRequest)(nil), "commander.GetSecretRequest")
-	proto1.RegisterType((*GetSecretResponse)(nil), "commander.GetSecretResponse")
-	proto1.RegisterType((*SetSecretRequest)(nil), "commander.SetSecretRequest")
-	proto1.RegisterType((*SetSecretResponse)(nil), "commander.SetSecretResponse")
+	proto.RegisterType((*GetSecretRequest)(nil), "commander.GetSecretRequest")
+	proto.RegisterType((*GetSecretResponse)(nil), "commander.GetSecretResponse")
+	proto.RegisterType((*SetSecretRequest)(nil), "commander.SetSecretRequest")
+	proto.RegisterType((*SetSecretResponse)(nil), "commander.SetSecretResponse")
 }
 
-func init() { proto1.RegisterFile("secret.proto", fileDescriptor3) }
+func init() { proto.RegisterFile("secret.proto", fileDescriptor_6acf428160d7a216) }
 
-var fileDescriptor3 = []byte{
+var fileDescriptor_6acf428160d7a216 = []byte{
 	// 216 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x29, 0x4e, 0x4d, 0x2e,
 	0x4a, 0x2d, 0xd1, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x4c, 0xce, 0xcf, 0xcd, 0x4d, 0xcc,

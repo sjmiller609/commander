@@ -3,23 +3,54 @@
 
 package proto
 
-import proto1 "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
+import (
+	fmt "fmt"
+	proto "github.com/golang/protobuf/proto"
+	math "math"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
-var _ = proto1.Marshal
+var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+// A compilation error at this line likely means your copy of the
+// proto package needs to be updated.
+const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
+
 type GetDeploymentRequest struct {
-	Name string `protobuf:"bytes,1,opt,name=name" json:"name,omitempty"`
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *GetDeploymentRequest) Reset()                    { *m = GetDeploymentRequest{} }
-func (m *GetDeploymentRequest) String() string            { return proto1.CompactTextString(m) }
-func (*GetDeploymentRequest) ProtoMessage()               {}
-func (*GetDeploymentRequest) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0} }
+func (m *GetDeploymentRequest) Reset()         { *m = GetDeploymentRequest{} }
+func (m *GetDeploymentRequest) String() string { return proto.CompactTextString(m) }
+func (*GetDeploymentRequest) ProtoMessage()    {}
+func (*GetDeploymentRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fac0ec10f8e4d7ff, []int{0}
+}
+
+func (m *GetDeploymentRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetDeploymentRequest.Unmarshal(m, b)
+}
+func (m *GetDeploymentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetDeploymentRequest.Marshal(b, m, deterministic)
+}
+func (m *GetDeploymentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetDeploymentRequest.Merge(m, src)
+}
+func (m *GetDeploymentRequest) XXX_Size() int {
+	return xxx_messageInfo_GetDeploymentRequest.Size(m)
+}
+func (m *GetDeploymentRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetDeploymentRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetDeploymentRequest proto.InternalMessageInfo
 
 func (m *GetDeploymentRequest) GetName() string {
 	if m != nil {
@@ -29,14 +60,37 @@ func (m *GetDeploymentRequest) GetName() string {
 }
 
 type GetDeploymentResponse struct {
-	Result      *Result       `protobuf:"bytes,1,opt,name=result" json:"result,omitempty"`
-	Deployments []*Deployment `protobuf:"bytes,2,rep,name=deployments" json:"deployments,omitempty"`
+	Result               *Result       `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Deployments          []*Deployment `protobuf:"bytes,2,rep,name=deployments,proto3" json:"deployments,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
 }
 
-func (m *GetDeploymentResponse) Reset()                    { *m = GetDeploymentResponse{} }
-func (m *GetDeploymentResponse) String() string            { return proto1.CompactTextString(m) }
-func (*GetDeploymentResponse) ProtoMessage()               {}
-func (*GetDeploymentResponse) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1} }
+func (m *GetDeploymentResponse) Reset()         { *m = GetDeploymentResponse{} }
+func (m *GetDeploymentResponse) String() string { return proto.CompactTextString(m) }
+func (*GetDeploymentResponse) ProtoMessage()    {}
+func (*GetDeploymentResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fac0ec10f8e4d7ff, []int{1}
+}
+
+func (m *GetDeploymentResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetDeploymentResponse.Unmarshal(m, b)
+}
+func (m *GetDeploymentResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetDeploymentResponse.Marshal(b, m, deterministic)
+}
+func (m *GetDeploymentResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetDeploymentResponse.Merge(m, src)
+}
+func (m *GetDeploymentResponse) XXX_Size() int {
+	return xxx_messageInfo_GetDeploymentResponse.Size(m)
+}
+func (m *GetDeploymentResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetDeploymentResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetDeploymentResponse proto.InternalMessageInfo
 
 func (m *GetDeploymentResponse) GetResult() *Result {
 	if m != nil {
@@ -53,18 +107,42 @@ func (m *GetDeploymentResponse) GetDeployments() []*Deployment {
 }
 
 type CreateDeploymentRequest struct {
-	ReleaseName string       `protobuf:"bytes,1,opt,name=release_name,json=releaseName" json:"release_name,omitempty"`
-	RawConfig   string       `protobuf:"bytes,2,opt,name=raw_config,json=rawConfig" json:"raw_config,omitempty"`
-	Chart       *Chart       `protobuf:"bytes,3,opt,name=chart" json:"chart,omitempty"`
-	Namespace   string       `protobuf:"bytes,4,opt,name=namespace" json:"namespace,omitempty"`
-	Secrets     []*Secret    `protobuf:"bytes,10,rep,name=secrets" json:"secrets,omitempty"`
-	EnvSecret   []*EnvSecret `protobuf:"bytes,11,rep,name=env_secret,json=envSecret" json:"env_secret,omitempty"`
+	ReleaseName          string       `protobuf:"bytes,1,opt,name=release_name,json=releaseName,proto3" json:"release_name,omitempty"`
+	RawConfig            string       `protobuf:"bytes,2,opt,name=raw_config,json=rawConfig,proto3" json:"raw_config,omitempty"`
+	Chart                *Chart       `protobuf:"bytes,3,opt,name=chart,proto3" json:"chart,omitempty"`
+	Namespace            string       `protobuf:"bytes,4,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	Secrets              []*Secret    `protobuf:"bytes,10,rep,name=secrets,proto3" json:"secrets,omitempty"`
+	EnvSecret            []*EnvSecret `protobuf:"bytes,11,rep,name=env_secret,json=envSecret,proto3" json:"env_secret,omitempty"`
+	NamespaceLabels      []*Label     `protobuf:"bytes,12,rep,name=namespace_labels,json=namespaceLabels,proto3" json:"namespace_labels,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
-func (m *CreateDeploymentRequest) Reset()                    { *m = CreateDeploymentRequest{} }
-func (m *CreateDeploymentRequest) String() string            { return proto1.CompactTextString(m) }
-func (*CreateDeploymentRequest) ProtoMessage()               {}
-func (*CreateDeploymentRequest) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{2} }
+func (m *CreateDeploymentRequest) Reset()         { *m = CreateDeploymentRequest{} }
+func (m *CreateDeploymentRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateDeploymentRequest) ProtoMessage()    {}
+func (*CreateDeploymentRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fac0ec10f8e4d7ff, []int{2}
+}
+
+func (m *CreateDeploymentRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateDeploymentRequest.Unmarshal(m, b)
+}
+func (m *CreateDeploymentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateDeploymentRequest.Marshal(b, m, deterministic)
+}
+func (m *CreateDeploymentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateDeploymentRequest.Merge(m, src)
+}
+func (m *CreateDeploymentRequest) XXX_Size() int {
+	return xxx_messageInfo_CreateDeploymentRequest.Size(m)
+}
+func (m *CreateDeploymentRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateDeploymentRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateDeploymentRequest proto.InternalMessageInfo
 
 func (m *CreateDeploymentRequest) GetReleaseName() string {
 	if m != nil {
@@ -108,15 +186,45 @@ func (m *CreateDeploymentRequest) GetEnvSecret() []*EnvSecret {
 	return nil
 }
 
-type CreateDeploymentResponse struct {
-	Result     *Result     `protobuf:"bytes,1,opt,name=result" json:"result,omitempty"`
-	Deployment *Deployment `protobuf:"bytes,2,opt,name=deployment" json:"deployment,omitempty"`
+func (m *CreateDeploymentRequest) GetNamespaceLabels() []*Label {
+	if m != nil {
+		return m.NamespaceLabels
+	}
+	return nil
 }
 
-func (m *CreateDeploymentResponse) Reset()                    { *m = CreateDeploymentResponse{} }
-func (m *CreateDeploymentResponse) String() string            { return proto1.CompactTextString(m) }
-func (*CreateDeploymentResponse) ProtoMessage()               {}
-func (*CreateDeploymentResponse) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{3} }
+type CreateDeploymentResponse struct {
+	Result               *Result     `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Deployment           *Deployment `protobuf:"bytes,2,opt,name=deployment,proto3" json:"deployment,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *CreateDeploymentResponse) Reset()         { *m = CreateDeploymentResponse{} }
+func (m *CreateDeploymentResponse) String() string { return proto.CompactTextString(m) }
+func (*CreateDeploymentResponse) ProtoMessage()    {}
+func (*CreateDeploymentResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fac0ec10f8e4d7ff, []int{3}
+}
+
+func (m *CreateDeploymentResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateDeploymentResponse.Unmarshal(m, b)
+}
+func (m *CreateDeploymentResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateDeploymentResponse.Marshal(b, m, deterministic)
+}
+func (m *CreateDeploymentResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateDeploymentResponse.Merge(m, src)
+}
+func (m *CreateDeploymentResponse) XXX_Size() int {
+	return xxx_messageInfo_CreateDeploymentResponse.Size(m)
+}
+func (m *CreateDeploymentResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateDeploymentResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateDeploymentResponse proto.InternalMessageInfo
 
 func (m *CreateDeploymentResponse) GetResult() *Result {
 	if m != nil {
@@ -133,18 +241,41 @@ func (m *CreateDeploymentResponse) GetDeployment() *Deployment {
 }
 
 type UpdateDeploymentRequest struct {
-	ReleaseName      string       `protobuf:"bytes,1,opt,name=release_name,json=releaseName" json:"release_name,omitempty"`
-	RawConfig        string       `protobuf:"bytes,2,opt,name=raw_config,json=rawConfig" json:"raw_config,omitempty"`
-	Chart            *Chart       `protobuf:"bytes,3,opt,name=chart" json:"chart,omitempty"`
-	OrganizationUuid *UUID        `protobuf:"bytes,6,opt,name=organization_uuid,json=organizationUuid" json:"organization_uuid,omitempty"`
-	Secrets          []*Secret    `protobuf:"bytes,10,rep,name=secrets" json:"secrets,omitempty"`
-	EnvSecret        []*EnvSecret `protobuf:"bytes,11,rep,name=env_secret,json=envSecret" json:"env_secret,omitempty"`
+	ReleaseName          string       `protobuf:"bytes,1,opt,name=release_name,json=releaseName,proto3" json:"release_name,omitempty"`
+	RawConfig            string       `protobuf:"bytes,2,opt,name=raw_config,json=rawConfig,proto3" json:"raw_config,omitempty"`
+	Chart                *Chart       `protobuf:"bytes,3,opt,name=chart,proto3" json:"chart,omitempty"`
+	OrganizationUuid     *UUID        `protobuf:"bytes,6,opt,name=organization_uuid,json=organizationUuid,proto3" json:"organization_uuid,omitempty"`
+	Secrets              []*Secret    `protobuf:"bytes,10,rep,name=secrets,proto3" json:"secrets,omitempty"`
+	EnvSecret            []*EnvSecret `protobuf:"bytes,11,rep,name=env_secret,json=envSecret,proto3" json:"env_secret,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
-func (m *UpdateDeploymentRequest) Reset()                    { *m = UpdateDeploymentRequest{} }
-func (m *UpdateDeploymentRequest) String() string            { return proto1.CompactTextString(m) }
-func (*UpdateDeploymentRequest) ProtoMessage()               {}
-func (*UpdateDeploymentRequest) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{4} }
+func (m *UpdateDeploymentRequest) Reset()         { *m = UpdateDeploymentRequest{} }
+func (m *UpdateDeploymentRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateDeploymentRequest) ProtoMessage()    {}
+func (*UpdateDeploymentRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fac0ec10f8e4d7ff, []int{4}
+}
+
+func (m *UpdateDeploymentRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateDeploymentRequest.Unmarshal(m, b)
+}
+func (m *UpdateDeploymentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateDeploymentRequest.Marshal(b, m, deterministic)
+}
+func (m *UpdateDeploymentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateDeploymentRequest.Merge(m, src)
+}
+func (m *UpdateDeploymentRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateDeploymentRequest.Size(m)
+}
+func (m *UpdateDeploymentRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateDeploymentRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateDeploymentRequest proto.InternalMessageInfo
 
 func (m *UpdateDeploymentRequest) GetReleaseName() string {
 	if m != nil {
@@ -189,14 +320,37 @@ func (m *UpdateDeploymentRequest) GetEnvSecret() []*EnvSecret {
 }
 
 type UpdateDeploymentResponse struct {
-	Result     *Result     `protobuf:"bytes,1,opt,name=result" json:"result,omitempty"`
-	Deployment *Deployment `protobuf:"bytes,2,opt,name=deployment" json:"deployment,omitempty"`
+	Result               *Result     `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Deployment           *Deployment `protobuf:"bytes,2,opt,name=deployment,proto3" json:"deployment,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
-func (m *UpdateDeploymentResponse) Reset()                    { *m = UpdateDeploymentResponse{} }
-func (m *UpdateDeploymentResponse) String() string            { return proto1.CompactTextString(m) }
-func (*UpdateDeploymentResponse) ProtoMessage()               {}
-func (*UpdateDeploymentResponse) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{5} }
+func (m *UpdateDeploymentResponse) Reset()         { *m = UpdateDeploymentResponse{} }
+func (m *UpdateDeploymentResponse) String() string { return proto.CompactTextString(m) }
+func (*UpdateDeploymentResponse) ProtoMessage()    {}
+func (*UpdateDeploymentResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fac0ec10f8e4d7ff, []int{5}
+}
+
+func (m *UpdateDeploymentResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateDeploymentResponse.Unmarshal(m, b)
+}
+func (m *UpdateDeploymentResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateDeploymentResponse.Marshal(b, m, deterministic)
+}
+func (m *UpdateDeploymentResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateDeploymentResponse.Merge(m, src)
+}
+func (m *UpdateDeploymentResponse) XXX_Size() int {
+	return xxx_messageInfo_UpdateDeploymentResponse.Size(m)
+}
+func (m *UpdateDeploymentResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateDeploymentResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateDeploymentResponse proto.InternalMessageInfo
 
 func (m *UpdateDeploymentResponse) GetResult() *Result {
 	if m != nil {
@@ -213,17 +367,40 @@ func (m *UpdateDeploymentResponse) GetDeployment() *Deployment {
 }
 
 type UpgradeDeploymentRequest struct {
-	ReleaseName string       `protobuf:"bytes,1,opt,name=release_name,json=releaseName" json:"release_name,omitempty"`
-	RawConfig   string       `protobuf:"bytes,2,opt,name=raw_config,json=rawConfig" json:"raw_config,omitempty"`
-	Chart       *Chart       `protobuf:"bytes,3,opt,name=chart" json:"chart,omitempty"`
-	Secrets     []*Secret    `protobuf:"bytes,10,rep,name=secrets" json:"secrets,omitempty"`
-	EnvSecret   []*EnvSecret `protobuf:"bytes,11,rep,name=env_secret,json=envSecret" json:"env_secret,omitempty"`
+	ReleaseName          string       `protobuf:"bytes,1,opt,name=release_name,json=releaseName,proto3" json:"release_name,omitempty"`
+	RawConfig            string       `protobuf:"bytes,2,opt,name=raw_config,json=rawConfig,proto3" json:"raw_config,omitempty"`
+	Chart                *Chart       `protobuf:"bytes,3,opt,name=chart,proto3" json:"chart,omitempty"`
+	Secrets              []*Secret    `protobuf:"bytes,10,rep,name=secrets,proto3" json:"secrets,omitempty"`
+	EnvSecret            []*EnvSecret `protobuf:"bytes,11,rep,name=env_secret,json=envSecret,proto3" json:"env_secret,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
-func (m *UpgradeDeploymentRequest) Reset()                    { *m = UpgradeDeploymentRequest{} }
-func (m *UpgradeDeploymentRequest) String() string            { return proto1.CompactTextString(m) }
-func (*UpgradeDeploymentRequest) ProtoMessage()               {}
-func (*UpgradeDeploymentRequest) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{6} }
+func (m *UpgradeDeploymentRequest) Reset()         { *m = UpgradeDeploymentRequest{} }
+func (m *UpgradeDeploymentRequest) String() string { return proto.CompactTextString(m) }
+func (*UpgradeDeploymentRequest) ProtoMessage()    {}
+func (*UpgradeDeploymentRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fac0ec10f8e4d7ff, []int{6}
+}
+
+func (m *UpgradeDeploymentRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpgradeDeploymentRequest.Unmarshal(m, b)
+}
+func (m *UpgradeDeploymentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpgradeDeploymentRequest.Marshal(b, m, deterministic)
+}
+func (m *UpgradeDeploymentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpgradeDeploymentRequest.Merge(m, src)
+}
+func (m *UpgradeDeploymentRequest) XXX_Size() int {
+	return xxx_messageInfo_UpgradeDeploymentRequest.Size(m)
+}
+func (m *UpgradeDeploymentRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpgradeDeploymentRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpgradeDeploymentRequest proto.InternalMessageInfo
 
 func (m *UpgradeDeploymentRequest) GetReleaseName() string {
 	if m != nil {
@@ -261,14 +438,37 @@ func (m *UpgradeDeploymentRequest) GetEnvSecret() []*EnvSecret {
 }
 
 type UpgradeDeploymentResponse struct {
-	Result     *Result     `protobuf:"bytes,1,opt,name=result" json:"result,omitempty"`
-	Deployment *Deployment `protobuf:"bytes,2,opt,name=deployment" json:"deployment,omitempty"`
+	Result               *Result     `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Deployment           *Deployment `protobuf:"bytes,2,opt,name=deployment,proto3" json:"deployment,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
-func (m *UpgradeDeploymentResponse) Reset()                    { *m = UpgradeDeploymentResponse{} }
-func (m *UpgradeDeploymentResponse) String() string            { return proto1.CompactTextString(m) }
-func (*UpgradeDeploymentResponse) ProtoMessage()               {}
-func (*UpgradeDeploymentResponse) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{7} }
+func (m *UpgradeDeploymentResponse) Reset()         { *m = UpgradeDeploymentResponse{} }
+func (m *UpgradeDeploymentResponse) String() string { return proto.CompactTextString(m) }
+func (*UpgradeDeploymentResponse) ProtoMessage()    {}
+func (*UpgradeDeploymentResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fac0ec10f8e4d7ff, []int{7}
+}
+
+func (m *UpgradeDeploymentResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpgradeDeploymentResponse.Unmarshal(m, b)
+}
+func (m *UpgradeDeploymentResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpgradeDeploymentResponse.Marshal(b, m, deterministic)
+}
+func (m *UpgradeDeploymentResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpgradeDeploymentResponse.Merge(m, src)
+}
+func (m *UpgradeDeploymentResponse) XXX_Size() int {
+	return xxx_messageInfo_UpgradeDeploymentResponse.Size(m)
+}
+func (m *UpgradeDeploymentResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpgradeDeploymentResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpgradeDeploymentResponse proto.InternalMessageInfo
 
 func (m *UpgradeDeploymentResponse) GetResult() *Result {
 	if m != nil {
@@ -285,15 +485,38 @@ func (m *UpgradeDeploymentResponse) GetDeployment() *Deployment {
 }
 
 type DeleteDeploymentRequest struct {
-	ReleaseName     string `protobuf:"bytes,1,opt,name=release_name,json=releaseName" json:"release_name,omitempty"`
-	Namespace       string `protobuf:"bytes,2,opt,name=namespace" json:"namespace,omitempty"`
-	DeleteNamespace bool   `protobuf:"varint,5,opt,name=delete_namespace,json=deleteNamespace" json:"delete_namespace,omitempty"`
+	ReleaseName          string   `protobuf:"bytes,1,opt,name=release_name,json=releaseName,proto3" json:"release_name,omitempty"`
+	Namespace            string   `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	DeleteNamespace      bool     `protobuf:"varint,5,opt,name=delete_namespace,json=deleteNamespace,proto3" json:"delete_namespace,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *DeleteDeploymentRequest) Reset()                    { *m = DeleteDeploymentRequest{} }
-func (m *DeleteDeploymentRequest) String() string            { return proto1.CompactTextString(m) }
-func (*DeleteDeploymentRequest) ProtoMessage()               {}
-func (*DeleteDeploymentRequest) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{8} }
+func (m *DeleteDeploymentRequest) Reset()         { *m = DeleteDeploymentRequest{} }
+func (m *DeleteDeploymentRequest) String() string { return proto.CompactTextString(m) }
+func (*DeleteDeploymentRequest) ProtoMessage()    {}
+func (*DeleteDeploymentRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fac0ec10f8e4d7ff, []int{8}
+}
+
+func (m *DeleteDeploymentRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteDeploymentRequest.Unmarshal(m, b)
+}
+func (m *DeleteDeploymentRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteDeploymentRequest.Marshal(b, m, deterministic)
+}
+func (m *DeleteDeploymentRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteDeploymentRequest.Merge(m, src)
+}
+func (m *DeleteDeploymentRequest) XXX_Size() int {
+	return xxx_messageInfo_DeleteDeploymentRequest.Size(m)
+}
+func (m *DeleteDeploymentRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteDeploymentRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteDeploymentRequest proto.InternalMessageInfo
 
 func (m *DeleteDeploymentRequest) GetReleaseName() string {
 	if m != nil {
@@ -317,14 +540,37 @@ func (m *DeleteDeploymentRequest) GetDeleteNamespace() bool {
 }
 
 type DeleteDeploymentResponse struct {
-	Result     *Result     `protobuf:"bytes,1,opt,name=result" json:"result,omitempty"`
-	Deployment *Deployment `protobuf:"bytes,2,opt,name=deployment" json:"deployment,omitempty"`
+	Result               *Result     `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Deployment           *Deployment `protobuf:"bytes,2,opt,name=deployment,proto3" json:"deployment,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
-func (m *DeleteDeploymentResponse) Reset()                    { *m = DeleteDeploymentResponse{} }
-func (m *DeleteDeploymentResponse) String() string            { return proto1.CompactTextString(m) }
-func (*DeleteDeploymentResponse) ProtoMessage()               {}
-func (*DeleteDeploymentResponse) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{9} }
+func (m *DeleteDeploymentResponse) Reset()         { *m = DeleteDeploymentResponse{} }
+func (m *DeleteDeploymentResponse) String() string { return proto.CompactTextString(m) }
+func (*DeleteDeploymentResponse) ProtoMessage()    {}
+func (*DeleteDeploymentResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_fac0ec10f8e4d7ff, []int{9}
+}
+
+func (m *DeleteDeploymentResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteDeploymentResponse.Unmarshal(m, b)
+}
+func (m *DeleteDeploymentResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteDeploymentResponse.Marshal(b, m, deterministic)
+}
+func (m *DeleteDeploymentResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteDeploymentResponse.Merge(m, src)
+}
+func (m *DeleteDeploymentResponse) XXX_Size() int {
+	return xxx_messageInfo_DeleteDeploymentResponse.Size(m)
+}
+func (m *DeleteDeploymentResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteDeploymentResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteDeploymentResponse proto.InternalMessageInfo
 
 func (m *DeleteDeploymentResponse) GetResult() *Result {
 	if m != nil {
@@ -341,48 +587,50 @@ func (m *DeleteDeploymentResponse) GetDeployment() *Deployment {
 }
 
 func init() {
-	proto1.RegisterType((*GetDeploymentRequest)(nil), "commander.GetDeploymentRequest")
-	proto1.RegisterType((*GetDeploymentResponse)(nil), "commander.GetDeploymentResponse")
-	proto1.RegisterType((*CreateDeploymentRequest)(nil), "commander.CreateDeploymentRequest")
-	proto1.RegisterType((*CreateDeploymentResponse)(nil), "commander.CreateDeploymentResponse")
-	proto1.RegisterType((*UpdateDeploymentRequest)(nil), "commander.UpdateDeploymentRequest")
-	proto1.RegisterType((*UpdateDeploymentResponse)(nil), "commander.UpdateDeploymentResponse")
-	proto1.RegisterType((*UpgradeDeploymentRequest)(nil), "commander.UpgradeDeploymentRequest")
-	proto1.RegisterType((*UpgradeDeploymentResponse)(nil), "commander.UpgradeDeploymentResponse")
-	proto1.RegisterType((*DeleteDeploymentRequest)(nil), "commander.DeleteDeploymentRequest")
-	proto1.RegisterType((*DeleteDeploymentResponse)(nil), "commander.DeleteDeploymentResponse")
+	proto.RegisterType((*GetDeploymentRequest)(nil), "commander.GetDeploymentRequest")
+	proto.RegisterType((*GetDeploymentResponse)(nil), "commander.GetDeploymentResponse")
+	proto.RegisterType((*CreateDeploymentRequest)(nil), "commander.CreateDeploymentRequest")
+	proto.RegisterType((*CreateDeploymentResponse)(nil), "commander.CreateDeploymentResponse")
+	proto.RegisterType((*UpdateDeploymentRequest)(nil), "commander.UpdateDeploymentRequest")
+	proto.RegisterType((*UpdateDeploymentResponse)(nil), "commander.UpdateDeploymentResponse")
+	proto.RegisterType((*UpgradeDeploymentRequest)(nil), "commander.UpgradeDeploymentRequest")
+	proto.RegisterType((*UpgradeDeploymentResponse)(nil), "commander.UpgradeDeploymentResponse")
+	proto.RegisterType((*DeleteDeploymentRequest)(nil), "commander.DeleteDeploymentRequest")
+	proto.RegisterType((*DeleteDeploymentResponse)(nil), "commander.DeleteDeploymentResponse")
 }
 
-func init() { proto1.RegisterFile("deployment.proto", fileDescriptor2) }
+func init() { proto.RegisterFile("deployment.proto", fileDescriptor_fac0ec10f8e4d7ff) }
 
-var fileDescriptor2 = []byte{
-	// 444 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x95, 0x4f, 0x6f, 0xd3, 0x30,
-	0x18, 0xc6, 0x95, 0x6c, 0xed, 0xc8, 0x9b, 0x49, 0xeb, 0xac, 0x4d, 0x35, 0x08, 0xa4, 0x92, 0x03,
-	0xea, 0x40, 0xea, 0x61, 0x13, 0xe2, 0xc2, 0x89, 0x16, 0x21, 0x2e, 0x3b, 0x18, 0xe5, 0xc2, 0x25,
-	0x32, 0xc9, 0x4b, 0x89, 0x94, 0xd8, 0xc1, 0x76, 0x36, 0xf1, 0xef, 0x84, 0xf8, 0x24, 0x7c, 0x37,
-	0x3e, 0x07, 0x8a, 0xd3, 0x3f, 0x66, 0x81, 0x03, 0x48, 0xa4, 0xa7, 0xba, 0xcf, 0xfb, 0xb3, 0xfd,
-	0xfa, 0x79, 0x12, 0x07, 0x46, 0x19, 0x56, 0x85, 0xfc, 0x50, 0xa2, 0x30, 0xb3, 0x4a, 0x49, 0x23,
-	0x49, 0x90, 0xca, 0xb2, 0xe4, 0x22, 0x43, 0x75, 0xe7, 0xb0, 0x19, 0x4a, 0xd1, 0x16, 0xa2, 0x87,
-	0x70, 0xf2, 0x02, 0xcd, 0x62, 0xc3, 0x33, 0x7c, 0x5f, 0xa3, 0x36, 0x84, 0xc0, 0xbe, 0xe0, 0x25,
-	0x52, 0x6f, 0xe2, 0x4d, 0x03, 0x66, 0xc7, 0xd1, 0x27, 0x38, 0xbd, 0xc1, 0xea, 0x4a, 0x0a, 0x8d,
-	0xe4, 0x0c, 0x86, 0x0a, 0x75, 0x5d, 0x18, 0x8b, 0x87, 0xe7, 0xc7, 0xb3, 0xcd, 0x76, 0x33, 0x66,
-	0x0b, 0x6c, 0x05, 0x90, 0x27, 0x10, 0x6e, 0x9b, 0xd3, 0xd4, 0x9f, 0xec, 0x4d, 0xc3, 0xf3, 0x53,
-	0x87, 0x77, 0x96, 0x77, 0xc9, 0xe8, 0xab, 0x0f, 0xe3, 0xb9, 0x42, 0x6e, 0xb0, 0xdb, 0xec, 0x7d,
-	0x38, 0x54, 0x58, 0x20, 0xd7, 0x98, 0x38, 0x4d, 0x87, 0x2b, 0xed, 0x92, 0x97, 0x48, 0xee, 0x01,
-	0x28, 0x7e, 0x9d, 0xa4, 0x52, 0xbc, 0xcd, 0x97, 0xd4, 0xb7, 0x40, 0xa0, 0xf8, 0xf5, 0xdc, 0x0a,
-	0xe4, 0x01, 0x0c, 0xd2, 0x77, 0x5c, 0x19, 0xba, 0x67, 0x0f, 0x30, 0x72, 0x1a, 0x9a, 0x37, 0x3a,
-	0x6b, 0xcb, 0xe4, 0x2e, 0x04, 0xcd, 0x0e, 0xba, 0xe2, 0x29, 0xd2, 0xfd, 0x76, 0x95, 0x8d, 0x40,
-	0x1e, 0xc1, 0x81, 0xc6, 0x54, 0xa1, 0xd1, 0x14, 0xec, 0xc1, 0x5c, 0x23, 0x5e, 0xd9, 0x0a, 0x5b,
-	0x13, 0xe4, 0x02, 0x00, 0xc5, 0x55, 0xd2, 0xfe, 0xa5, 0xa1, 0xe5, 0x4f, 0x1c, 0xfe, 0xb9, 0xb8,
-	0x5a, 0x4d, 0x09, 0x70, 0x3d, 0x8c, 0x3e, 0x03, 0xed, 0x9a, 0xf0, 0xf7, 0x29, 0x3c, 0x06, 0xd8,
-	0x7a, 0x6b, 0xdd, 0xf8, 0x63, 0x08, 0x0e, 0x18, 0x7d, 0xf7, 0x61, 0x1c, 0x57, 0xd9, 0x8e, 0x33,
-	0x78, 0x0a, 0xc7, 0x52, 0x2d, 0xb9, 0xc8, 0x3f, 0x72, 0x93, 0x4b, 0x91, 0xd4, 0x75, 0x9e, 0xd1,
-	0xa1, 0x9d, 0x73, 0xe4, 0xcc, 0x89, 0xe3, 0x97, 0x0b, 0x36, 0x72, 0xc9, 0xb8, 0xce, 0xb3, 0x7e,
-	0x32, 0xea, 0x9a, 0xd4, 0x5b, 0x46, 0x3f, 0xbc, 0x66, 0xfb, 0xa5, 0xe2, 0xd9, 0x4e, 0x43, 0xfa,
-	0xff, 0x36, 0x7f, 0x81, 0xdb, 0xbf, 0x39, 0x67, 0x6f, 0x3e, 0x7f, 0xf3, 0x60, 0xbc, 0xc0, 0x02,
-	0xff, 0xf1, 0x5d, 0xf8, 0xe5, 0x22, 0xf1, 0x6f, 0x5e, 0x24, 0x67, 0xcd, 0x15, 0xde, 0xac, 0x9d,
-	0x6c, 0xa1, 0xc1, 0xc4, 0x9b, 0xde, 0x62, 0x47, 0xad, 0x7e, 0xb9, 0x96, 0x9b, 0xa7, 0xad, 0xdb,
-	0x46, 0x5f, 0x2e, 0x3c, 0x3b, 0x78, 0x3d, 0xb0, 0xdf, 0x91, 0x37, 0x43, 0xfb, 0x73, 0xf1, 0x33,
-	0x00, 0x00, 0xff, 0xff, 0x2f, 0x02, 0xa0, 0x43, 0x7b, 0x06, 0x00, 0x00,
+var fileDescriptor_fac0ec10f8e4d7ff = []byte{
+	// 473 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x95, 0xcf, 0x8e, 0xd3, 0x30,
+	0x10, 0xc6, 0x95, 0xec, 0xb6, 0x4b, 0x26, 0x95, 0xda, 0xb5, 0x76, 0x55, 0x83, 0x40, 0x2a, 0x39,
+	0xa0, 0x2e, 0x48, 0x3d, 0xec, 0x0a, 0x71, 0x80, 0x13, 0x2d, 0x42, 0x48, 0x68, 0x0f, 0x41, 0xbd,
+	0x70, 0x89, 0xbc, 0xc9, 0x50, 0x22, 0x25, 0x76, 0xb0, 0x9d, 0x5d, 0xf1, 0xef, 0xc8, 0x93, 0xf0,
+	0x22, 0x3c, 0x0d, 0xcf, 0x81, 0xec, 0xb4, 0xa9, 0xd9, 0xc2, 0x01, 0xa4, 0x6d, 0x4f, 0xb5, 0x67,
+	0x7e, 0xe3, 0x19, 0x7f, 0x5f, 0xeb, 0xc2, 0x20, 0xc3, 0xaa, 0x10, 0x1f, 0x4b, 0xe4, 0x7a, 0x52,
+	0x49, 0xa1, 0x05, 0x09, 0x52, 0x51, 0x96, 0x8c, 0x67, 0x28, 0xef, 0xf4, 0xcc, 0x52, 0xf0, 0x26,
+	0x11, 0x3d, 0x84, 0xa3, 0x97, 0xa8, 0x67, 0x2d, 0x1f, 0xe3, 0x87, 0x1a, 0x95, 0x26, 0x04, 0xf6,
+	0x39, 0x2b, 0x91, 0x7a, 0x23, 0x6f, 0x1c, 0xc4, 0x76, 0x1d, 0x7d, 0x86, 0xe3, 0x6b, 0xac, 0xaa,
+	0x04, 0x57, 0x48, 0x4e, 0xa0, 0x2b, 0x51, 0xd5, 0x85, 0xb6, 0x78, 0x78, 0x7a, 0x38, 0x69, 0xdb,
+	0x4d, 0x62, 0x9b, 0x88, 0x97, 0x00, 0x79, 0x02, 0xe1, 0x7a, 0x38, 0x45, 0xfd, 0xd1, 0xde, 0x38,
+	0x3c, 0x3d, 0x76, 0x78, 0xe7, 0x78, 0x97, 0x8c, 0x7e, 0xf8, 0x30, 0x9c, 0x4a, 0x64, 0x1a, 0x37,
+	0x87, 0xbd, 0x0f, 0x3d, 0x89, 0x05, 0x32, 0x85, 0x89, 0x33, 0x74, 0xb8, 0x8c, 0x9d, 0xb3, 0x12,
+	0xc9, 0x3d, 0x00, 0xc9, 0xae, 0x92, 0x54, 0xf0, 0x77, 0xf9, 0x82, 0xfa, 0x16, 0x08, 0x24, 0xbb,
+	0x9a, 0xda, 0x00, 0x79, 0x00, 0x9d, 0xf4, 0x3d, 0x93, 0x9a, 0xee, 0xd9, 0x0b, 0x0c, 0x9c, 0x81,
+	0xa6, 0x26, 0x1e, 0x37, 0x69, 0x72, 0x17, 0x02, 0xd3, 0x41, 0x55, 0x2c, 0x45, 0xba, 0xdf, 0x9c,
+	0xd2, 0x06, 0xc8, 0x23, 0x38, 0x50, 0x98, 0x4a, 0xd4, 0x8a, 0x82, 0xbd, 0x98, 0x2b, 0xc4, 0x1b,
+	0x9b, 0x89, 0x57, 0x04, 0x39, 0x03, 0x40, 0x7e, 0x99, 0x34, 0x5b, 0x1a, 0x5a, 0xfe, 0xc8, 0xe1,
+	0x5f, 0xf0, 0xcb, 0x65, 0x49, 0x80, 0xab, 0x25, 0x79, 0x0a, 0x83, 0xb6, 0x5d, 0x52, 0xb0, 0x0b,
+	0x2c, 0x14, 0xed, 0xd9, 0x52, 0x77, 0xe4, 0xd7, 0x26, 0x11, 0xf7, 0x5b, 0xd2, 0xee, 0x55, 0xf4,
+	0x05, 0xe8, 0xa6, 0x82, 0xff, 0x6e, 0xe1, 0x63, 0x80, 0xb5, 0x31, 0x56, 0xca, 0xbf, 0x3a, 0xe8,
+	0x80, 0xd1, 0x77, 0x1f, 0x86, 0xf3, 0x2a, 0xdb, 0xb1, 0x81, 0xcf, 0xe0, 0x50, 0xc8, 0x05, 0xe3,
+	0xf9, 0x27, 0xa6, 0x73, 0xc1, 0x93, 0xba, 0xce, 0x33, 0xda, 0xb5, 0x35, 0x7d, 0xa7, 0x66, 0x3e,
+	0x7f, 0x35, 0x8b, 0x07, 0x2e, 0x39, 0xaf, 0xf3, 0xec, 0xe6, 0x0d, 0x36, 0x1e, 0x6d, 0x8a, 0xb4,
+	0x35, 0x8f, 0x7e, 0x7a, 0xa6, 0xfd, 0x42, 0xb2, 0x6c, 0xa7, 0x26, 0xdd, 0xbc, 0xcc, 0x5f, 0xe1,
+	0xf6, 0x1f, 0xee, 0xb9, 0x35, 0x9d, 0xbf, 0x79, 0x30, 0x9c, 0x61, 0x81, 0xff, 0xf9, 0x5b, 0xf8,
+	0xed, 0x15, 0xf2, 0xaf, 0xbf, 0x42, 0x27, 0xe6, 0xfd, 0x37, 0x67, 0x27, 0x6b, 0xa8, 0x33, 0xf2,
+	0xc6, 0xb7, 0xe2, 0x7e, 0x13, 0x3f, 0x5f, 0x85, 0xcd, 0xb7, 0x6d, 0x73, 0x8c, 0x6d, 0xa9, 0xf0,
+	0xfc, 0xe0, 0x6d, 0xc7, 0xfe, 0x09, 0x5d, 0x74, 0xed, 0xc7, 0xd9, 0xaf, 0x00, 0x00, 0x00, 0xff,
+	0xff, 0x9e, 0x00, 0x9c, 0x58, 0xb8, 0x06, 0x00, 0x00,
 }

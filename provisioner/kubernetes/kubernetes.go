@@ -41,8 +41,18 @@ func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentReque
 		}
 	}
 
+	// copy all key/value of labels from buffer into map
+	namespace_labels := map[string]string{
+		"platform-release": appConfig.PlatformRelease,
+	}
+	if len(request.NamespaceLabels) > 0 {
+		for _, label := range request.NamespaceLabels {
+			namespace_labels[label.Key] = label.Value
+		}
+	}
+
 	// Create the namespace for this installation.
-	err := k.kube.Namespace.Ensure(request.Namespace)
+	err := k.kube.Namespace.Ensure(request.Namespace, namespace_labels)
 	if err != nil {
 		logger.Errorf("Error creating namespace: %s", err.Error())
 		response.Result = BuildResult(false, err.Error())
@@ -158,7 +168,6 @@ func (k *KubeProvisioner) DeleteDeployment(request *proto.DeleteDeploymentReques
 func (k *KubeProvisioner) SetSecret(request *proto.SetSecretRequest) (*proto.SetSecretResponse, error) {
 	response := &proto.SetSecretResponse{}
 
-	err := k.kube.Namespace.Ensure(request.Namespace)
 	if err != nil {
 		response.Result = BuildResult(false, err.Error())
 		return response, nil
