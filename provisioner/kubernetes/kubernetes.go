@@ -41,10 +41,10 @@ func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentReque
 		}
 	}
 
-	// copy all key/value of labels from buffer into map
 	namespace_labels := map[string]string{
 		"platform-release": appConfig.PlatformRelease,
 	}
+	// Copy all key/value of labels from buffer into map
 	if len(request.NamespaceLabels) > 0 {
 		for _, label := range request.NamespaceLabels {
 			namespace_labels[label.Key] = label.Value
@@ -167,11 +167,6 @@ func (k *KubeProvisioner) DeleteDeployment(request *proto.DeleteDeploymentReques
 
 func (k *KubeProvisioner) SetSecret(request *proto.SetSecretRequest) (*proto.SetSecretResponse, error) {
 	response := &proto.SetSecretResponse{}
-
-	if err != nil {
-		response.Result = BuildResult(false, err.Error())
-		return response, nil
-	}
 
 	secret, err := k.kube.Secret.Get(request.Secret.Name, request.Namespace)
 	if err != nil {
