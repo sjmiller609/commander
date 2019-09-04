@@ -5,3 +5,5 @@ commander
 .vscode/
 
 .DS_Store
+
+# pkg/proto/*

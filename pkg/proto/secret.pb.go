@@ -20,7 +20,7 @@ type GetSecretRequest struct {
 func (m *GetSecretRequest) Reset()                    { *m = GetSecretRequest{} }
 func (m *GetSecretRequest) String() string            { return proto1.CompactTextString(m) }
 func (*GetSecretRequest) ProtoMessage()               {}
-func (*GetSecretRequest) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{0} }
+func (*GetSecretRequest) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0} }
 
 func (m *GetSecretRequest) GetNamespace() string {
 	if m != nil {
@@ -44,7 +44,7 @@ type GetSecretResponse struct {
 func (m *GetSecretResponse) Reset()                    { *m = GetSecretResponse{} }
 func (m *GetSecretResponse) String() string            { return proto1.CompactTextString(m) }
 func (*GetSecretResponse) ProtoMessage()               {}
-func (*GetSecretResponse) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{1} }
+func (*GetSecretResponse) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1} }
 
 func (m *GetSecretResponse) GetResult() *Result {
 	if m != nil {
@@ -69,7 +69,7 @@ type SetSecretRequest struct {
 func (m *SetSecretRequest) Reset()                    { *m = SetSecretRequest{} }
 func (m *SetSecretRequest) String() string            { return proto1.CompactTextString(m) }
 func (*SetSecretRequest) ProtoMessage()               {}
-func (*SetSecretRequest) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{2} }
+func (*SetSecretRequest) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{2} }
 
 func (m *SetSecretRequest) GetReleaseName() string {
 	if m != nil {
@@ -99,7 +99,7 @@ type SetSecretResponse struct {
 func (m *SetSecretResponse) Reset()                    { *m = SetSecretResponse{} }
 func (m *SetSecretResponse) String() string            { return proto1.CompactTextString(m) }
 func (*SetSecretResponse) ProtoMessage()               {}
-func (*SetSecretResponse) Descriptor() ([]byte, []int) { return fileDescriptor3, []int{3} }
+func (*SetSecretResponse) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{3} }
 
 func (m *SetSecretResponse) GetResult() *Result {
 	if m != nil {
@@ -115,9 +115,9 @@ func init() {
 	proto1.RegisterType((*SetSecretResponse)(nil), "commander.SetSecretResponse")
 }
 
-func init() { proto1.RegisterFile("secret.proto", fileDescriptor3) }
+func init() { proto1.RegisterFile("secret.proto", fileDescriptor2) }
 
-var fileDescriptor3 = []byte{
+var fileDescriptor2 = []byte{
 	// 216 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x29, 0x4e, 0x4d, 0x2e,
 	0x4a, 0x2d, 0xd1, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x4c, 0xce, 0xcf, 0xcd, 0x4d, 0xcc,

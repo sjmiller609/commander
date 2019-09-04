@@ -2,7 +2,6 @@ package kubernetesProv
 
 import (
 	"github.com/sirupsen/logrus"
-
 	"github.com/astronomerio/commander/config"
 	"github.com/astronomerio/commander/helm"
 	"github.com/astronomerio/commander/kubernetes"
@@ -28,6 +27,18 @@ func New(helm *helm.Client, kube *kubernetes.Client) KubeProvisioner {
 	}
 }
 
+func ArrayOfLabelsToMap(labels_array []*proto.Label) (map[string]string) {
+
+  labels := map[string]string{}
+
+	if len(labels_array) > 0 {
+		for _, label := range labels_array {
+			labels[label.Key] = label.Value
+		}
+	}
+  return labels
+}
+
 func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentRequest) (*proto.CreateDeploymentResponse, error) {
 	logger := log.WithField("function", "InstallDeployment")
 	response := &proto.CreateDeploymentResponse{
@@ -41,8 +52,10 @@ func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentReque
 		}
 	}
 
+	namespace_labels := ArrayOfLabelsToMap(request.NamespaceLabels)
+
 	// Create the namespace for this installation.
-	err := k.kube.Namespace.Ensure(request.Namespace)
+	err := k.kube.Namespace.Ensure(request.Namespace, namespace_labels)
 	if err != nil {
 		logger.Errorf("Error creating namespace: %s", err.Error())
 		response.Result = BuildResult(false, err.Error())
@@ -157,12 +170,6 @@ func (k *KubeProvisioner) DeleteDeployment(request *proto.DeleteDeploymentReques
 
 func (k *KubeProvisioner) SetSecret(request *proto.SetSecretRequest) (*proto.SetSecretResponse, error) {
 	response := &proto.SetSecretResponse{}
-
-	err := k.kube.Namespace.Ensure(request.Namespace)
-	if err != nil {
-		response.Result = BuildResult(false, err.Error())
-		return response, nil
-	}
 
 	secret, err := k.kube.Secret.Get(request.Secret.Name, request.Namespace)
 	if err != nil {

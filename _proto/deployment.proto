@@ -22,6 +22,7 @@ message CreateDeploymentRequest {
     string namespace = 4;
     repeated Secret secrets = 10; // secrets to be set
     repeated EnvSecret env_secret = 11;
+    repeated Label namespace_labels = 12;
 }
 
 message CreateDeploymentResponse {
@@ -66,4 +67,3 @@ message DeleteDeploymentResponse {
     Result result = 1;
     Deployment deployment = 2;
 }
-

@@ -23,6 +23,12 @@ message EnvSecret {
     string name = 2; // the name of the secret
 }
 
+// k8s label
+message Label {
+    string key = 1;
+    string value = 2;
+}
+
 message Secret {
     string name = 1;
     map<string, string> data = 2;
