@@ -67,4 +67,3 @@ message DeleteDeploymentResponse {
     Result result = 1;
     Deployment deployment = 2;
 }
-
