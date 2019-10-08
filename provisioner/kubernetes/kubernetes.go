@@ -81,6 +81,21 @@ func (k *KubeProvisioner) InstallDeployment(request *proto.CreateDeploymentReque
 	return response, nil
 }
 
+func (k *KubeProvisioner) UpdateNamespace(request *proto.UpdateNamespaceRequest) (*proto.UpdateNamespaceResponse, error) {
+	response := &proto.UpdateNamespaceResponse{}
+
+	namespace_labels := ArrayOfLabelsToMap(request.NamespaceLabels)
+
+	err := k.kube.Namespace.Ensure(request.Namespace, namespace_labels)
+	if err != nil {
+		response.Result = BuildResult(false, err.Error())
+		return response, nil
+	}
+
+	response.Result = BuildResult(true, "Namespace Updated")
+	return response, nil
+}
+
 func (k *KubeProvisioner) UpdateDeployment(request *proto.UpdateDeploymentRequest) (*proto.UpdateDeploymentResponse, error) {
 	response := &proto.UpdateDeploymentResponse{
 		Deployment: &proto.Deployment{},

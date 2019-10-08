@@ -12,6 +12,7 @@ service Commander {
     rpc Ping (PingRequest) returns (PingResponse) {}
     rpc GetDeployment (GetDeploymentRequest) returns (GetDeploymentResponse) {}
     rpc CreateDeployment (CreateDeploymentRequest) returns (CreateDeploymentResponse) {}
+    rpc UpdateNamespace (UpdateNamespaceRequest) returns (UpdateNamespaceResponse) {}
     rpc UpdateDeployment (UpdateDeploymentRequest) returns (UpdateDeploymentResponse) {}
     rpc UpgradeDeployment (UpgradeDeploymentRequest) returns (UpgradeDeploymentResponse) {}
     rpc DeleteDeployment (DeleteDeploymentRequest) returns (DeleteDeploymentResponse) {}

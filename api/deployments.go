@@ -24,6 +24,11 @@ func (s *GRPCServer) CreateDeployment(ctx context.Context, in *proto.CreateDeplo
 	return response, err
 }
 
+func (s *GRPCServer) UpdateNamespace(ctx context.Context, in *proto.UpdateNamespaceRequest) (*proto.UpdateNamespaceResponse, error) {
+	response, err := s.provisioner.UpdateNamespace(in)
+	return response, err
+}
+
 func (s *GRPCServer) UpdateDeployment(ctx context.Context, in *proto.UpdateDeploymentRequest) (*proto.UpdateDeploymentResponse, error) {
 	response, err := s.provisioner.UpdateDeployment(in)
 	return response, err

@@ -9,6 +9,7 @@ import (
 type Provisioner interface {
 	// ListDeployments(organizationID string) (*ListDeploymentResponse, error)
 	InstallDeployment(request *proto.CreateDeploymentRequest) (*proto.CreateDeploymentResponse, error)
+	UpdateNamespace(request *proto.UpdateNamespaceRequest) (*proto.UpdateNamespaceResponse, error)
 	UpdateDeployment(request *proto.UpdateDeploymentRequest) (*proto.UpdateDeploymentResponse, error)
 	UpgradeDeployment(request *proto.UpgradeDeploymentRequest) (*proto.UpgradeDeploymentResponse, error)
 	DeleteDeployment(request *proto.DeleteDeploymentRequest) (*proto.DeleteDeploymentResponse, error)
