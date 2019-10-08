@@ -8,12 +8,16 @@ dep:
 	dep ensure
 
 build:
-	go build -o ${OUTPUT} main.go
+	CGO_ENABLED=0 go build -o ${OUTPUT} main.go
+
+dependencies:
+	dep ensure -vendor-only -v
 
 build-image:
 	docker build -t ${IMAGE_NAME} .
 
 build-proto:
+	mkdir -p ${PROTO_DEST}
 	protoc --proto_path=${PROTO_SRC} --go_out=plugins=grpc:${PROTO_DEST} $(shell find ${PROTO_SRC} -type f -name "*.proto")
 
 test:
