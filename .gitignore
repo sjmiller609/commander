@@ -7,3 +7,5 @@ commander
 .DS_Store
 
 # pkg/proto/*
+vendor/*
+pkg/*
